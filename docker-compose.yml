@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+    container_name: owori-backend
+    ports:
+      - 8080:8080
+    networks:
+      - app-tier
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: on-failure
+    tty: true
+
+  db:
+    image: mysql
+    container_name: owori-db
+    ports:
+      - 3306:3306
+    networks:
+      - app-tier
+    volumes:
+      - data_mysql:/var/lib/mysql
+    env_file:
+      - .env
+    restart: on-failure
+    tty: true
+
+networks:
+  app-tier:
+    driver: bridge
+
+volumes:
+  data_mysql: null

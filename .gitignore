@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+.env
+.DS_Store
 htmlReport/
 .json
 env.yml
@@ -40,3 +42,4 @@ out/
 
 ### VS Code ###
 .vscode/
+!/.env

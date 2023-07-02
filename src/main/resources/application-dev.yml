@@ -1,0 +1,26 @@
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://owori-db:3306/owori?serverTimezone=Asia/Seoul
+    username: root
+    password: ${MYSQL_ROOT_PASSWORD}
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
