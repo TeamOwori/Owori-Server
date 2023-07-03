@@ -22,6 +22,9 @@ spring:
       hibernate:
         format_sql: true
 
+  main:
+    allow-bean-definition-overriding: true
+
 logging:
   level:
     org.hibernate.SQL: debug
