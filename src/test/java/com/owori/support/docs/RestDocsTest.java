@@ -7,7 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,6 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public abstract class RestDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    protected JpaMetamodelMappingContext jpaMetamodelMappingContext;
+
     protected MockMvc mockMvc;
 
     protected String toRequestBody(Object value) throws JsonProcessingException {
