@@ -7,7 +7,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://owori-db:3306/owori?serverTimezone=Asia/Seoul
     username: root
-    password: ${MYSQL_ROOT_PASSWORD}
+
+  config:
+    import: classpath:env.yml
 
   jackson:
     property-naming-strategy: SNAKE_CASE

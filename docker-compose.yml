@@ -13,7 +13,6 @@ services:
       - db
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: on-failure
     tty: true
 
