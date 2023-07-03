@@ -9,7 +9,7 @@ on:
 defaults:
   run:
     shell: bash
-    working-directory: ./backend
+    working-directory: .
 jobs:
   backend-test:
     runs-on: ubuntu-latest

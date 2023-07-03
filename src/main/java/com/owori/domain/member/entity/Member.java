@@ -36,6 +36,7 @@ public class Member implements Auditable {
     private AuthProvider authProvider;
 
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "member_role")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
 
@@ -45,14 +46,12 @@ public class Member implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Member(String name, String nickname, String profileImage, LocalDate birthDay, Color color, AuthProvider authProvider, List<Role> role, BaseTime baseTime) {
+    public Member(String name, String nickname, String profileImage, LocalDate birthDay, Color color, AuthProvider authProvider) {
         this.name = name;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.birthDay = birthDay;
         this.color = color;
         this.authProvider = authProvider;
-        this.role = role;
-        this.baseTime = baseTime;
     }
 }
