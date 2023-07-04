@@ -5,7 +5,6 @@ import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@SoftDelete
 public class AuditListener {
     @PrePersist
     public void setCreatedAt(Auditable auditable) {

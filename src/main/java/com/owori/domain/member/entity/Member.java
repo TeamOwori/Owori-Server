@@ -1,9 +1,12 @@
 package com.owori.domain.member.entity;
 
+import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +16,8 @@ import java.util.UUID;
 
 @Getter
 @Entity
+@Where(clause = "deleted_at is null")
+@EntityListeners(AuditListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member implements Auditable {
     @Id
@@ -29,16 +34,18 @@ public class Member implements Auditable {
 
     private LocalDate birthDay;
 
-    @Enumerated(EnumType.STRING)
-    private Color color;
+    private String refreshToken;
 
     @Enumerated(EnumType.STRING)
-    private AuthProvider authProvider;
+    private Color color;
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "member_role")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
+
+    @Embedded
+    private OAuth2Info oAuth2Info;
 
     @Setter
     @Embedded
@@ -46,12 +53,12 @@ public class Member implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Member(String name, String nickname, String profileImage, LocalDate birthDay, Color color, AuthProvider authProvider) {
+    public Member(String name, OAuth2Info oAuth2Info) {
         this.name = name;
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.birthDay = birthDay;
-        this.color = color;
-        this.authProvider = authProvider;
+        this.oAuth2Info = oAuth2Info;
+    }
+
+    public List<SimpleGrantedAuthority> getRole() {
+        return role.stream().map(Role::name).map(SimpleGrantedAuthority::new).toList();
     }
 }
