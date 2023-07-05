@@ -10,5 +10,5 @@ public class CommentResponse {
     private Long commentId;
     private String comment;
     private String writer;
-    private String before;
+    private String TimeBeforeWriting;
 }
