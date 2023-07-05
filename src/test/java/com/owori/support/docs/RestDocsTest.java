@@ -2,6 +2,9 @@ package com.owori.support.docs;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.owori.config.security.jwt.JwtTokenProvider;
+import com.owori.config.security.jwt.JwtValidator;
+import com.owori.config.security.oauth.UserPrincipleMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +31,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public abstract class RestDocsTest {
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     protected JpaMetamodelMappingContext jpaMetamodelMappingContext;
-
     protected MockMvc mockMvc;
+    @MockBean
+    private JwtValidator jwtValidator;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private UserPrincipleMapper userPrincipleMapper;
 
     protected String toRequestBody(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);

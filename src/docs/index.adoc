@@ -9,3 +9,4 @@
 오월이
 
 include::auth.adoc[]
+include::family.adoc[]

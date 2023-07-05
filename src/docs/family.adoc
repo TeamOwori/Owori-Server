@@ -1,0 +1,12 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Family
+=== 가족 생성
+operation::save family[snippets='http-request,http-response']
+
+=== 가족 멤버 초대코드로 추가
+operation::add member to family[snippets='http-request,http-response']
