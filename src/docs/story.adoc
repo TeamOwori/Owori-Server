@@ -4,7 +4,7 @@
 :toc: left
 :toclevels: 4
 
-== Auth
+== Story
 === 이야기 등록
 operation::save story[snippets='http-request,http-response']
 
