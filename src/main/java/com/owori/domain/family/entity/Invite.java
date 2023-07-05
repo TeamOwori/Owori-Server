@@ -9,27 +9,26 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.UUID;
 
 @Getter
 @Entity
 @Where(clause = "deleted_at is null")
 @EntityListeners(AuditListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Family implements Auditable {
+public class Invite implements Auditable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private String familyGroupName;
+    @Column(nullable = false, unique = true)
+    private String code;
 
-    @OneToMany(mappedBy = "family", cascade = CascadeType.PERSIST)
-    private Set<Member> members = new HashSet<>();
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
-    private Invite invite;
+    @JoinColumn
+    @OneToOne(fetch = FetchType.LAZY)
+    private Family family;
 
     @Setter
     @Embedded
@@ -37,14 +36,8 @@ public class Family implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Family(String familyGroupName, Member member, String code) {
-        this.familyGroupName = familyGroupName;
-        this.invite = new Invite(code, this);
-        addMember(member);
-    }
-
-    public void addMember(Member member) {
-        this.members.add(member);
-        member.organizeFamily(this);
+    public Invite(String code, Family family) {
+        this.code = code;
+        this.family = family;
     }
 }
