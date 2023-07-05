@@ -35,11 +35,6 @@ public class SecurityConfig {
     private final AccessDeniedHandler accessDeniedHandler;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http
                 .cors()
