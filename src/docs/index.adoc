@@ -10,3 +10,4 @@
 
 include::auth.adoc[]
 include::family.adoc[]
+include::story.adoc[]
