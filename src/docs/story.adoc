@@ -1,0 +1,9 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Auth
+=== 이야기 등록
+operation::save story[snippets='http-request,http-response']
