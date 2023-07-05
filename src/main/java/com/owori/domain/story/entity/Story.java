@@ -25,7 +25,8 @@ public class Story implements Auditable {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Lob
+    @Column(nullable = false)
     private String contents;
 
     @Column(nullable = false)

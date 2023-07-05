@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class findStoryResponse {
+public class FindStoryResponse {
     private Boolean isLiked;
     private List<String> images;
     private String title;

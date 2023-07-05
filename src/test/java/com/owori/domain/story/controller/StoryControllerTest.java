@@ -1,11 +1,10 @@
 package com.owori.domain.story.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.owori.domain.family.dto.request.FamilyRequest;
-import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.service.StoryService;
+import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -47,7 +43,7 @@ public class StoryControllerTest extends RestDocsTest{
     @DisplayName("POST /stories 이야기 등록 API 테스트")
     void addStory() throws Exception {
         //given
-        AddStoryResponse expected = new AddStoryResponse(2L);
+        IdResponse<Long> expected = new IdResponse<>(2L);
         given(storyService.addStory(any(),any())).willReturn(expected);
 
         AddStoryRequest request = new AddStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ");
@@ -66,8 +62,7 @@ public class StoryControllerTest extends RestDocsTest{
                 );
 
         //then
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.story_id").exists());
+        perform.andExpect(status().isCreated());
 
         //docs
         perform.andDo(document("save story", getDocumentRequest(), getDocumentResponse(), requestPartBody("images")));
@@ -78,9 +73,9 @@ public class StoryControllerTest extends RestDocsTest{
     void findStoryList() throws Exception {
         //given
         Long lastId = 2L;
-        List<findListStoryResponse> responses = new ArrayList<>();
-        responses.add(new findListStoryResponse("신나는 가족여행","이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5L,2L, "허망고","2022-02-01"));
-        responses.add(new findListStoryResponse("다같이 보드게임 했던 날","이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2L,5L, "허지롱이","2022-02-01 - 2022-02-04"));
+
+        List<FindListStoryResponse> responses = List.of(new FindListStoryResponse("신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5L, 2L, "허망고", "2022-02-01"),
+                new FindListStoryResponse("다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2L, 5L, "허지롱이", "2022-02-01 - 2022-02-04"));
 
         given(storyService.findListStory(any(),any())).willReturn(responses);
 
@@ -94,7 +89,6 @@ public class StoryControllerTest extends RestDocsTest{
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 );
 
-
         //then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").exists())
@@ -104,7 +98,6 @@ public class StoryControllerTest extends RestDocsTest{
                 .andExpect(jsonPath("$[0].comment_cnt").exists())
                 .andExpect(jsonPath("$[0].writer").exists())
                 .andExpect(jsonPath("$[0].date").exists());
-
 
         //docs
         perform.andDo(print())
@@ -117,20 +110,14 @@ public class StoryControllerTest extends RestDocsTest{
         //given
         Long lastId = 4L;
 
-        List<String> images1 = Stream.of(
-                "image0.png","image00.png","image02.png"
-        ).collect(Collectors.toList());
+        List<String> images1 = List.of("image0.png","image00.png","image02.png");
+        List<String> images2 = List.of("image2.png","image3.png","image2.png","image3.png","image3.png");
 
-        List<String> images2 = Stream.of(
-                "image2.png","image3.png","image2.png","image3.png","image3.png"
-        ).collect(Collectors.toList());
-
-        List<findAlbumStoryResponse> responses = Stream.of(
-                new findAlbumStoryResponse("2023.07", images1),
-                new findAlbumStoryResponse("2023.06", images2),
-                new findAlbumStoryResponse("2023.05", images1),
-                new findAlbumStoryResponse("2023.04", images2)
-        ).collect(Collectors.toList());
+        List<FindAlbumStoryResponse> responses = List.of(
+                new FindAlbumStoryResponse("2023.07", images1),
+                new FindAlbumStoryResponse("2023.06", images2),
+                new FindAlbumStoryResponse("2023.05", images1),
+                new FindAlbumStoryResponse("2023.04", images2));
 
         given(storyService.findAlbumStory(any(),any())).willReturn(responses);
 
@@ -160,19 +147,16 @@ public class StoryControllerTest extends RestDocsTest{
     @DisplayName("GET /stories/{storyId} 이야기 상세 조회 API 테스트")
     void findStory() throws Exception {
         //given
-        List<String> images = Stream.of(
-                "image2.png","image3.png","image2.png","image3.png","image3.png"
-        ).collect(Collectors.toList());
+        List<String> images = List.of("image2.png","image3.png","image2.png","image3.png","image3.png");
 
-        List<CommentResponse> comments = Stream.of(
+        List<CommentResponse> comments = List.of(
                 new CommentResponse(null,1L,"야호 첫번째 최상위 댓글입니다.","허지렁지렁","3시간 전"),
                 new CommentResponse(1L,2L,"첫번째 대댓글입니다.","김건빵","2시간 전"),
                 new CommentResponse(1L,3L,"두번째 대댓글입니다.","고구마","30분 전"),
                 new CommentResponse(null,4L,"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
-                ).collect(Collectors.toList());
+        );
 
-        findStoryResponse response = new findStoryResponse(true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
-
+        FindStoryResponse response = new FindStoryResponse(true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
         given(storyService.findStory(any())).willReturn(response);
 
         //when

@@ -1,11 +1,11 @@
 package com.owori.domain.story.service;
 
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.AddStoryResponse;
-import com.owori.domain.story.dto.response.findAlbumStoryResponse;
-import com.owori.domain.story.dto.response.findListStoryResponse;
-import com.owori.domain.story.dto.response.findStoryResponse;
+import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
+import com.owori.domain.story.dto.response.FindListStoryResponse;
+import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.repository.StoryRepository;
+import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,22 +19,22 @@ public class StoryService {
 
     private final StoryRepository storyRepository;
 
-    public AddStoryResponse addStory(AddStoryRequest request, List<MultipartFile> images) {
+    public IdResponse<Long> addStory(AddStoryRequest request, List<MultipartFile> images) {
         // todo: 로직 작성
         return null;
     }
 
-    public List<findAlbumStoryResponse> findAlbumStory(Pageable pageable, Long lastId) {
+    public List<FindAlbumStoryResponse> findAlbumStory(Pageable pageable, Long lastId) {
         // todo: 로직 작성
         return null;
     }
 
-    public List<findListStoryResponse> findListStory(Pageable pageable, Long lastId) {
+    public List<FindListStoryResponse> findListStory(Pageable pageable, Long lastId) {
         // todo: 로직 작성
         return null;
     }
 
-    public findStoryResponse findStory(Long storyId) {
+    public FindStoryResponse findStory(Long storyId) {
         // todo: 로직 작성
         return null;
     }

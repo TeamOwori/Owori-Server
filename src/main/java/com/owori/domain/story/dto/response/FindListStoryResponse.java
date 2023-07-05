@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class findListStoryResponse {
+public class FindListStoryResponse {
     private String title;
     private String contents;
     private String image;
