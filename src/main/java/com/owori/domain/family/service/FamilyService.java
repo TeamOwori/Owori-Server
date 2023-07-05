@@ -33,7 +33,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         return new InviteCodeResponse(code);
     }
 
-    private void validateCode(String code) {
+    private void validateCode(final String code) {
         if (familyRepository.existsByInviteCode(code)) {
             throw new InviteCodeDuplicateException();
         }
@@ -49,7 +49,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         familyRepository.findByInviteCode(addMemberRequest.getInviteCode().strip())
                 .ifPresent(family -> {
                     Invite invite = family.getInvite();
-                    if (isValidCode(invite)) {
+                    if (isInValidCode(invite)) {
                         invite.delete();
                         return;
                     }
@@ -57,7 +57,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
                 });
     }
 
-    private boolean isValidCode(Invite invite) {
+    private boolean isInValidCode(final Invite invite) {
         return invite.getBaseTime().getCreatedAt().plusMinutes(30L).isBefore(LocalDateTime.now());
     }
 
