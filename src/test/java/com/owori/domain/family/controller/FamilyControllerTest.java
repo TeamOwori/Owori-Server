@@ -4,7 +4,6 @@ import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.service.FamilyService;
-import com.owori.domain.member.controller.AuthController;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -31,6 +29,7 @@ class FamilyControllerTest extends RestDocsTest {
     @MockBean private FamilyService familyService;
 
     @Test
+    @DisplayName("가족 생성이 수행되는가")
     void saveFamily() throws Exception {
         //given
         InviteCodeResponse expected = new InviteCodeResponse("oworiinvite");
@@ -55,6 +54,7 @@ class FamilyControllerTest extends RestDocsTest {
     }
 
     @Test
+    @DisplayName("가족 인증을 통한 멤버 추가가 수행되는가")
     void saveFamilyMember() throws Exception {
         //given
         doNothing().when(familyService).addMember(any());

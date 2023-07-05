@@ -18,13 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class FamilyController {
     private final FamilyService familyService;
 
+    /**
+     * 가족 생성 컨트롤러입니다.
+     * 가족을 로그인한 유저를 포함하며 생성해 저장합니다. 초대코드를 response합니다.
+     * @param familyRequest 가족 그룹 명을 가지는 dto 입니다.
+     * @return 초대 코드를 가지는 response dto 입니다.
+     */
     @PostMapping
     public ResponseEntity<InviteCodeResponse> saveFamily(@RequestBody FamilyRequest familyRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamily(familyRequest));
     }
 
+    /**
+     * 가족 초대 코드 검증 및 멤버 추가 컨트롤러입니다.
+     * 초대 코드로 가족을 찾아 유효하면 멤버를 추가시킵니다.
+     * @param addMemberRequest 초대 코드를 가지고 있는 dto 입니다.
+     * @return 초대 코드를 가지는 response dto 입니다.
+     */
     @PostMapping("/members")
-    public ResponseEntity<Void> saveFamilyMember(@RequestBody AddMemberRequest addMemberRequest) {
+    public ResponseEntity<Void> addFamilyMember(@RequestBody AddMemberRequest addMemberRequest) {
         familyService.addMember(addMemberRequest);
         return ResponseEntity.ok().build();
     }
