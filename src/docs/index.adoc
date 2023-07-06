@@ -11,5 +11,4 @@
 include::auth.adoc[]
 include::family.adoc[]
 include::story.adoc[]
-
-include::record.adoc[]
+include::schedule.adoc[]

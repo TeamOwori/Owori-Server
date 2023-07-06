@@ -43,13 +43,22 @@ public class Schedule implements Auditable {
     private String type;
 
     // 개인이라면 색을 받아오기 위해서 생성자 저장
-    @OneToOne
+    @ManyToOne //수정
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    private Boolean dDayOption;
+
+    @Enumerated(EnumType.STRING)
+    @JoinColumn
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<Alarm> alarmList = new ArrayList<>();
+
+    /*
     // 알람 종류가 여러개일 수 있음
     @OneToMany(mappedBy = "schedule")
     private List<AlarmType> alarmTypes = new ArrayList<>();
+     */
 
     @Setter
     @Embedded

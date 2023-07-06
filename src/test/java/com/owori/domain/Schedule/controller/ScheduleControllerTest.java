@@ -36,7 +36,7 @@ public class ScheduleControllerTest extends RestDocsTest {
     @MockBean private ScheduleService scheduleService;
 
     @Test
-    @DisplayName("POST / record 일정 등록 API 테스트")
+    @DisplayName("POST / schedule 일정 등록 API 테스트")
         void addSchedule() throws Exception {
         // given
         AddScheduleResponse expected = new AddScheduleResponse(UUID.randomUUID());
@@ -57,11 +57,11 @@ public class ScheduleControllerTest extends RestDocsTest {
         perform.andExpect(status().isCreated());
 
         // docs
-        perform.andDo(document("save record", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("save schedule", getDocumentRequest(), getDocumentResponse()));
     }
 
     @Test
-    @DisplayName("PATCH / record 일정 수정 API 테스트")
+    @DisplayName("PATCH / shedule 일정 수정 API 테스트")
     void updateSchedule() throws Exception {
         // given
         UpdateScheduleResponse expected = new UpdateScheduleResponse(UUID.randomUUID());
@@ -83,11 +83,11 @@ public class ScheduleControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk());
 
         // docs
-        perform.andDo(document("update record", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("update schedule", getDocumentRequest(), getDocumentResponse()));
     }
 
     @Test
-    @DisplayName("GET / record 일정 월별 조회 API 테스트")
+    @DisplayName("GET / schedule 일정 월별 조회 API 테스트")
     void findScheduleByMonth() throws Exception {
         // given
         List<FindScheduleByMonthResponse> expected = List.of(
@@ -115,6 +115,6 @@ public class ScheduleControllerTest extends RestDocsTest {
 
         // docs
         perform.andDo(print())
-                .andDo(document("find record by month", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find schedule by month", getDocumentRequest(), getDocumentResponse()));
     }
 }
