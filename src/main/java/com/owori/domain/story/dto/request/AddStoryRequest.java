@@ -19,5 +19,5 @@ public class AddStoryRequest {
     private String title;
 
     private String contents;
-    private List<UUID> images;
+    private List<UUID> imageId;
 }
