@@ -3,6 +3,7 @@ package com.owori.domain.story.service;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.repository.MemberRepository;
+import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
 import com.owori.domain.story.dto.response.FindListStoryResponse;
@@ -27,11 +28,12 @@ public class StoryService implements EntityLoader<Story, Long> {
     private final StoryRepository storyRepository;
     private final StoryMapper storyMapper;
     private final ImageService imageService;
+    private final AuthService authService;
     private final MemberRepository memberRepository;
 
     @Transactional
     public IdResponse<Long> addStory(AddStoryRequest request) {
-        Member member = memberRepository.findByNickname("지렁이");
+        Member member = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, member));
         imageService.updateStory(newStory, request.getImages());
 
