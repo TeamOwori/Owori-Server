@@ -49,7 +49,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 post("/stories")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(toRequestBody(request))
-                                        .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                        .header("memberId", UUID.randomUUID().toString())
                 );
 
         //then
@@ -77,7 +77,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 .param("sort", "createAt")
                                 .param("lastId", lastId.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                                 );
 
         //then
@@ -119,7 +119,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 .param("sort", "createAt")
                                 .param("lastId", lastId.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                 );
 
 
@@ -155,7 +155,7 @@ public class StoryControllerTest extends RestDocsTest{
                 mockMvc.perform(
                         get("/stories/{storyId}", 2L)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                 );
 
 
