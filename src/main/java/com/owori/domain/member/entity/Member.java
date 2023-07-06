@@ -66,7 +66,8 @@ public class Member implements Auditable {
     }
 
     public void generateColor() {
-        List<Color> familyColors = family.getMembers().stream().filter(m -> !m.getId().equals(this.id)).map(Member::getColor).toList();
+        if (family == null) return;
+        List<Color> familyColors = family.getMembers().stream().filter(m -> m.getId() != null && !m.getId().equals(this.id)).map(Member::getColor).toList();
         updateColor(Color.getNextColor(familyColors));
     }
 
