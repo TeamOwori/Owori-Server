@@ -63,12 +63,15 @@ public class Member implements Auditable {
     public void update(String nickname, LocalDate birthDay) {
         this.nickname = nickname;
         this.birthDay = birthDay;
-        this.color = generateColor();
     }
 
-    private Color generateColor() {
+    public void generateColor() {
         List<Color> familyColors = family.getMembers().stream().filter(m -> !m.getId().equals(this.id)).map(Member::getColor).toList();
-        return Color.getNextColor(familyColors);
+        updateColor(Color.getNextColor(familyColors));
+    }
+
+    public void updateColor(Color color) {
+        this.color = color;
     }
 
     public List<SimpleGrantedAuthority> getRole() {
@@ -77,6 +80,7 @@ public class Member implements Auditable {
 
     public void organizeFamily(Family family) {
         this.family = family;
+        generateColor();
     }
 
     public void updateProfileImage(String profileImage) {
