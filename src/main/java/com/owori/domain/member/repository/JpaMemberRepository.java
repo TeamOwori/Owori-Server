@@ -1,5 +1,6 @@
 package com.owori.domain.member.repository;
 
+import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,8 +12,8 @@ import java.util.UUID;
 
 public interface JpaMemberRepository extends JpaRepository<Member, UUID>, MemberRepository {
 
-    @Query("SELECT m FROM Member m WHERE m.oAuth2Info.accountId = :accountId")
-    Optional<Member> findByAccountId(String accountId);
+    @Query("SELECT m FROM Member m WHERE m.oAuth2Info.token = :token AND m.oAuth2Info.authProvider = :authProvider")
+    Optional<Member> findByTokenAndAuthProvider(String token, AuthProvider authProvider);
 
     @Modifying
     @Transactional

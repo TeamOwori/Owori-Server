@@ -50,7 +50,7 @@ class FamilyServiceTest extends LoginTest {
         String familyName = "오월이 가족";
         String code = familyService.saveFamily(new FamilyRequest(familyName)).getInviteCode();
 
-        Member member = Member.builder().name("test").oAuth2Info(new OAuth2Info("123123", AuthProvider.APPLE)).build();
+        Member member = Member.builder().oAuth2Info(new OAuth2Info("123123", AuthProvider.APPLE)).build();
         when(authService.getLoginUser()).thenReturn(member);
 
         //when
