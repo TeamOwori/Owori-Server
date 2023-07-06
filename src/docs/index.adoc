@@ -9,3 +9,5 @@
 오월이
 
 include::auth.adoc[]
+
+include::record.adoc[]
