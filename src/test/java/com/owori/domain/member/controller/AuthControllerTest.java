@@ -5,6 +5,7 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Auth 컨트롤러의")
+@WebMvcTest(AuthController.class)
 class AuthControllerTest extends RestDocsTest {
 
     @MockBean private AuthService authService;

@@ -1,0 +1,18 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Story
+=== 이야기 등록
+operation::save story[snippets='http-request,http-response']
+
+=== 이야기 목록형 조회
+operation::find story list[snippets='http-request,http-response']
+
+=== 이야기 앨범형 조회
+operation::find story album[snippets='http-request,http-response']
+
+=== 이야기 상세 조회
+operation::find story[snippets='http-request,http-response']
