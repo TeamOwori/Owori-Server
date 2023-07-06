@@ -1,4 +1,4 @@
-package com.owori.domain.record.dto.response;
+package com.owori.domain.Schedule.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
-public class UpdateRecordResponse {
+public class UpdateScheduleResponse {
     private UUID id;
 }

@@ -1,11 +1,9 @@
-package com.owori.domain.record.entity;
+package com.owori.domain.Schedule.entity;
 
-import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
-import com.sun.jdi.PrimitiveValue;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @Where(clause = "deleted_at is null")
 @EntityListeners(AuditListener.class) // 자동으로 시간 매핑
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Record implements Auditable {
+public class Schedule implements Auditable {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -50,7 +48,7 @@ public class Record implements Auditable {
     private Member member;
 
     // 알람 종류가 여러개일 수 있음
-    @OneToMany(mappedBy = "record")
+    @OneToMany(mappedBy = "schedule")
     private List<AlarmType> alarmTypes = new ArrayList<>();
 
     @Setter

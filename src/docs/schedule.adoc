@@ -1,0 +1,15 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Schedule
+=== 일정 등록
+operation::save schedule [snippets='http-request,http-response']
+
+=== 일정 수정
+operation::update schedule [snippets='http-request,http-response']
+
+=== 일정 월별 조회
+operation::find shedule by month [snippets='http-request,http-response']

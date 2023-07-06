@@ -1,5 +1,6 @@
-package com.owori.domain.record.dto.request;
+package com.owori.domain.Schedule.dto.response;
 
+import com.owori.domain.member.entity.Color;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,14 +9,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddRecordRequest {
+@NoArgsConstructor
+public class FindScheduleByMonthResponse {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String type; // 가족 or 개인
+    private Color color;
     private Boolean dDayOption;
     private List<String> alarmOptions;
-
 }

@@ -1,4 +1,4 @@
-package com.owori.domain.record.entity;
+package com.owori.domain.Schedule.entity;
 
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
@@ -27,7 +27,7 @@ public class AlarmType implements Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECORD_ID")
-    private Record record;
+    private Schedule schedule;
 
     @Column(nullable = false)
     private Alarm alarm;

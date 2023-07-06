@@ -1,4 +1,4 @@
-package com.owori.domain.record.entity;
+package com.owori.domain.Schedule.entity;
 
 
 public enum Alarm {

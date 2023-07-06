@@ -1,4 +1,4 @@
-package com.owori.domain.record.dto.request;
+package com.owori.domain.Schedule.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateRecordRequest {
+public class UpdateScheduleRequest {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
