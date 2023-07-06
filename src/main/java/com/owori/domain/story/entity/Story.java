@@ -1,6 +1,8 @@
 package com.owori.domain.story.entity;
 
 import com.owori.domain.image.entity.Image;
+import com.owori.domain.member.entity.Member;
+import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
@@ -35,6 +37,10 @@ public class Story implements Auditable {
     @Column(nullable = false)
     private LocalDate endDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -42,5 +48,14 @@ public class Story implements Auditable {
     @Embedded
     @Column(nullable = false)
     private BaseTime baseTime;
+
+    @Builder
+    public Story(AddStoryRequest request, Member member){
+        this.title = request.getTitle();
+        this.contents = request.getContents();
+        this.startDate = request.getStartDate();
+        this.endDate = request.getEndDate();
+        this.member = member;
+    }
 
 }

@@ -27,6 +27,9 @@ public class Image implements Auditable {
     @JoinColumn(name = "story_id")
     private Story story;
 
+    @Column
+    private Long orderNum;
+
     @Column(nullable = false)
     private String url;
 
@@ -34,5 +37,15 @@ public class Image implements Auditable {
     @Embedded
     @Column(nullable = false)
     private BaseTime baseTime;
+
+    @Builder
+    public Image (String url, Long orderNum){
+        this.url = url;
+        this.orderNum = orderNum;
+    }
+
+    public void updateStory(Story story){
+        this.story = story;
+    }
 
 }
