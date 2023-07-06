@@ -1,4 +1,4 @@
-package com.owori.domain.Schedule.dto.response;
+package com.owori.domain.schedule.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.owori.domain.Schedule.entity;
+package com.owori.domain.schedule.entity;
 
 import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
@@ -38,6 +38,8 @@ public class Schedule implements Auditable {
     @Column(nullable = false)
     private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
+    private ScheduleType scheduleType;
     // 가족인지 개인인지 판단
     @Column(nullable = false)
     private String type;
@@ -49,16 +51,11 @@ public class Schedule implements Auditable {
 
     private Boolean dDayOption;
 
+    // 알람 옵션이 여러개일 수 있음
     @Enumerated(EnumType.STRING)
     @JoinColumn
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Alarm> alarmList = new ArrayList<>();
-
-    /*
-    // 알람 종류가 여러개일 수 있음
-    @OneToMany(mappedBy = "schedule")
-    private List<AlarmType> alarmTypes = new ArrayList<>();
-     */
 
     @Setter
     @Embedded

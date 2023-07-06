@@ -1,5 +1,6 @@
-package com.owori.domain.Schedule.dto.response;
+package com.owori.domain.schedule.dto.response;
 
+import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.member.entity.Color;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +18,5 @@ public class FindScheduleByMonthResponse {
     private LocalDate endDate;
     private Color color;
     private Boolean dDayOption;
-    private List<String> alarmOptions;
+    private List<Alarm> alarmOptions;
 }

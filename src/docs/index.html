@@ -815,9 +815,10 @@ Content-Length: 1296
 <h4 id="_일정_등록_http_request"><a class="link" href="#_일정_등록_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /record HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /schedule HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 42cbed3a-b1f1-419a-a705-a0e8ae79025d
 Content-Length: 190
 Host: localhost:8080
 
@@ -841,7 +842,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 53
 
 {
-  "id" : "87b19d85-60c8-46f1-9896-911af387942d"
+  "id" : "1753776f-38dd-4b7d-991a-c68dae563b67"
 }</code></pre>
 </div>
 </div>
@@ -853,10 +854,11 @@ Content-Length: 53
 <h4 id="_일정_수정_http_request"><a class="link" href="#_일정_수정_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /record/update?id=334b56ea-7592-49ea-a849-9b0af58eb8a5 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /schedule/update?scheduleId=647f90b4-ca31-43ba-bd71-bb8fb25b82df HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-Content-Length: 177
+memberId: f29d8874-0191-4276-bf45-c774ff514b37
+Content-Length: 168
 Host: localhost:8080
 
 {
@@ -864,7 +866,7 @@ Host: localhost:8080
   "start_date" : "2023-07-31",
   "end_date" : "2023-08-04",
   "type" : "가족",
-  "alarm_options" : [ "당일" ],
+  "alarm_options" : [ ],
   "dday_option" : true
 }</code></pre>
 </div>
@@ -879,7 +881,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 53
 
 {
-  "id" : "7aebaba3-c934-4f53-ab31-2058f7896cbe"
+  "id" : "bac26004-5e98-473b-bac4-216ffd2fad22"
 }</code></pre>
 </div>
 </div>
@@ -891,9 +893,10 @@ Content-Length: 53
 <h4 id="_일정_월별_조회_http_request"><a class="link" href="#_일정_월별_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /record/month?sort=startDate&amp;yearMonth=2023-07 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /schedule/month?sort=startDate&amp;yearMonth=2023-07 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 4af2561d-88e1-407d-8b2e-083fb9cb8dea
 Host: localhost:8080</code></pre>
 </div>
 </div>
