@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
-public class ImageUploadUtil {
+public class S3ImageComponent {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
