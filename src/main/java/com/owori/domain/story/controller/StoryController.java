@@ -30,7 +30,7 @@ public class StoryController {
      * @return 생성된 이야기의 id가 반환됩니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<Long>> addStory(@RequestBody(required = false) AddStoryRequest request) {
+    public ResponseEntity<IdResponse<Long>> addStory(@RequestBody AddStoryRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 

@@ -23,7 +23,7 @@ public class ImageController {
     /**
      * 이야기에 첨부될 이미지를 저장합니다.
      * @param images 이야기에 첨부한 사진 입니다. 10장까지 첨부 가능합니다.
-     * @return 생성된 이야기의 엔티티가 반환됩니다.
+     * @return 생성된 이야기의 id가 반환됩니다.
      */
     @PostMapping
     public ResponseEntity<List<UUID>> addStoryImage(@RequestPart(required = false) List<MultipartFile> images) throws IOException {
