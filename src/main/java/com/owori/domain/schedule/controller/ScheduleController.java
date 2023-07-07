@@ -6,6 +6,7 @@ import com.owori.domain.schedule.dto.response.AddScheduleResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.dto.response.UpdateScheduleResponse;
 import com.owori.domain.schedule.service.ScheduleService;
+import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,7 +31,7 @@ public class ScheduleController {
      * @return AddScheduleResponse는 추가된 일정의 id값입니다.
      */
     @PostMapping
-    public ResponseEntity<AddScheduleResponse> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
+    public ResponseEntity<IdResponse> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.addSchedule(addScheduleRequest));
     }
 
@@ -42,7 +43,7 @@ public class ScheduleController {
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
     @PatchMapping("/update")
-    public ResponseEntity<UpdateScheduleResponse> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
+    public ResponseEntity<IdResponse> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
         return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
     }
 

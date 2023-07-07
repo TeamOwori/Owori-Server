@@ -6,6 +6,7 @@ import com.owori.domain.schedule.dto.response.AddScheduleResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.dto.response.UpdateScheduleResponse;
 import com.owori.domain.schedule.repository.ScheduleRepository;
+import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,11 @@ import java.util.UUID;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
-    public AddScheduleResponse addSchedule(AddScheduleRequest addScheduleRequest) {
+    public IdResponse addSchedule(AddScheduleRequest addScheduleRequest) {
         return null; // todo 로직 작성
     }
 
-    public UpdateScheduleResponse updateSchedule(UUID scheduleId, UpdateScheduleRequest updateScheduleRequest) {
+    public IdResponse updateSchedule(UUID scheduleId, UpdateScheduleRequest updateScheduleRequest) {
         return null; // todo 로직작성
     }
 

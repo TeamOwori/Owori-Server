@@ -41,10 +41,6 @@ public class Schedule implements Auditable {
     @Enumerated(EnumType.STRING)
     private ScheduleType scheduleType;
 
-    // 가족인지 개인인지 판단
-    @Column(nullable = false)
-    private String type;
-
     // 개인이라면 색을 받아오기 위해서 생성자 저장
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
