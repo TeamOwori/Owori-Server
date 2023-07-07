@@ -1,5 +1,7 @@
 package com.owori.config.security.jwt;
 
+import com.owori.domain.member.entity.Member;
+import com.owori.domain.member.exception.JwtProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +24,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtValidator jwtValidator;
     @Value("${jwt.access-header}")
     private String tokenTag;
+    @Value("${app.member-header}")
+    private String memberTag;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -29,10 +34,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token.ifPresent(
                 t -> {
                     Authentication authentication = jwtValidator.getAuthentication(t);
+                    validateMemberId(request, authentication);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 });
 
         filterChain.doFilter(request, response);
+    }
+
+    private void validateMemberId(HttpServletRequest request, Authentication authentication) {
+        UUID memberId = UUID.fromString(request.getHeader(memberTag));
+        if (!memberId.equals(((Member)(authentication.getPrincipal())).getId())) {
+            throw new JwtProcessingException();
+        }
     }
 
     private String parseBearerToken(HttpServletRequest request) {

@@ -12,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.UUID;
+
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,6 +43,7 @@ class FamilyControllerTest extends RestDocsTest {
                         post("/families")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                                 .content(
                                         toRequestBody(new FamilyRequest("우리가족"))));
 
@@ -65,6 +68,7 @@ class FamilyControllerTest extends RestDocsTest {
                         post("/families/members")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                                 .content(
                                         toRequestBody(new AddMemberRequest("우리가족"))));
 

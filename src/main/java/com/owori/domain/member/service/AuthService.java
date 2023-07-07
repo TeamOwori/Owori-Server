@@ -3,7 +3,6 @@ package com.owori.domain.member.service;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.config.security.jwt.JwtTokenProvider;
 import com.owori.config.security.jwt.JwtValidator;
-import com.owori.config.security.oauth.UserPrinciple;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.JwtProcessingException;
 import com.owori.domain.member.repository.MemberRepository;
@@ -25,23 +24,23 @@ public class AuthService {
     public JwtToken refreshToken(final String oldRefreshToken, final String oldAccessToken) {
         validateTokens(oldRefreshToken, oldAccessToken);
 
-        UserPrinciple user = getUserDetails(oldAccessToken);
+        Member user = getUserDetails(oldAccessToken);
 
-        validateSavedRefreshTokenIfExpired(oldRefreshToken, UUID.fromString(user.getName()));
+        validateSavedRefreshTokenIfExpired(oldRefreshToken, user.getId());
 
-        return findMemberAndUpdateRefreshToken(user);
+        return createAndUpdateToken(user, user.getOAuth2Info().getToken());
     }
 
-    private JwtToken findMemberAndUpdateRefreshToken(final UserPrinciple user) {
-        JwtToken jwtToken = jwtTokenProvider.createToken(user);
+    public JwtToken createAndUpdateToken(final Member user, final String token) {
+        JwtToken jwtToken = jwtTokenProvider.createToken(user, token);
 
-        memberRepository.updateRefreshToken(UUID.fromString(user.getName()), jwtToken.getRefreshToken());
+        memberRepository.updateRefreshToken(user.getId(), jwtToken.getRefreshToken());
         return jwtToken;
     }
 
-    private UserPrinciple getUserDetails(final String oldAccessToken) {
+    private Member getUserDetails(final String oldAccessToken) {
         Authentication authentication = jwtValidator.getAuthentication(oldAccessToken);
-        return (UserPrinciple) authentication.getPrincipal();
+        return (Member) authentication.getPrincipal();
     }
 
     private void validateTokens(final String oldRefreshToken, final String oldAccessToken) {
@@ -69,7 +68,7 @@ public class AuthService {
     }
 
     public UUID getLoginUserId() {
-        return UUID.fromString(((UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName());
+        return ((Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
     }
 
     public Member getLoginUser() {

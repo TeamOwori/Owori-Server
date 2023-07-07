@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -59,6 +60,7 @@ public class StoryControllerTest extends RestDocsTest{
                                         .content(objectMapper.writeValueAsString(request))
                                         .accept(MediaType.APPLICATION_JSON)
                                         .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                        .header("memberId", UUID.randomUUID().toString())
                 );
 
         //then
@@ -87,6 +89,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 .param("lastId", lastId.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                                 );
 
         //then
@@ -129,6 +132,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 .param("lastId", lastId.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                 );
 
 
@@ -165,6 +169,7 @@ public class StoryControllerTest extends RestDocsTest{
                         get("/stories/{storyId}", 2L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
                 );
 
 

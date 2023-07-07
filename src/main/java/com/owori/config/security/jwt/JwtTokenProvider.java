@@ -1,6 +1,6 @@
 package com.owori.config.security.jwt;
 
-import com.owori.config.security.oauth.UserPrinciple;
+import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +14,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final Key key;
+    private final MemberRepository memberRepository;
     private static final Long ACCESS_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 1000; // 1 Day
     private static final Long REFRESH_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 14 * 1000; // 14 Days
-    private final MemberRepository memberRepository;
 
-    public JwtToken createToken(UserPrinciple userDetails) {
-        Claims claims = getClaims(userDetails);
+    public JwtToken createToken(Member loginUser, String token) {
+        Claims claims = getClaims(loginUser, token);
 
-        String accessToken = getToken(userDetails, claims, ACCESS_TOKEN_EXPIRE_LENGTH);
-        String refreshToken = getToken(userDetails, claims, REFRESH_TOKEN_EXPIRE_LENGTH);
+        String accessToken = getToken(loginUser, claims, ACCESS_TOKEN_EXPIRE_LENGTH);
+        String refreshToken = getToken(loginUser, claims, REFRESH_TOKEN_EXPIRE_LENGTH);
 
-        saveRefreshToken(refreshToken, userDetails);
+        saveRefreshToken(refreshToken, loginUser);
 
         return JwtToken.builder()
                 .accessToken(accessToken)
@@ -41,23 +41,23 @@ public class JwtTokenProvider {
         }
     }
 
-    private void saveRefreshToken(String refreshToken, UserPrinciple userDetails) {
-        UUID id = UUID.fromString(userDetails.getName());
-
+    private void saveRefreshToken(String refreshToken, Member loginUser) {
+        UUID id = loginUser.getId();
         memberRepository.updateRefreshToken(id, refreshToken);
     }
 
-    private Claims getClaims(UserPrinciple userDetails) {
+    private Claims getClaims(Member loginUser, String token) {
         Claims claims = Jwts.claims();
-        claims.put("id", userDetails.getName());
+        claims.put("id", loginUser.getId().toString());
+        claims.put("token", token);
         return claims;
     }
 
-    private String getToken(UserPrinciple loginUser, Claims claims, Long validationSecond) {
+    private String getToken(Member loginUser, Claims claims, Long validationSecond) {
         long now = new Date().getTime();
 
         return Jwts.builder()
-                .setSubject(loginUser.getName())
+                .setSubject(loginUser.getId().toString())
                 .setClaims(claims)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(new Date(now + validationSecond))
