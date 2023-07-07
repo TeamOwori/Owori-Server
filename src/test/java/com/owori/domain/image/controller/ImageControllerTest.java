@@ -43,14 +43,14 @@ public class ImageControllerTest extends RestDocsTest{
 
         MockMultipartFile image1 = new MockMultipartFile("images", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 1".getBytes(StandardCharsets.UTF_8));
         MockMultipartFile image2 = new MockMultipartFile("images", "image2.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 2".getBytes(StandardCharsets.UTF_8));
-        MockMultipartFile metadata = new MockMultipartFile("metadata", "", "application/json", "{ \"version\": \"1.0\"}".getBytes());
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                                 multipart("/images", HttpMethod.POST)
-                                        .file(image1).file(image2).file(metadata)
+                                        .file(image1).file(image2)
                                         .accept(MediaType.APPLICATION_JSON)
+                                        .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                         .header("memberId", UUID.randomUUID().toString())
                 );
 
