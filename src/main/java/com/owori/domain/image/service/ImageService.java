@@ -7,7 +7,7 @@ import com.owori.domain.image.exception.ImageLimitExceededException;
 import com.owori.domain.story.entity.Story;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
-import com.owori.utils.ImageUploadUtil;
+import com.owori.utils.S3ImageComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class ImageService implements EntityLoader<Image, UUID> {
     private final ImageRepository imageRepository;
     private final ImageMapper imageMapper;
-    private final ImageUploadUtil imageUploadUtil;
+    private final S3ImageComponent s3ImageComponent;
 
     @Transactional
     public List<UUID> addStoryImage(List<MultipartFile> images) throws IOException {
@@ -37,7 +37,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
 
         for (MultipartFile image : images) {
             if(image != null) {
-                String imgUrl = imageUploadUtil.uploadImage("story", image);
+                String imgUrl = s3ImageComponent.uploadImage("story", image);
                 Image newImage = imageMapper.toEntity(imgUrl, order);
                 imageRepository.save(newImage);
                 response.add(newImage.getId());
@@ -49,9 +49,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
 
     @Transactional
     public void updateStory(Story newStory, List<UUID> images) {
-        for (UUID imageID : images){
-            loadEntity(imageID).updateStory(newStory);
-        }
+        images.stream().forEach(imageId -> loadEntity(imageId).updateStory(newStory));
     }
 
     @Override
