@@ -8,15 +8,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,8 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService;
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
@@ -44,11 +37,10 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests(
                         requests -> requests
-                                .antMatchers("/oauth2/**", "/auth/**")
+                                .antMatchers("/auth/**", "/members")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
-                .oauth2Login(oAuth2LoginConfigurer())
                 .sessionManagement(sessionManagementConfigurer())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
@@ -60,14 +52,6 @@ public class SecurityConfig {
 
     private Customizer<SessionManagementConfigurer<HttpSecurity>> sessionManagementConfigurer() {
         return s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-
-    private Customizer<OAuth2LoginConfigurer<HttpSecurity>> oAuth2LoginConfigurer() {
-        return o -> o.authorizationEndpoint(a ->
-                        a.baseUri("/oauth2/authorize")
-                                .and().redirectionEndpoint().baseUri("/oauth2/callback/*"))
-                .userInfoEndpoint(u -> u.userService(customOAuth2UserService))
-                .successHandler(authenticationSuccessHandler);
     }
 
     @Bean

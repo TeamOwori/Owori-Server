@@ -23,7 +23,7 @@ public abstract class LoginTest {
 
     @BeforeEach
     public void setup() {
-        Member member = new Member("오월이", new OAuth2Info("123", AuthProvider.KAKAO));
+        Member member = new Member(new OAuth2Info("123", AuthProvider.KAKAO));
         loginUser = memberRepository.save(member);
         when(authService.getLoginUserId()).thenReturn(loginUser.getId());
         when(authService.getLoginUser()).thenReturn(loginUser);

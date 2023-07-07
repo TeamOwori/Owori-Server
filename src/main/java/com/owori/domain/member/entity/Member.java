@@ -27,8 +27,6 @@ public class Member implements Auditable {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private String name;
-
     private String nickname;
 
     private String profileImage;
@@ -44,8 +42,8 @@ public class Member implements Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Family family;
 
+    @JoinColumn
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "member_role")
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
 
@@ -58,9 +56,23 @@ public class Member implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Member(String name, OAuth2Info oAuth2Info) {
-        this.name = name;
+    public Member(OAuth2Info oAuth2Info) {
         this.oAuth2Info = oAuth2Info;
+    }
+
+    public void update(String nickname, LocalDate birthDay) {
+        this.nickname = nickname;
+        this.birthDay = birthDay;
+    }
+
+    public void generateColor() {
+        if (family == null) return;
+        List<Color> familyColors = family.getMembers().stream().filter(m -> m.getId() != null && !m.getId().equals(this.id)).map(Member::getColor).toList();
+        updateColor(Color.getNextColor(familyColors));
+    }
+
+    public void updateColor(Color color) {
+        this.color = color;
     }
 
     public List<SimpleGrantedAuthority> getRole() {
@@ -69,5 +81,10 @@ public class Member implements Auditable {
 
     public void organizeFamily(Family family) {
         this.family = family;
+        generateColor();
+    }
+
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }
