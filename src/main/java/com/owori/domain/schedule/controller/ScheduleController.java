@@ -2,9 +2,7 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.AddScheduleResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.UpdateScheduleResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +29,7 @@ public class ScheduleController {
      * @return AddScheduleResponse는 추가된 일정의 id값입니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.addSchedule(addScheduleRequest));
     }
 
@@ -43,7 +41,7 @@ public class ScheduleController {
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
     @PatchMapping("/update")
-    public ResponseEntity<IdResponse> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
         return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
     }
 

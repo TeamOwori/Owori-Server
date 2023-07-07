@@ -3,9 +3,7 @@ package com.owori.domain.schedule.controller;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.AddScheduleResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.UpdateScheduleResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -44,7 +42,7 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("POST / schedule 일정 등록 API 테스트")
         void addSchedule() throws Exception {
         // given
-        IdResponse expected = new IdResponse(UUID.randomUUID());
+        IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
         given(scheduleService.addSchedule(any())).willReturn(expected);
 
         AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), 가족, true, List.of(당일, 하루전));
@@ -70,7 +68,7 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("PATCH / schedule 일정 수정 API 테스트")
     void updateSchedule() throws Exception {
         // given
-        IdResponse expected = new IdResponse(UUID.randomUUID());
+        IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
         given(scheduleService.updateSchedule(any(), any())).willReturn(expected);
 
         UpdateScheduleRequest request = new UpdateScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), 가족, true, List.of());
@@ -100,7 +98,7 @@ public class ScheduleControllerTest extends RestDocsTest {
         List<FindScheduleByMonthResponse> expected = List.of(
                 new FindScheduleByMonthResponse("친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), Color.BLUE, true, List.of(당일)),
                 new FindScheduleByMonthResponse("코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.ORANGE, true, List.of(하루전, 일주일전))
+                new FindScheduleByMonthResponse("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.BLUE, true, List.of(하루전, 일주일전))
         );
 
         given(scheduleService.findScheduleByMonth(any(), any())).willReturn(expected);
