@@ -9,7 +9,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Entity

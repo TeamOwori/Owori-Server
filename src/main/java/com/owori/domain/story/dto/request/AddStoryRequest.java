@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -17,4 +19,5 @@ public class AddStoryRequest {
     private String title;
 
     private String contents;
+    private List<UUID> imageId;
 }

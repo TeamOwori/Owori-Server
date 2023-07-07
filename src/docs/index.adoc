@@ -10,5 +10,7 @@
 
 include::auth.adoc[]
 include::family.adoc[]
+include::image.adoc[]
 include::story.adoc[]
 include::schedule.adoc[]
+include::member.adoc[]
