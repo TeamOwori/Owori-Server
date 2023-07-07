@@ -2,7 +2,6 @@ package com.owori.domain.story.entity;
 
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.member.entity.Member;
-import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
@@ -50,11 +49,11 @@ public class Story implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Story(AddStoryRequest request, Member member){
-        this.title = request.getTitle();
-        this.contents = request.getContents();
-        this.startDate = request.getStartDate();
-        this.endDate = request.getEndDate();
+    public Story(String title, String contents, LocalDate startDate, LocalDate endDate, Member member){
+        this.title = title;
+        this.contents = contents;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.member = member;
     }
 

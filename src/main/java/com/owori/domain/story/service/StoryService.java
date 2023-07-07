@@ -34,7 +34,7 @@ public class StoryService implements EntityLoader<Story, Long> {
     @Transactional
     public IdResponse<Long> addStory(AddStoryRequest request) {
         Member member = authService.getLoginUser();
-        Story newStory = storyRepository.save(storyMapper.toEntity(request, member));
+        Story newStory = storyRepository.save(storyMapper.toEntity(request.getTitle(), request.getContents(), request.getStartDate(), request.getEndDate(), member));
         imageService.updateStory(newStory, request.getImageId());
 
         return new IdResponse<>(newStory.getId());
