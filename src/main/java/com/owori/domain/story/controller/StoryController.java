@@ -12,7 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,10 +24,14 @@ public class StoryController {
 
     private final StoryService storyService;
 
+    /**
+     * 이야기를 생성합니다.
+     * @param request 이야기 생성을 위한 dto 입니다.
+     * @return 생성된 이야기의 id가 반환됩니다.
+     */
     @PostMapping
-    public ResponseEntity<IdResponse<Long>> addStory(@RequestPart(required = false) AddStoryRequest request,
-                                                      @RequestPart(required = false) List<MultipartFile> images){
-        return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request, images));
+    public ResponseEntity<IdResponse<Long>> addStory(@RequestBody AddStoryRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 
     @GetMapping("/album")
