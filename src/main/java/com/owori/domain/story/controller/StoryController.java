@@ -38,15 +38,15 @@ public class StoryController {
      * 이야기를 앨범형으로 조회합니다.
      * @param pageable
      * @param orderBy createAt: 최신순 / eventAt: 날짜순
-     * @param lastId 마지막으로 조회한 게시글의 id 입니다.
+     * @param lastViewed 마지막으로 조회할 게시글 정보 입니다. 최신순의 경우 Id값을 넘겨주면 되고, 날짜순으로 조회할 경우는 "2022.02"로 넘겨주면 됩니다.
      * @return 앨범형 조회 dto가 반환됩니다.
      */
     @GetMapping("/album")
     public ResponseEntity<List<FindAlbumStoryGroupResponse>> findAlbumStory(@PageableDefault(direction = DESC) Pageable pageable,
                                                                             @RequestParam(required = false, defaultValue = "createAt") String orderBy,
-                                                                            @RequestParam Long lastId){
+                                                                            @RequestParam(required = false) String lastViewed){
 
-        return ResponseEntity.ok(storyService.findAlbumStory(pageable, orderBy, lastId));
+        return ResponseEntity.ok(storyService.findAlbumStory(pageable, orderBy, lastViewed));
     }
 
     @GetMapping("/list")
