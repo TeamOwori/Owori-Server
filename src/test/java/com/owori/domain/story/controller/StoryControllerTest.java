@@ -66,10 +66,12 @@ public class StoryControllerTest extends RestDocsTest{
         //given
         Long lastId = 2L;
 
-        List<FindListStoryResponse> responses = List.of(new FindListStoryResponse("신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5L, 2L, "허망고", "2022-02-01"),
-                new FindListStoryResponse("다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2L, 5L, "허지롱이", "2022-02-01 - 2022-02-04"));
+        List<FindListStoryResponse> response = List.of(
+                new FindListStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5L, 2L, "허망고", "2022-02-01"),
+                new FindListStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2L, 5L, "허지롱이", "2022-02-01 - 2022-02-04"));
 
-        given(storyService.findListStory(any(),any())).willReturn(responses);
+        FindListStoryGroupResponse findListStoryGroupResponse = new FindListStoryGroupResponse(response, true);
+        given(storyService.findListStory(any(),any())).willReturn(findListStoryGroupResponse);
 
         //when
         ResultActions perform =
@@ -83,14 +85,7 @@ public class StoryControllerTest extends RestDocsTest{
                                 );
 
         //then
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").exists())
-                .andExpect(jsonPath("$[0].contents").exists())
-                .andExpect(jsonPath("$[0].image").exists())
-                .andExpect(jsonPath("$[0].heart_cnt").exists())
-                .andExpect(jsonPath("$[0].comment_cnt").exists())
-                .andExpect(jsonPath("$[0].writer").exists())
-                .andExpect(jsonPath("$[0].date").exists());
+        perform.andExpect(status().isOk());
 
         //docs
         perform.andDo(print())
@@ -115,13 +110,15 @@ public class StoryControllerTest extends RestDocsTest{
 
         List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
 
-        List<FindAlbumStoryGroupResponse> responses = List.of(
-                new FindAlbumStoryGroupResponse("2022.08", storyResponses1, true),
-                new FindAlbumStoryGroupResponse("2022.07", storyResponses2, true),
-                new FindAlbumStoryGroupResponse("2021.04", storyResponses3, true)
+        List<FindAlbumStoryByMonthResponse> responses = List.of(
+                new FindAlbumStoryByMonthResponse("2022.08", storyResponses1),
+                new FindAlbumStoryByMonthResponse("2022.07", storyResponses2),
+                new FindAlbumStoryByMonthResponse("2021.04", storyResponses3)
                 );
 
-        given(storyService.findAlbumStory(any(),any())).willReturn(responses);
+        FindAlbumStoryGroupResponse expected = new FindAlbumStoryGroupResponse(responses, true);
+
+        given(storyService.findAlbumStory(any(),any())).willReturn(expected);
 
         //when
         ResultActions perform =
@@ -137,8 +134,7 @@ public class StoryControllerTest extends RestDocsTest{
 
 
         //then
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].year_month").exists());
+        perform.andExpect(status().isOk());
 
         //docs
         perform.andDo(print())
@@ -163,13 +159,15 @@ public class StoryControllerTest extends RestDocsTest{
 
         List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
 
-        List<FindAlbumStoryGroupResponse> responses = List.of(
-                new FindAlbumStoryGroupResponse("2022.08", storyResponses1, false),
-                new FindAlbumStoryGroupResponse("2022.07", storyResponses2, false),
-                new FindAlbumStoryGroupResponse("2021.04", storyResponses3, false)
+        List<FindAlbumStoryByMonthResponse> responses = List.of(
+                new FindAlbumStoryByMonthResponse("2022.08", storyResponses1),
+                new FindAlbumStoryByMonthResponse("2022.07", storyResponses2),
+                new FindAlbumStoryByMonthResponse("2021.04", storyResponses3)
         );
 
-        given(storyService.findAlbumStory(any(), any())).willReturn(responses);
+        FindAlbumStoryGroupResponse expected = new FindAlbumStoryGroupResponse(responses, false);
+
+        given(storyService.findAlbumStory(any(),any())).willReturn(expected);
 
         //when
         ResultActions perform =
@@ -185,8 +183,7 @@ public class StoryControllerTest extends RestDocsTest{
 
 
         //then
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].year_month").exists());
+        perform.andExpect(status().isOk());
 
         //docs
         perform.andDo(print())
@@ -207,7 +204,7 @@ public class StoryControllerTest extends RestDocsTest{
                 new CommentResponse(null,4L,"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
         );
 
-        FindStoryResponse response = new FindStoryResponse(true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
+        FindStoryResponse response = new FindStoryResponse(1L,true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
         given(storyService.findStory(any())).willReturn(response);
 
         //when

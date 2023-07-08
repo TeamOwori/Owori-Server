@@ -1,10 +1,9 @@
 package com.owori.domain.story.dto.collection;
 
 import com.owori.domain.image.entity.Image;
-import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindAlbumStoryByMonthResponse;
 import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
 import com.owori.domain.story.entity.Story;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.Map;
@@ -16,17 +15,17 @@ public class StoryAlbumGroup {
         this.storyByYearMonth = storyByYearMonth;
     }
 
-    public List<FindAlbumStoryGroupResponse> getStoryGroupResponses(Slice<Story> storyBySlice) {
+    public List<FindAlbumStoryByMonthResponse> getStoryGroupResponses() {
         return storyByYearMonth.entrySet().stream()
                 .map(entry -> {
-                    FindAlbumStoryGroupResponse storyGroupResponse = new FindAlbumStoryGroupResponse(entry.getKey());
+                    FindAlbumStoryByMonthResponse storyGroupResponse = new FindAlbumStoryByMonthResponse(entry.getKey());
                     List<FindAlbumStoryResponse> storyResponseList = entry.getValue().stream()
                             .map(story -> {
                                 String imageUrl = story.getImages().stream()
                                         .findFirst().map(Image::getUrl).orElse(null);
                                 return new FindAlbumStoryResponse(story.getId(), imageUrl);
                             }).toList();
-                    storyGroupResponse.updateStories(storyResponseList, storyBySlice.hasNext());
+                    storyGroupResponse.updateStories(storyResponseList);
                     return storyGroupResponse;
                 }).toList();
     }

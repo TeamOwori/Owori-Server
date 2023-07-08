@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -54,11 +53,11 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createAt")),  LocalDate.of(2023,8,31));
+        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createAt")), LocalDate.of(2023, 8, 31));
 
         //then
-        assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
-        assertThat(findAlbumStoryGroupResponses.get(0).getStories().get(0).getUrl()).isEqualTo(null);
+        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
+        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
     }
 
     @Test
@@ -69,10 +68,10 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("startDate")), LocalDate.now());
+        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("startDate")), LocalDate.now());
 
         //then
-        assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo("2017.12");
-        assertThat(findAlbumStoryGroupResponses.get(0).getStories().get(0).getUrl()).isEqualTo(null);
+        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo("2017.12");
+        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
     }
 }

@@ -6,9 +6,7 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.collection.StoryAlbumGroup;
 import com.owori.domain.story.dto.collection.StoryGroupByYearMonth;
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
-import com.owori.domain.story.dto.response.FindListStoryResponse;
-import com.owori.domain.story.dto.response.FindStoryResponse;
+import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.exception.StoryOrderException;
 import com.owori.domain.story.mapper.StoryMapper;
@@ -45,7 +43,7 @@ public class StoryService implements EntityLoader<Story, Long> {
         return new IdResponse<>(newStory.getId());
     }
 
-    public List<FindAlbumStoryGroupResponse> findAlbumStory(Pageable pageable, LocalDate lastViewed) {
+    public FindAlbumStoryGroupResponse findAlbumStory(Pageable pageable, LocalDate lastViewed) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM");
         String sort = pageable.getSort().toList().get(0).getProperty();
@@ -70,10 +68,10 @@ public class StoryService implements EntityLoader<Story, Long> {
 
         // dto로 변환
         StoryAlbumGroup storyAlbumGroup = new StoryAlbumGroup(storyByYearMonth);
-        return storyAlbumGroup.getStoryGroupResponses(storyBySlice);
+        return new FindAlbumStoryGroupResponse(storyAlbumGroup.getStoryGroupResponses(), storyBySlice.hasNext());
     }
 
-    public List<FindListStoryResponse> findListStory(Pageable pageable, Long lastId) {
+    public FindListStoryGroupResponse findListStory(Pageable pageable, Long lastId) {
         // todo: 로직 작성
         return null;
     }

@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class FindStoryResponse {
+    private Long id;
     private Boolean isLiked;
     private List<String> images;
     private String title;

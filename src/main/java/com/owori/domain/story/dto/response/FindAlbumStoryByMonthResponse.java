@@ -9,16 +9,14 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindAlbumStoryGroupResponse {
+public class FindAlbumStoryByMonthResponse {
     private String yearMonth;
     private List<FindAlbumStoryResponse> stories;
-    private boolean hasNext;
-    public FindAlbumStoryGroupResponse(String yearMonth){
+    public FindAlbumStoryByMonthResponse(String yearMonth){
         this.yearMonth = yearMonth;
     }
 
-    public void updateStories(List<FindAlbumStoryResponse> stories, boolean hasNext){
+    public void updateStories(List<FindAlbumStoryResponse> stories){
         this.stories = stories;
-        this.hasNext = hasNext;
     }
 }
