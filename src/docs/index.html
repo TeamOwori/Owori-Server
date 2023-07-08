@@ -471,6 +471,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_image">Image</a>
+<ul class="sectlevel2">
+<li><a href="#_이미지_업로드_이야기">이미지 업로드 - 이야기</a>
+<ul class="sectlevel3">
+<li><a href="#_이미지_업로드_이야기_http_request">HTTP request</a></li>
+<li><a href="#_이미지_업로드_이야기_http_response">HTTP response</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_story">Story</a>
 <ul class="sectlevel2">
 <li><a href="#_이야기_등록">이야기 등록</a>
@@ -521,6 +531,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
+<li><a href="#_member">Member</a>
+<ul class="sectlevel2">
+<li><a href="#_멤버_생성_및_jwt_토큰_생성">멤버 생성 및 Jwt 토큰 생성</a>
+<ul class="sectlevel3">
+<li><a href="#_멤버_생성_및_jwt_토큰_생성_http_request">HTTP request</a></li>
+<li><a href="#_멤버_생성_및_jwt_토큰_생성_http_response">HTTP response</a></li>
+</ul>
+</li>
+<li><a href="#_멤버_초기_정보_업데이트">멤버 초기 정보 업데이트</a>
+<ul class="sectlevel3">
+<li><a href="#_멤버_초기_정보_업데이트_http_request">HTTP request</a></li>
+<li><a href="#_멤버_초기_정보_업데이트_http_response">HTTP response</a></li>
+</ul>
+</li>
+<li><a href="#_멤버_프로필_이미지_저장">멤버 프로필 이미지 저장</a>
+<ul class="sectlevel3">
+<li><a href="#_멤버_프로필_이미지_저장_http_request">HTTP request</a></li>
+<li><a href="#_멤버_프로필_이미지_저장_http_response">HTTP response</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -548,7 +580,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 141
+Content-Length: 138
 
 {
   "access_token" : "asdfiuer3oidwf12.asdfoihoihn23vs.grwoi6ghrweiog5h",
@@ -572,7 +604,8 @@ Content-Length: 141
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /families HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-Content-Length: 44
+memberId: 66adc2bc-e15d-4800-a46e-deb1a2fbb283
+Content-Length: 42
 Host: localhost:8080
 
 {
@@ -587,7 +620,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 37
+Content-Length: 35
 
 {
   "invite_code" : "oworiinvite"
@@ -605,7 +638,8 @@ Content-Length: 37
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /families/members HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-Content-Length: 38
+memberId: bd90fe7b-d7cf-4faf-b6b3-fcd0cf56acdc
+Content-Length: 36
 Host: localhost:8080
 
 {
@@ -626,6 +660,51 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect1">
+<h2 id="_image"><a class="link" href="#_image">Image</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_이미지_업로드_이야기"><a class="link" href="#_이미지_업로드_이야기">이미지 업로드 - 이야기</a></h3>
+<div class="sect3">
+<h4 id="_이미지_업로드_이야기_http_request"><a class="link" href="#_이미지_업로드_이야기_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /images HTTP/1.1
+Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Accept: application/json
+Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 40b2c9ea-bafe-43ef-9b33-fdc07e346143
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=images; filename=image1.jpg
+Content-Type: image/jpeg
+
+Image 1
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=images; filename=image2.jpg
+Content-Type: image/jpeg
+
+Image 2
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_이미지_업로드_이야기_http_response"><a class="link" href="#_이미지_업로드_이야기_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 162
+
+[ "7ae46c5a-314b-435c-9643-14b52869b817", "e8ead2e5-1922-441f-b59c-9103eb591126", "393b7cbc-5427-403c-bb62-a4db4443aaec", "961ec6e5-2d22-4f54-adca-1a68c99790c4" ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_story"><a class="link" href="#_story">Story</a></h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -635,17 +714,18 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /stories HTTP/1.1
-Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Accept: application/json
+Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-Content-Length: 545
+memberId: d75f9d2b-c45b-43eb-bd3e-7d3100bceda7
+Content-Length: 799
 Host: localhost:8080
 
 {
   "start_date" : "2017-12-25",
   "end_date" : "2017-12-30",
   "title" : "기다리고 기다리던 하루",
-  "contents" : "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ "
+  "contents" : "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ",
+  "image_id" : [ "c2d4a2a9-0b24-43b8-aed9-cba5da830514", "823751b9-556b-4391-aa37-95ccf73e26bd", "46108731-24b7-4203-8e2b-12f32ad03ddc", "27c2de4e-32d5-4553-a9ec-988e8f4973ef", "dc07c18b-783b-411a-a874-6eb725ba519b", "5e2e710a-a841-4aef-81b7-a320d428566c" ]
 }</code></pre>
 </div>
 </div>
@@ -656,7 +736,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 16
+Content-Length: 14
 
 {
   "id" : 2
@@ -674,6 +754,7 @@ Content-Length: 16
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stories/list?sort=createAt&amp;lastId=2 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 45219921-7877-4a8f-b689-43e19932f1da
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -684,7 +765,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 664
+Content-Length: 648
 
 [ {
   "title" : "신나는 가족여행",
@@ -716,6 +797,7 @@ Content-Length: 664
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stories/album?sort=createAt&amp;lastId=4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: b3de1950-0c97-4cc7-bb49-e6b6cc5d5d66
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -726,7 +808,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 438
+Content-Length: 426
 
 [ {
   "year_month" : "2023.07",
@@ -754,6 +836,7 @@ Content-Length: 438
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /stories/2 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 3b491897-4650-4f55-a901-55f281077c89
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -764,7 +847,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1296
+Content-Length: 1263
 
 {
   "is_liked" : true,
@@ -818,8 +901,8 @@ Content-Length: 1296
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /schedule HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-memberId: 42cbed3a-b1f1-419a-a705-a0e8ae79025d
-Content-Length: 190
+memberId: afedf617-34f5-4f4d-a618-abb81a8634b7
+Content-Length: 183
 Host: localhost:8080
 
 {
@@ -839,10 +922,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 53
+Content-Length: 51
 
 {
-  "id" : "1753776f-38dd-4b7d-991a-c68dae563b67"
+  "id" : "414f550f-54aa-4f9d-b84d-f7a26cfa3a35"
 }</code></pre>
 </div>
 </div>
@@ -854,11 +937,11 @@ Content-Length: 53
 <h4 id="_일정_수정_http_request"><a class="link" href="#_일정_수정_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /schedule/update?scheduleId=647f90b4-ca31-43ba-bd71-bb8fb25b82df HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /schedule/update?scheduleId=5ccfbf39-2bdf-45b5-85d0-e802c4b91fc4 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-memberId: f29d8874-0191-4276-bf45-c774ff514b37
-Content-Length: 168
+memberId: db92f4bb-b79d-496d-9ed2-ce0b7cc3191d
+Content-Length: 161
 Host: localhost:8080
 
 {
@@ -878,10 +961,10 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 53
+Content-Length: 51
 
 {
-  "id" : "bac26004-5e98-473b-bac4-216ffd2fad22"
+  "id" : "fdb81a63-8111-4239-a02a-d86913952a8b"
 }</code></pre>
 </div>
 </div>
@@ -896,7 +979,7 @@ Content-Length: 53
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /schedule/month?sort=startDate&amp;yearMonth=2023-07 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
-memberId: 4af2561d-88e1-407d-8b2e-083fb9cb8dea
+memberId: 499352d7-4caf-475a-89a3-964090f2d1ac
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -907,7 +990,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 562
+Content-Length: 539
 
 [ {
   "title" : "친구랑 여행",
@@ -927,7 +1010,7 @@ Content-Length: 562
   "title" : "가족여행",
   "start_date" : "2023-07-31",
   "end_date" : "2023-08-02",
-  "color" : "ORANGE",
+  "color" : "BLUE",
   "alarm_options" : [ "하루전", "일주일전" ],
   "dday_option" : true
 } ]</code></pre>
@@ -937,10 +1020,111 @@ Content-Length: 562
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_member"><a class="link" href="#_member">Member</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_멤버_생성_및_jwt_토큰_생성"><a class="link" href="#_멤버_생성_및_jwt_토큰_생성">멤버 생성 및 Jwt 토큰 생성</a></h3>
+<div class="sect3">
+<h4 id="_멤버_생성_및_jwt_토큰_생성_http_request"><a class="link" href="#_멤버_생성_및_jwt_토큰_생성_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /members HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 56
+Host: localhost:8080
+
+{
+  "token" : "382y5e3a5",
+  "auth_provider" : "KAKAO"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_멤버_생성_및_jwt_토큰_생성_http_response"><a class="link" href="#_멤버_생성_및_jwt_토큰_생성_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 229
+
+{
+  "member_id" : "e0261256-c5b3-4e19-aa17-35ade552c061",
+  "jwt_token" : {
+    "access_token" : "accesasdfagfwaerg.tokenasfd13sad.isthisahtfgwiueoh",
+    "refresh_token" : "refreshriuqwhfoieu.tokenqiweurhu.isthiswheoituhw"
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_멤버_초기_정보_업데이트"><a class="link" href="#_멤버_초기_정보_업데이트">멤버 초기 정보 업데이트</a></h3>
+<div class="sect3">
+<h4 id="_멤버_초기_정보_업데이트_http_request"><a class="link" href="#_멤버_초기_정보_업데이트_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /members/details HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: aec3c6f1-645f-4fc5-9f84-baccda33b78e
+Content-Length: 56
+Host: localhost:8080
+
+{
+  "nickname" : "owori",
+  "birth_day" : "2023-07-07"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_멤버_초기_정보_업데이트_http_response"><a class="link" href="#_멤버_초기_정보_업데이트_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_멤버_프로필_이미지_저장"><a class="link" href="#_멤버_프로필_이미지_저장">멤버 프로필 이미지 저장</a></h3>
+<div class="sect3">
+<h4 id="_멤버_프로필_이미지_저장_http_request"><a class="link" href="#_멤버_프로필_이미지_저장_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /members/profile-image HTTP/1.1
+Content-Type: multipart/form-data;charset=UTF-8; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Authorization: Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb
+memberId: 6d3c9aa6-5412-46a7-86cb-74e581647659
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=profile_image; filename=image.jpg
+Content-Type: image/jpeg
+
+Image
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_멤버_프로필_이미지_저장_http_response"><a class="link" href="#_멤버_프로필_이미지_저장_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-07-06 23:00:04 +0900
+Last updated 2023-07-07 16:14:59 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

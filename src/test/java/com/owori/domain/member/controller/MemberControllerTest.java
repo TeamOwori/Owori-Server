@@ -11,15 +11,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -89,13 +94,13 @@ class MemberControllerTest extends RestDocsTest {
     void updateMemberProfileImage() throws Exception {
         //given
         doNothing().when(memberService).updateMemberProfileImage(any());
+        MockMultipartFile image1 = new MockMultipartFile("profile_image", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "Image".getBytes(StandardCharsets.UTF_8));
 
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        post("/members/profile-image")
-                                .content(
-                                        toRequestBody("profile_image 를 이름으로 해서 이미지 파일을 같이 전송해주세요"))
+                        multipart("/members/profile-image", HttpMethod.POST)
+                                .file(image1)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
                                 .contentType(MediaType.MULTIPART_FORM_DATA));
