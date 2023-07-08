@@ -53,7 +53,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", "7");
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", LocalDate.of(2023,8,31));
 
         //then
         assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
@@ -68,7 +68,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "eventAt", "2022.08");
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "eventAt", LocalDate.now());
 
         //then
         assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo("2017.12");

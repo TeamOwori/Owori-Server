@@ -21,7 +21,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +44,9 @@ public class StoryService implements EntityLoader<Story, Long> {
         return new IdResponse<>(newStory.getId());
     }
 
-    public Map<String, List<Story>> groupStoryByYearMonth (List<Story> storyList, String orderBy, DateTimeFormatter formatter){
+    public Map<String, List<Story>> groupStoryByYearMonth (List<Story> storyList, String orderBy){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM");
+
         if(orderBy.equals("eventAt")) {
             return storyList.stream()
                     .collect(Collectors.groupingBy(story -> story.getStartDate().format(formatter)));
@@ -56,22 +57,19 @@ public class StoryService implements EntityLoader<Story, Long> {
         }
     }
 
-    public List<FindAlbumStoryGroupResponse> findAlbumStory(Pageable pageable, String orderBy, String lastViewed) {
+    public List<FindAlbumStoryGroupResponse> findAlbumStory(Pageable pageable, String orderBy, LocalDate lastViewed) {
         Member loginUser = authService.getLoginUser();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM");
 
         Slice<Story> storyBySlice;
         if (orderBy.equals("eventAt")){
-            LocalDate lastStartDate = lastViewed == null ? null : YearMonth.parse(lastViewed, formatter).atEndOfMonth();
-            storyBySlice = storyRepository.findAllStoryByEventAt(pageable, lastStartDate, loginUser);
+            storyBySlice = storyRepository.findAllStoryByEventAt(pageable, lastViewed, loginUser);
         }
         else {
-            Long lastId = lastViewed == null ? null : Long.parseLong(lastViewed);
-            storyBySlice = storyRepository.findAllStoryByCreateAt(pageable, lastId, loginUser);
+            storyBySlice = storyRepository.findAllStoryByCreateAt(pageable, lastViewed, loginUser);
         }
 
         // yyyy.MM로 grouping 후 내림차순 정렬
-        Map<String, List<Story>> groupedStories =  groupStoryByYearMonth(storyBySlice.getContent(), orderBy, formatter);
+        Map<String, List<Story>> groupedStories =  groupStoryByYearMonth(storyBySlice.getContent(), orderBy);
         Map<String, List<Story>> StoryByYearMonth  = new TreeMap<>(Collections.reverseOrder());
         StoryByYearMonth.putAll(groupedStories);
 

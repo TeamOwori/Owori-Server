@@ -19,29 +19,29 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     /*
-    *  최신순 앨범형 조회
+    *  최신순 앨범형 조회 - createAt 기준
     */
     @Override
-    public Slice<Story> findAllStoryByCreateAt(Pageable pageable, Long lastId, Member member) {
+    public Slice<Story> findAllStoryByCreateAt(Pageable pageable, LocalDate createAt, Member member) {
         List<Story> storyList = queryFactory
                 .selectFrom(story)
                 .where(
                         story.member.eq(member),
-                        ltStoryId(lastId)
+                        ltStoryCreateAt(createAt)
                 )
-                .orderBy(story.id.desc())
+                .orderBy(story.baseTime.createdAt.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         return checkLastPage(pageable, storyList);
     }
 
-    private BooleanExpression ltStoryId(Long storyId) {
-        return storyId == null ? null : story.id.lt(storyId);
+    private BooleanExpression ltStoryCreateAt(LocalDate createAt) {
+        return createAt == null ? null : story.baseTime.createdAt.lt(createAt.atStartOfDay());
     }
 
     /*
-     *  날짜순 앨범형 조회
+     *  날짜순 앨범형 조회 - StartDate 기준
      */
     @Override
     public Slice<Story> findAllStoryByEventAt(Pageable pageable, LocalDate startDate, Member member) {

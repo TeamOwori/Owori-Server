@@ -98,10 +98,9 @@ public class StoryControllerTest extends RestDocsTest{
     }
 
     @Test
-    @DisplayName("GET /stories/album 이야기 앨범형 조회 API 테스트")
-    void findStoryAlbum() throws Exception {
+    @DisplayName("GET /stories/album 이야기 앨범형 조회 (최신순) API 테스트")
+    void findStoryAlbumByCreateAt() throws Exception {
         //given
-        String lastId = "11";
         String size = "7";
 
         List<FindAlbumStoryResponse> storyResponses1 = List.of(
@@ -128,8 +127,8 @@ public class StoryControllerTest extends RestDocsTest{
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/album")
-                                .param("sort", "eventAt")
-                                .param("lastViewed","2022.09")
+                                .param("sort", "createAt")
+                                .param("lastViewed","2023-07-31")
                                 .param("size", size)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
@@ -143,7 +142,55 @@ public class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story album", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story album by createAt", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET /stories/album 이야기 앨범형 조회 (날짜순) API 테스트")
+    void findStoryAlbumByEventAt() throws Exception {
+        //given
+        String size = "7";
+
+        List<FindAlbumStoryResponse> storyResponses1 = List.of(
+                new FindAlbumStoryResponse(5L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
+                new FindAlbumStoryResponse(4L, null),
+                new FindAlbumStoryResponse(3L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
+                new FindAlbumStoryResponse(2L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
+
+        List<FindAlbumStoryResponse> storyResponses2 = List.of(
+                new FindAlbumStoryResponse(6L, null),
+                new FindAlbumStoryResponse(1L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
+
+        List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
+
+        List<FindAlbumStoryGroupResponse> responses = List.of(
+                new FindAlbumStoryGroupResponse("2022.08", storyResponses1, false),
+                new FindAlbumStoryGroupResponse("2022.07", storyResponses2, false),
+                new FindAlbumStoryGroupResponse("2021.04", storyResponses3, false)
+        );
+
+        given(storyService.findAlbumStory(any(),any(),any())).willReturn(responses);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/album")
+                                .param("sort", "eventAt")
+                                .param("lastViewed","2023-07-31")
+                                .param("size", size)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].year_month").exists());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("find story album by eventAt", getDocumentRequest(), getDocumentResponse()));
     }
 
 
