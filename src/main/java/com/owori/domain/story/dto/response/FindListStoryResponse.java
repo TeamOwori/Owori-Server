@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FindListStoryResponse {
+    private Long id;
     private String title;
     private String contents;
     private String image;

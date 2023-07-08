@@ -24,7 +24,7 @@ public class Image implements Auditable {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "story_id")
+    @JoinColumn
     private Story story;
 
     @Column
@@ -46,6 +46,7 @@ public class Image implements Auditable {
 
     public void updateStory(Story story){
         this.story = story;
+        this.story.updateImage(this);
     }
 
 }

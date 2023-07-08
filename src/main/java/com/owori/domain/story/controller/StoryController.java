@@ -1,19 +1,20 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
-import com.owori.domain.story.dto.response.FindListStoryResponse;
+import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindListStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.service.StoryService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -34,16 +35,22 @@ public class StoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 
+    /**
+     * 이야기를 앨범형으로 조회합니다.
+     * @param pageable
+     * @param lastViewed 조회할 게시글의 기준 (year_month) 입니다.
+     * @return 앨범형 조회 dto가 반환됩니다.
+     */
     @GetMapping("/album")
-    public ResponseEntity<List<FindAlbumStoryResponse>> findAlbumStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                       @RequestParam Long lastId){
+    public ResponseEntity<FindAlbumStoryGroupResponse> findAlbumStory(@PageableDefault(sort = "createAt", direction = DESC) Pageable pageable,
+                                                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
 
-        return ResponseEntity.ok(storyService.findAlbumStory(pageable, lastId));
+        return ResponseEntity.ok(storyService.findAlbumStory(pageable, lastViewed));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<FindListStoryResponse>> findListStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                     @RequestParam Long lastId){
+    public ResponseEntity<FindListStoryGroupResponse> findListStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
+                                                                    @RequestParam Long lastId){
 
         return ResponseEntity.ok(storyService.findListStory(pageable, lastId));
     }

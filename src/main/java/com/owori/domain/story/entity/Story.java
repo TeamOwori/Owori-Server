@@ -37,7 +37,7 @@ public class Story implements Auditable {
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn
     private Member member;
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
@@ -55,6 +55,10 @@ public class Story implements Auditable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
+    }
+
+    public void updateImage(Image image){
+        this.images.add(image);
     }
 
 }

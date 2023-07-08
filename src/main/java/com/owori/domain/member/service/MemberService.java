@@ -10,11 +10,13 @@ import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
+import com.owori.utils.S3ImageComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final AuthService authService;
+    private final S3ImageComponent s3ImageComponent;
 
     @Override
     public Member loadEntity(final UUID id) {
@@ -50,15 +53,15 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public void updateMemberProfileImage(final MultipartFile profileImage) {
+    public void updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
         String profileImageUrl = uploadImage(profileImage);
         authService.getLoginUser().updateProfileImage(profileImageUrl);
     }
 
-    private String uploadImage(final MultipartFile profileImage) {
+    private String uploadImage(final MultipartFile profileImage) throws IOException {
         if (profileImage.isEmpty()) {
             throw new NoSuchProfileImageException();
         }
-        return null; // todo S3파일 업로드 구현
+        return s3ImageComponent.uploadImage("profile-image", profileImage);
     }
 }

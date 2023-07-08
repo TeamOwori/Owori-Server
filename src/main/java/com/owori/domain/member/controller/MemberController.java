@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
@@ -26,7 +29,7 @@ public class MemberController {
      * @return 멤버의 JwtToken 입니다.
      */
     @PostMapping
-    public ResponseEntity<MemberJwtResponse> saveMember(@RequestBody MemberRequest memberRequest) {
+    public ResponseEntity<MemberJwtResponse> saveMember(@RequestBody @Valid MemberRequest memberRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveIfNone(memberRequest));
     }
 
@@ -37,7 +40,7 @@ public class MemberController {
      * @return 바디로 response 하는 정보는 없습니다.
      */
     @PostMapping("/details")
-    public ResponseEntity<Void> updateMemberDetails(@RequestBody MemberDetailsRequest memberDetailsRequest) {
+    public ResponseEntity<Void> updateMemberDetails(@RequestBody @Valid MemberDetailsRequest memberDetailsRequest) {
         memberService.updateMemberDetails(memberDetailsRequest);
         return ResponseEntity.ok().build();
     }
@@ -47,9 +50,10 @@ public class MemberController {
      * 멤버 프로필 이미지를 받아와 업데이트한 후 상태코드 200번을 빈 body 와 함께 response 합니다.
      * @param profileImage 멤버의 프로필 이미지입니다.
      * @return 바디로 response 하는 정보는 없습니다.
+     * @throws IOException 파일 업로드시 발생할 수 있는 예외입니다.
      */
     @PostMapping("/profile-image")
-    public ResponseEntity<Void> updateMemberProfileImage(MultipartFile profileImage) {
+    public ResponseEntity<Void> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
         memberService.updateMemberProfileImage(profileImage);
         return ResponseEntity.ok().build();
     }
