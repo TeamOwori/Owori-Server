@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/families")
@@ -25,7 +27,7 @@ public class FamilyController {
      * @return 초대 코드를 가지는 response dto 입니다.
      */
     @PostMapping
-    public ResponseEntity<InviteCodeResponse> saveFamily(@RequestBody FamilyRequest familyRequest) {
+    public ResponseEntity<InviteCodeResponse> saveFamily(@RequestBody @Valid FamilyRequest familyRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamily(familyRequest));
     }
 
@@ -36,7 +38,7 @@ public class FamilyController {
      * @return 초대 코드를 가지는 response dto 입니다.
      */
     @PostMapping("/members")
-    public ResponseEntity<Void> addFamilyMember(@RequestBody AddMemberRequest addMemberRequest) {
+    public ResponseEntity<Void> addFamilyMember(@RequestBody @Valid AddMemberRequest addMemberRequest) {
         familyService.addMember(addMemberRequest);
         return ResponseEntity.ok().build();
     }
