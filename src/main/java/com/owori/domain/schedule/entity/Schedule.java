@@ -1,6 +1,7 @@
 package com.owori.domain.schedule.entity;
 
 import com.owori.domain.member.entity.Member;
+import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
@@ -65,7 +66,14 @@ public class Schedule implements Auditable {
         this.dDayOption = dDayOption;
         this.alarmList = alarmList;
         this.member = member;
+    }
 
-
+    public void updateSchedule(UpdateScheduleRequest updateScheduleRequest){
+        this.title = updateScheduleRequest.getTitle();
+        this.startDate = updateScheduleRequest.getStartDate();
+        this.endDate = updateScheduleRequest.getEndDate();
+        this.scheduleType = updateScheduleRequest.getType();
+        this.dDayOption = updateScheduleRequest.getDDayOption();
+        this.alarmList = updateScheduleRequest.getAlarmOptions();
     }
 }
