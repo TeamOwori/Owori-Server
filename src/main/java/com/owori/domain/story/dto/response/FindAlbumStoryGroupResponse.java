@@ -17,9 +17,8 @@ public class FindAlbumStoryGroupResponse {
         this.yearMonth = yearMonth;
     }
 
-    public FindAlbumStoryGroupResponse updateStories(List<FindAlbumStoryResponse> stories, boolean hasNext){
+    public void updateStories(List<FindAlbumStoryResponse> stories, boolean hasNext){
         this.stories = stories;
         this.hasNext = hasNext;
-        return this;
     }
 }

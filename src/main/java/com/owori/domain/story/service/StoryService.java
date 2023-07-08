@@ -1,15 +1,16 @@
 package com.owori.domain.story.service;
 
-import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
+import com.owori.domain.story.dto.collection.StoryAlbumGroup;
+import com.owori.domain.story.dto.collection.StoryGroupByYearMonth;
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
 import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindListStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
+import com.owori.domain.story.exception.StoryOrderException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
@@ -44,48 +45,32 @@ public class StoryService implements EntityLoader<Story, Long> {
         return new IdResponse<>(newStory.getId());
     }
 
-    public Map<String, List<Story>> groupStoryByYearMonth (List<Story> storyList, String orderBy){
+    public List<FindAlbumStoryGroupResponse> findAlbumStory(Pageable pageable, LocalDate lastViewed) {
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM");
-
-        if(orderBy.equals("eventAt")) {
-            return storyList.stream()
-                    .collect(Collectors.groupingBy(story -> story.getStartDate().format(formatter)));
-        }
-        else {
-            return storyList.stream()
-                    .collect(Collectors.groupingBy(story -> story.getBaseTime().getCreatedAt().format(formatter)));
-        }
-    }
-
-    public List<FindAlbumStoryGroupResponse> findAlbumStory(Pageable pageable, String orderBy, LocalDate lastViewed) {
+        String sort = pageable.getSort().toList().get(0).getProperty();
         Member loginUser = authService.getLoginUser();
 
         Slice<Story> storyBySlice;
-        if (orderBy.equals("eventAt")){
+        Map<String, List<Story>> groupedStories;
+        if (sort.equals("startDate")){
             storyBySlice = storyRepository.findAllStoryByEventAt(pageable, lastViewed, loginUser);
-        }
-        else {
+            groupedStories = storyBySlice.getContent().stream().collect(Collectors.groupingBy(s -> s.getStartDate().format(formatter)));
+        } else if (sort.equals("createAt") || sort == null) {
             storyBySlice = storyRepository.findAllStoryByCreateAt(pageable, lastViewed, loginUser);
+            groupedStories = storyBySlice.getContent().stream().collect(Collectors.groupingBy(s -> s.getBaseTime().getCreatedAt().format(formatter)));
+        } else {
+            throw new StoryOrderException();
         }
 
         // yyyy.MM로 grouping 후 내림차순 정렬
-        Map<String, List<Story>> groupedStories =  groupStoryByYearMonth(storyBySlice.getContent(), orderBy);
-        Map<String, List<Story>> StoryByYearMonth  = new TreeMap<>(Collections.reverseOrder());
-        StoryByYearMonth.putAll(groupedStories);
+        StoryGroupByYearMonth storyGroupByYearMonth = new StoryGroupByYearMonth();
+        storyGroupByYearMonth.addStories(groupedStories);
+        Map<String, List<Story>> storyByYearMonth = storyGroupByYearMonth.getStoryByYearMonth();
 
-
-        return StoryByYearMonth.entrySet().stream()
-                .map(entry -> {
-                    FindAlbumStoryGroupResponse storyGroupResponse = new FindAlbumStoryGroupResponse(entry.getKey());
-                    List<FindAlbumStoryResponse> storyResponseList = entry.getValue().stream()
-                            .map(story -> {
-                                String imageUrl = story.getImages().stream()
-                                        .findFirst().map(Image::getUrl).orElse(null);
-                                return new FindAlbumStoryResponse(story.getId(), imageUrl);
-                            }).toList();
-                    return storyGroupResponse.updateStories(storyResponseList, storyBySlice.hasNext());
-                }).toList();
-
+        // dto로 변환
+        StoryAlbumGroup storyAlbumGroup = new StoryAlbumGroup(storyByYearMonth);
+        return storyAlbumGroup.getStoryGroupResponses(storyBySlice);
     }
 
     public List<FindListStoryResponse> findListStory(Pageable pageable, Long lastId) {

@@ -121,7 +121,7 @@ public class StoryControllerTest extends RestDocsTest{
                 new FindAlbumStoryGroupResponse("2021.04", storyResponses3, true)
                 );
 
-        given(storyService.findAlbumStory(any(),any(),any())).willReturn(responses);
+        given(storyService.findAlbumStory(any(),any())).willReturn(responses);
 
         //when
         ResultActions perform =
@@ -169,13 +169,13 @@ public class StoryControllerTest extends RestDocsTest{
                 new FindAlbumStoryGroupResponse("2021.04", storyResponses3, false)
         );
 
-        given(storyService.findAlbumStory(any(),any(),any())).willReturn(responses);
+        given(storyService.findAlbumStory(any(), any())).willReturn(responses);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/album")
-                                .param("sort", "eventAt")
+                                .param("sort", "startDate")
                                 .param("lastViewed","2023-07-31")
                                 .param("size", size)
                                 .contentType(MediaType.APPLICATION_JSON)

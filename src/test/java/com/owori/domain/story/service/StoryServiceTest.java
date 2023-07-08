@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +54,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", LocalDate.of(2023,8,31));
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createAt")),  LocalDate.of(2023,8,31));
 
         //then
         assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
@@ -68,7 +69,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "eventAt", LocalDate.now());
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("startDate")), LocalDate.now());
 
         //then
         assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo("2017.12");

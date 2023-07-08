@@ -17,6 +17,7 @@ import static com.owori.domain.story.entity.QStory.story;
 @RequiredArgsConstructor
 public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     private final JPAQueryFactory queryFactory;
+    private final StoryOrderConverter storyOrderConverter;
 
     /*
     *  최신순 앨범형 조회 - createAt 기준
@@ -26,10 +27,10 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
         List<Story> storyList = queryFactory
                 .selectFrom(story)
                 .where(
-                        story.member.eq(member),
-                        ltStoryCreateAt(createAt)
+                        story.member.eq(member)
+                                .and(ltStoryCreateAt(createAt))
                 )
-                .orderBy(story.baseTime.createdAt.desc())
+                .orderBy(storyOrderConverter.convert(pageable.getSort()))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -51,7 +52,7 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
                         story.member.eq(member),
                         ltStoryStartDate(startDate)
                 )
-                .orderBy(story.startDate.desc())
+                .orderBy(storyOrderConverter.convert(pageable.getSort()))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
