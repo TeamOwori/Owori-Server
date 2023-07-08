@@ -100,7 +100,7 @@ public class ScheduleControllerTest extends RestDocsTest {
         List<FindScheduleByMonthResponse> expected = List.of(
                 new FindScheduleByMonthResponse("친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), Color.BLUE, true, List.of(당일)),
                 new FindScheduleByMonthResponse("코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.RED, true, List.of(하루전, 일주일전))
+                new FindScheduleByMonthResponse("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.BLUE, true, List.of(하루전, 일주일전))
         );
 
         given(scheduleService.findScheduleByMonth(any(), any())).willReturn(expected);
