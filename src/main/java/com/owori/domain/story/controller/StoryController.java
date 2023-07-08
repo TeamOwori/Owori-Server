@@ -1,7 +1,7 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryResponse;
+import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindListStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.service.StoryService;
@@ -34,11 +34,19 @@ public class StoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 
+    /**
+     * 이야기를 앨범형으로 조회합니다.
+     * @param pageable
+     * @param orderBy createAt: 최신순 / eventAt: 날짜순
+     * @param lastId 마지막으로 조회한 게시글의 id 입니다.
+     * @return 앨범형 조회 dto가 반환됩니다.
+     */
     @GetMapping("/album")
-    public ResponseEntity<List<FindAlbumStoryResponse>> findAlbumStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                       @RequestParam Long lastId){
+    public ResponseEntity<List<FindAlbumStoryGroupResponse>> findAlbumStory(@PageableDefault(direction = DESC) Pageable pageable,
+                                                                            @RequestParam(required = false, defaultValue = "createAt") String orderBy,
+                                                                            @RequestParam Long lastId){
 
-        return ResponseEntity.ok(storyService.findAlbumStory(pageable, lastId));
+        return ResponseEntity.ok(storyService.findAlbumStory(pageable, orderBy, lastId));
     }
 
     @GetMapping("/list")
