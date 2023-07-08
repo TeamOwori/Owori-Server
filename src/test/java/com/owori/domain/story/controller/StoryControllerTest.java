@@ -101,25 +101,36 @@ public class StoryControllerTest extends RestDocsTest{
     @DisplayName("GET /stories/album 이야기 앨범형 조회 API 테스트")
     void findStoryAlbum() throws Exception {
         //given
-        Long lastId = 4L;
+        String lastId = "11";
+        String size = "7";
 
-        List<String> images1 = List.of("image0.png","image00.png","image02.png");
-        List<String> images2 = List.of("image2.png","image3.png","image2.png","image3.png","image3.png");
+        List<FindAlbumStoryResponse> storyResponses1 = List.of(
+                new FindAlbumStoryResponse(5L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
+                new FindAlbumStoryResponse(4L, null),
+                new FindAlbumStoryResponse(3L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
+                new FindAlbumStoryResponse(2L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
 
-        List<FindAlbumStoryResponse> responses = List.of(
-                new FindAlbumStoryResponse("2023.07", images1),
-                new FindAlbumStoryResponse("2023.06", images2),
-                new FindAlbumStoryResponse("2023.05", images1),
-                new FindAlbumStoryResponse("2023.04", images2));
+        List<FindAlbumStoryResponse> storyResponses2 = List.of(
+                new FindAlbumStoryResponse(6L, null),
+                new FindAlbumStoryResponse(1L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
 
-        given(storyService.findAlbumStory(any(),any())).willReturn(responses);
+        List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
+
+        List<FindAlbumStoryGroupResponse> responses = List.of(
+                new FindAlbumStoryGroupResponse("2022.08", storyResponses1, true),
+                new FindAlbumStoryGroupResponse("2022.07", storyResponses2, true),
+                new FindAlbumStoryGroupResponse("2021.04", storyResponses3, true)
+                );
+
+        given(storyService.findAlbumStory(any(),any(),any())).willReturn(responses);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/album")
-                                .param("sort", "createAt")
-                                .param("lastId", lastId.toString())
+                                .param("sort", "eventAt")
+                                .param("lastId", lastId)
+                                .param("size", size)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
@@ -128,8 +139,7 @@ public class StoryControllerTest extends RestDocsTest{
 
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].year_month").exists())
-                .andExpect(jsonPath("$[0].images").exists());
+                .andExpect(jsonPath("$[0].year_month").exists());
 
         //docs
         perform.andDo(print())
