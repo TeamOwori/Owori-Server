@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -28,7 +29,7 @@ public class MemberController {
      * @return 멤버의 JwtToken 입니다.
      */
     @PostMapping
-    public ResponseEntity<MemberJwtResponse> saveMember(@RequestBody MemberRequest memberRequest) {
+    public ResponseEntity<MemberJwtResponse> saveMember(@RequestBody @Valid MemberRequest memberRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveIfNone(memberRequest));
     }
 
@@ -39,7 +40,7 @@ public class MemberController {
      * @return 바디로 response 하는 정보는 없습니다.
      */
     @PostMapping("/details")
-    public ResponseEntity<Void> updateMemberDetails(@RequestBody MemberDetailsRequest memberDetailsRequest) {
+    public ResponseEntity<Void> updateMemberDetails(@RequestBody @Valid MemberDetailsRequest memberDetailsRequest) {
         memberService.updateMemberDetails(memberDetailsRequest);
         return ResponseEntity.ok().build();
     }
