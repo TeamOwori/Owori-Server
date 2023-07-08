@@ -129,7 +129,7 @@ public class StoryControllerTest extends RestDocsTest{
                 mockMvc.perform(
                         get("/stories/album")
                                 .param("sort", "eventAt")
-                                .param("lastId", lastId)
+                                .param("lastViewed","2022.09")
                                 .param("size", size)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")

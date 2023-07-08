@@ -46,17 +46,32 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("이야기 앨범형 조회가 수행되는가")
-    void findAlbumStory() {
+    @DisplayName("이야기 앨범형 최신순 조회가 수행되는가")
+    void findAlbumStoryByCreateAt() {
         //given
         String title = "기다리고 기다리던 하루";
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", 7L);
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", "7");
 
         //then
         assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
+        assertThat(findAlbumStoryGroupResponses.get(0).getStories().get(0).getUrl()).isEqualTo(null);
+    }
+
+    @Test
+    @DisplayName("이야기 앨범형 날짜순 조회가 수행되는가")
+    void findAlbumStoryByEventAt() {
+        //given
+        String title = "기다리고 기다리던 하루";
+        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
+
+        //when
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "eventAt", "2022.08");
+
+        //then
+        assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo("2017.12");
         assertThat(findAlbumStoryGroupResponses.get(0).getStories().get(0).getUrl()).isEqualTo(null);
     }
 }
