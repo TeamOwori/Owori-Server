@@ -49,8 +49,8 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
         List<Story> storyList = queryFactory
                 .selectFrom(story)
                 .where(
-                        story.member.eq(member),
-                        ltStoryStartDate(startDate)
+                        story.member.eq(member)
+                                        .and(ltStoryStartDate(startDate))
                 )
                 .orderBy(storyOrderConverter.convert(pageable.getSort()))
                 .limit(pageable.getPageSize() + 1)
