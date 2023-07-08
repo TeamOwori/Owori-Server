@@ -49,7 +49,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
 
     @Transactional
     public void updateStory(Story newStory, List<UUID> images) {
-        images.stream().forEach(imageId -> loadEntity(imageId).updateStory(newStory));
+        images.forEach(imageId -> loadEntity(imageId).updateStory(newStory));
     }
 
     @Override

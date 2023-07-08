@@ -2,12 +2,13 @@ package com.owori.domain.story.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class FindAlbumStoryResponse {
-    private String yearMonth;
-    private List<String> images;
+    private Long id;
+    private String url;
 }
