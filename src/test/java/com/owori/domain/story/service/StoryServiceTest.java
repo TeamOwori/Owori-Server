@@ -1,8 +1,8 @@
 package com.owori.domain.story.service;
 
-import com.owori.domain.image.entity.Image;
-import com.owori.domain.image.repository.ImageRepository;
+import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.support.database.DatabaseTest;
@@ -10,10 +10,11 @@ import com.owori.support.database.LoginTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +25,7 @@ public class StoryServiceTest extends LoginTest {
     @Autowired private StoryService storyService;
     @Autowired private StoryRepository storyRepository;
 
-    @Autowired private ImageRepository imageRepository;
+    @Autowired private AuthService authService;
 
 
     @Test
@@ -39,6 +40,23 @@ public class StoryServiceTest extends LoginTest {
 
         //then
         Story story = storyRepository.findById(1L).orElseThrow();
+
         assertThat(story.getTitle()).isEqualTo(title);
+        assertThat(story.getMember()).isEqualTo(authService.getLoginUser());
+    }
+
+    @Test
+    @DisplayName("이야기 앨범형 조회가 수행되는가")
+    void findAlbumStory() {
+        //given
+        String title = "기다리고 기다리던 하루";
+        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
+
+        //when
+        List<FindAlbumStoryGroupResponse> findAlbumStoryGroupResponses = storyService.findAlbumStory(PageRequest.of(0, 4), "createAt", 7L);
+
+        //then
+        assertThat(findAlbumStoryGroupResponses.get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
+        assertThat(findAlbumStoryGroupResponses.get(0).getStories().get(0).getUrl()).isEqualTo(null);
     }
 }
