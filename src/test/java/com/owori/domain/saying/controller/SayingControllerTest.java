@@ -1,6 +1,7 @@
 package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
+import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -33,13 +34,13 @@ public class SayingControllerTest extends RestDocsTest {
     @DisplayName("POST / saying 서로에게 한마디 등록 API 테스트")
     void addSaying() throws Exception {
         // given
-        IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
+        IdResponse<UUID> expected = new IdResponse<>(UUID.randomUUID());
         given(sayingService.addSaying(any())).willReturn(expected);
 
         AddSayingRequest request = new AddSayingRequest("오늘 집 안 들어가요", List.of());
 
         // when
-        ResultActions perfrom =
+        ResultActions perform =
                 mockMvc.perform(
                         post("/saying")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -49,10 +50,38 @@ public class SayingControllerTest extends RestDocsTest {
                 );
 
         // then
-        perfrom.andExpect(status().isCreated());
+        perform.andExpect(status().isCreated());
 
         // docs
-        perfrom.andDo(document("save saying", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("save saying", getDocumentRequest(), getDocumentResponse()));
 
+    }
+
+    @Test
+    @DisplayName("GET / saying 서로에게 한마디 수정 API 테스트")
+    void updateSaying() throws Exception {
+        // given
+        UUID id = UUID.randomUUID();
+        IdResponse<UUID> expected = new IdResponse<>(id);
+        given(sayingService.updateSaying(any(), any())).willReturn(expected);
+
+        UpdateSayingRequest request = new UpdateSayingRequest("오늘 집 들어갈래", List.of(UUID.randomUUID()));
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        patch("/saying/update")
+                                .param("sayingId", id.toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                                .content(toRequestBody(request))
+                );
+
+        // then
+        perform.andExpect(status().isOk());
+
+        // docs
+        perform.andDo(document("update saying", getDocumentRequest(), getDocumentResponse()));
     }
 }

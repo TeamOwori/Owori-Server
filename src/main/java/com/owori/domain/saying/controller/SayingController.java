@@ -1,15 +1,13 @@
 package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
+import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -27,6 +25,17 @@ public class SayingController {
     @PostMapping
     public ResponseEntity<IdResponse<UUID>> addSaying(@RequestBody AddSayingRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(sayingService.addSaying(request));
+    }
+
+    /**
+     * 서로에게 한마디를 수정합니다.
+     * @param sayingId 수정할 서로에게 한마디 id 입니다.
+     * @param request 수정된 서로에게 한마디 정보입니다.
+     * @return 수정된 서로에게 한마디의 id가 반환됩니다.
+     */
+    @PatchMapping("/update")
+    public ResponseEntity<IdResponse<UUID>> updateSaying(@RequestParam UUID sayingId, @RequestBody UpdateSayingRequest request) {
+        return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
 
 }
