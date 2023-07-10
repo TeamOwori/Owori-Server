@@ -25,7 +25,8 @@ public class Saying implements Auditable {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
+    // 내용 글자 수 최대 50
+    @Column(nullable = false, length = 50)
     private String content;
 
     @OneToOne
