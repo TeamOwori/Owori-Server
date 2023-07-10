@@ -71,7 +71,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
 
         List<Schedule> schedules = scheduleRepository.findByMonth(member, fisrtDate,lastDate);
         monthSchedule = schedules.stream()
-                .map(schedule -> new FindScheduleByMonthResponse(schedule.getTitle(), schedule.getStartDate(),
+                .map(schedule -> new FindScheduleByMonthResponse(schedule.getId(), schedule.getTitle(), schedule.getStartDate(),
                         schedule.getEndDate(), schedule.getMember().getColor(), schedule.getDDayOption(), schedule.getAlarmList()))
                 .collect(Collectors.toList());
         /*

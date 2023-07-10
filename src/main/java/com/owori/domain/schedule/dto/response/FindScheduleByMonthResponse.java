@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindScheduleByMonthResponse {
+    private UUID id;
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
