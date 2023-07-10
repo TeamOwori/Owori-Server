@@ -1,0 +1,9 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Heart
+=== 좋아요 생성 / 취소
+operation::toggle heart[snippets='http-request,http-response']

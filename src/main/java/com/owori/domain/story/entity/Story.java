@@ -1,5 +1,6 @@
 package com.owori.domain.story.entity;
 
+import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
@@ -10,8 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Entity
@@ -43,6 +43,9 @@ public class Story implements Auditable {
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
+    private Set<Heart> hearts = new LinkedHashSet<>();
+
     @Setter
     @Embedded
     @Column(nullable = false)
@@ -59,6 +62,14 @@ public class Story implements Auditable {
 
     public void updateImage(Image image){
         this.images.add(image);
+    }
+
+    public void addHeart(Heart heart){
+       this.hearts.add(heart);
+    }
+
+    public void removeHeart(Heart heart){
+        this.hearts.remove(heart);
     }
 
 }
