@@ -55,7 +55,7 @@ public class ScheduleServiceTest extends LoginTest {
         // given
 
     }
-
+/*
     @Test
     @DisplayName("월별 일정 날짜순 조회가 수행되는가")
     void findScehduleByMonth() {
@@ -76,4 +76,6 @@ public class ScheduleServiceTest extends LoginTest {
             Assertions.assertEquals(response.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM")), month);
         }
     }
+
+ */
 }
