@@ -15,7 +15,6 @@ public interface ScheduleRepository {
     Optional<Schedule> findById(UUID id);
 
     // 멤버와 웗 시작일과 종료일 받아서 일정 넘겨주기
-    @Query("select s from Schedule s where ((s.startDate > :firstDate and s.startDate < :lastDate)" +
-            "or (s.endDate > :firstDate and s.endDate < :lastDate)) and s.member = :member")
+    @Query("select s from Schedule s where s.member = :member and ((s.startDate >= :firstDate and s.startDate <= :lastDate) or (s.endDate >= :firstDate and s.endDate <= :lastDate))")
     List<Schedule> findByMonth(Member member, LocalDate firstDate, LocalDate lastDate);
 }

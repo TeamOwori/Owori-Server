@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.owori.domain.schedule.entity.ScheduleType.개인;
 
@@ -60,15 +61,23 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         LocalDate fisrtDate = LocalDate.parse(date);
         LocalDate lastDate = fisrtDate.withDayOfMonth(fisrtDate.lengthOfMonth());
 
+        // 일정 저장할 리스트 생성
+        List<FindScheduleByMonthResponse> monthSchedule = new ArrayList<>();
+
         // 현재 로그인 중인 유저 받기
         Member member = authService.getLoginUser();
         // 현재 유저 가족 정보 받아오기
         Family family = member.getFamily();
+
+        List<Schedule> schedules = scheduleRepository.findByMonth(member, fisrtDate,lastDate);
+        monthSchedule = schedules.stream()
+                .map(schedule -> new FindScheduleByMonthResponse(schedule.getTitle(), schedule.getStartDate(),
+                        schedule.getEndDate(), schedule.getMember().getColor(), schedule.getDDayOption(), schedule.getAlarmList()))
+                .collect(Collectors.toList());
+        /*
         // 가족에 포함된 유저들 정보 받기
         Set<Member> familyMembers = family.getMembers();
 
-        // 일정 저장할 리스트 생성
-        List<FindScheduleByMonthResponse> monthSchedule = new ArrayList<>();
 
         // 생성자를 통해 가족 일정들 받아오기
         for(Member familyMember : familyMembers) {
@@ -81,6 +90,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
                     .toList();
             monthSchedule.addAll(tmp);
         }
+         */
 
         // startDate 를 기준으로 정렬
         // 정렬 기준 선언
