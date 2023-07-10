@@ -101,13 +101,12 @@ public class ScheduleControllerTest extends RestDocsTest {
                 new FindScheduleByMonthResponse("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.BLUE, true, List.of(하루전, 일주일전))
         );
 
-        given(scheduleService.findScheduleByMonth(any(), any())).willReturn(expected);
+        given(scheduleService.findScheduleByMonth(any())).willReturn(expected);
 
         // when
         ResultActions perform =
                 mockMvc.perform(
                         get("/schedule/month")
-                                .param("sort","startDate")
                                 .param("yearMonth","2023-07")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb") // ??

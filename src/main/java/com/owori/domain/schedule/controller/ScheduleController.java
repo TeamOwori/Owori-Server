@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
@@ -48,12 +50,11 @@ public class ScheduleController {
     /**
      * 월별 일정 조회 컨트롤러입니다.
      * 조회할 달을 입력받고 해당 달의 일정을 조회합니다.
-     * @param pageable 시작일을 기준으로 정렬하여 페이징합니다.
      * @param yearMonth  'yy-MM'형태로 조회할 달에 대한 정보입니다.
      * @return List<FindScheduleByMonthResponse> 해당 달에 대한 일정 리스트 정보입니다.
      */
     @GetMapping("/month")
-    public ResponseEntity<List<FindScheduleByMonthResponse>> findScheduleByMonth(@PageableDefault(sort = "startDate", direction = Sort.Direction.DESC) Pageable pageable, @RequestParam String yearMonth) {
-        return ResponseEntity.ok(scheduleService.findScheduleByMonth(pageable, yearMonth));
+    public ResponseEntity<List<FindScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
+        return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
 }
