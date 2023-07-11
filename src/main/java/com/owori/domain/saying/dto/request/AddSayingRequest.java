@@ -12,5 +12,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class AddSayingRequest {
     private String content;
-    private List<UUID> tagMembers;
+    private List<UUID> tagMembersId;
 }
