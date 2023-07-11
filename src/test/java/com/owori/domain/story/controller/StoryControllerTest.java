@@ -1,5 +1,6 @@
 package com.owori.domain.story.controller;
 
+import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.service.StoryService;
