@@ -22,6 +22,7 @@ import static com.owori.domain.schedule.entity.ScheduleType.가족;
 import static com.owori.domain.schedule.entity.Alarm.당일;
 import static com.owori.domain.schedule.entity.Alarm.하루전;
 import static com.owori.domain.schedule.entity.Alarm.일주일전;
+import static com.owori.domain.schedule.entity.ScheduleType.개인;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,9 +97,9 @@ public class ScheduleControllerTest extends RestDocsTest {
     void findScheduleByMonth() throws Exception {
         // given
         List<FindScheduleByMonthResponse> expected = List.of(
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), Color.BLUE, true, List.of(하루전, 일주일전))
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), 개인, Color.BLUE, true, List.of(당일)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"),개인 , Color.BLUE, true, List.of(당일)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), 가족, Color.BLUE, true, List.of(하루전, 일주일전))
         );
 
         given(scheduleService.findScheduleByMonth(any())).willReturn(expected);

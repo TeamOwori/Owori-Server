@@ -2,6 +2,7 @@ package com.owori.domain.schedule.service;
 
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
+import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.repository.ScheduleRepository;
@@ -53,7 +54,8 @@ public class ScheduleServiceTest extends LoginTest {
     @DisplayName("일정 수정이 수행되는가")
     void updateSchedule() {
         // given
-
+        UUID id = UUID.randomUUID();
+        UpdateScheduleRequest request = new UpdateScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), 가족, true, List.of(당일, 하루전));
     }
     @Test
     @DisplayName("월별 일정 날짜순 조회가 수행되는가")
