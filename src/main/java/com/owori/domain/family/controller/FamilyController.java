@@ -35,11 +35,23 @@ public class FamilyController {
      * 가족 초대 코드 검증 및 멤버 추가 컨트롤러입니다.
      * 초대 코드로 가족을 찾아 유효하면 멤버를 추가시킵니다.
      * @param addMemberRequest 초대 코드를 가지고 있는 dto 입니다.
-     * @return 초대 코드를 가지는 response dto 입니다.
+     * @return 바디로 response 하는 정보는 없습니다.
      */
     @PostMapping("/members")
     public ResponseEntity<Void> addFamilyMember(@RequestBody @Valid AddMemberRequest addMemberRequest) {
         familyService.addMember(addMemberRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 가족 그룹 이름을 수정하는 컨트롤러입니다.
+     * 가족 그룹 이름을 받아와 업데이트합니다.
+     * @param familyRequest 업데이트할 가족 그룹 이름을 가집니다.
+     * @return 바디로 response 하는 정보는 없습니다.
+     */
+    @PostMapping("/group-name")
+    public ResponseEntity<Void> updateGroupName(@RequestBody @Valid FamilyRequest familyRequest) {
+        familyService.updateGroupName(familyRequest);
         return ResponseEntity.ok().build();
     }
 }

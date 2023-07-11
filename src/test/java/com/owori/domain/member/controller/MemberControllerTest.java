@@ -1,10 +1,12 @@
 package com.owori.domain.member.controller;
 
 import com.owori.config.security.jwt.JwtToken;
-import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
+import com.owori.domain.member.dto.request.MemberProfileRequest;
+import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.entity.AuthProvider;
+import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.service.MemberService;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +20,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -111,5 +111,50 @@ class MemberControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("update member profile image", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("멤버 프로필 업데이트 수행되는가")
+    void updateMemberProfile() throws Exception {
+        //given
+        doNothing().when(memberService).updateMemberProfile(any());
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/members/profile")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toRequestBody(new MemberProfileRequest("오월이", LocalDate.now(), Color.GREEN)))
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("update member profile", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("멤버 회원탈퇴가 수행되는가")
+    void deleteMember() throws Exception {
+        //given
+        doNothing().when(memberService).deleteMember();
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        delete("/members")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("delete member", getDocumentRequest(), getDocumentResponse()));
     }
 }
