@@ -49,4 +49,8 @@ public class Family implements Auditable {
         this.members.add(member);
         member.organizeFamily(this);
     }
+
+    public void updateGroupName(String familyGroupName) {
+        this.familyGroupName = familyGroupName;
+    }
 }

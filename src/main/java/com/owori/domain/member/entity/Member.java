@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -71,8 +72,20 @@ public class Member implements Auditable {
         updateColor(Color.getNextColor(familyColors));
     }
 
-    public void updateColor(Color color) {
+    private void updateColor(Color color) {
+        Set<Member> familyMembers = this.family.getMembers();
+        if (hasNoDuplicateColor(familyMembers) && hasSameColor(color, familyMembers)) {
+            return;
+        }
         this.color = color;
+    }
+
+    private boolean hasNoDuplicateColor(Set<Member> familyMembers) {
+        return familyMembers.size() <= Color.values().length;
+    }
+
+    private boolean hasSameColor(Color color, Set<Member> familyMembers) {
+        return familyMembers.stream().map(Member::getColor).anyMatch(color::equals);
     }
 
     public List<SimpleGrantedAuthority> getRole() {
@@ -86,5 +99,11 @@ public class Member implements Auditable {
 
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void updateProfile(String nickname, LocalDate birthday, Color color) {
+        this.nickname = nickname;
+        this.birthDay = birthday;
+        updateColor(color);
     }
 }

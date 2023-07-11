@@ -70,7 +70,7 @@ class FamilyControllerTest extends RestDocsTest {
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
                                 .content(
-                                        toRequestBody(new AddMemberRequest("우리가족"))));
+                                        toRequestBody(new AddMemberRequest("길이가10인문자열!"))));
 
         //then
         perform.andExpect(status().isOk());
@@ -78,5 +78,29 @@ class FamilyControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("add member to family", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("가족 그룹 이름 업데이트가 수행되는가")
+    void updateGroupName() throws Exception {
+        //given
+        doNothing().when(familyService).updateGroupName(any());
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/families/group-name")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                                .content(
+                                        toRequestBody(new FamilyRequest("우리가족"))));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("update family group name", getDocumentRequest(), getDocumentResponse()));
     }
 }
