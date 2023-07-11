@@ -2,6 +2,7 @@ package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
+import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,8 +40,22 @@ public class SayingController {
         return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
 
+    /**
+     * 서로에게 한마디를 삭제합니다.
+     * @param sayingId 삭제할 서로에게 한마디 id 입니다.
+     * @return 삭제된 서로에게 한마디의 id가 반환됩니다.
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<IdResponse<UUID>> deleteSaying(@RequestParam UUID sayingId) {
         return ResponseEntity.ok(sayingService.deleteSaying(sayingId));
+    }
+
+    /**
+     * 로그인 유저가 포함된 가족의 서로에게 한마디를 조회합니다.
+     * @return 가족의 서로에게 한마디를 정보를 반환합니다.
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<FindSayingByFamilyResponse>> findSayingByFamily(){
+        return ResponseEntity.ok(sayingService.findSayingByFamily());
     }
 }

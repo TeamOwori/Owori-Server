@@ -2,6 +2,7 @@ package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
+import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -58,7 +59,7 @@ public class SayingControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("GET / saying 서로에게 한마디 수정 API 테스트")
+    @DisplayName("PATCH / saying 서로에게 한마디 수정 API 테스트")
     void updateSaying() throws Exception {
         // given
         UUID id = UUID.randomUUID();
@@ -108,5 +109,35 @@ public class SayingControllerTest extends RestDocsTest {
 
         // docs
         perform.andDo(document("delete saying",getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET / saying 서로에게 한마디 가족 단위 조회 API 테스트")
+    void findSayingByFamily() throws Exception {
+        // given
+        List<FindSayingByFamilyResponse> expected = List.of(
+                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of()),
+                new FindSayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()))
+        );
+
+        given(sayingService.findSayingByFamily()).willReturn(expected);
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/saying/search")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].content").exists())
+                .andExpect(jsonPath("$[0].memberId").exists());
+
+        // docs
+        perform.andDo(print())
+                .andDo(document("find saying by family", getDocumentRequest(), getDocumentResponse()));
     }
 }

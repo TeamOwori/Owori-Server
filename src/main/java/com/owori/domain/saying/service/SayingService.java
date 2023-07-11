@@ -2,12 +2,14 @@ package com.owori.domain.saying.service;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
+import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,4 +30,10 @@ public class SayingService {
     public IdResponse<UUID> deleteSaying(UUID sayingId) {
         return null; // todo: 로직 작성
     }
+
+    public List<FindSayingByFamilyResponse> findSayingByFamily() {
+        return null; // todo: 로직 작성
+    }
+
 }
+
