@@ -13,3 +13,9 @@ operation::update member details[snippets='http-request,http-response']
 
 === 멤버 프로필 이미지 저장
 operation::update member profile image[snippets='http-request,http-response']
+
+=== 멤버 프로필 업데이트
+operation::update member profile[snippets='http-request,http-response']
+
+=== 멤버 회원 탈퇴
+operation::delete member[snippets='http-request,http-response']

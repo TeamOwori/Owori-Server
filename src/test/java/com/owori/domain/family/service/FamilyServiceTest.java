@@ -10,7 +10,6 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @DatabaseTest
@@ -72,5 +70,20 @@ class FamilyServiceTest extends LoginTest {
 
         //then
         assertThat(family).isEqualTo(result);
+    }
+
+    @Test
+    @DisplayName("가족 그룹명 업데이트가 수행되는가")
+    void updateGroupName() {
+        //given
+        Family family = familyRepository.save(Family.builder().familyGroupName("오월이가족").member(loginUser).build());
+
+        //when
+        String resultName = "우리가족";
+        familyService.updateGroupName(new FamilyRequest(resultName));
+
+        //then
+        Family result = familyService.loadEntity(family.getId());
+        assertThat(result.getFamilyGroupName()).isEqualTo(resultName);
     }
 }

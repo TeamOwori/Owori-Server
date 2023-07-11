@@ -2,6 +2,7 @@ package com.owori.domain.member.service;
 
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
+import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.entity.Member;
@@ -63,5 +64,19 @@ public class MemberService implements EntityLoader<Member, UUID> {
             throw new NoSuchProfileImageException();
         }
         return s3ImageComponent.uploadImage("profile-image", profileImage);
+    }
+
+    @Transactional
+    public void updateMemberProfile(final MemberProfileRequest memberProfileRequest) {
+        Member member = authService.getLoginUser();
+        member.updateProfile(
+                memberProfileRequest.getNickname(),
+                memberProfileRequest.getBirthday(),
+                memberProfileRequest.getColor());
+    }
+
+    @Transactional
+    public void deleteMember() {
+        authService.getLoginUser().delete();
     }
 }

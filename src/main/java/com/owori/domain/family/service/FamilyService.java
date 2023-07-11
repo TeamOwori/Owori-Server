@@ -14,6 +14,7 @@ import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -65,5 +66,11 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     public Family loadEntity(final UUID id) {
         return familyRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional
+    public void updateGroupName(final FamilyRequest groupNameRequest) {
+        Family family = authService.getLoginUser().getFamily();
+        family.updateGroupName(groupNameRequest.getFamilyGroupName());
     }
 }
