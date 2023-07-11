@@ -25,12 +25,12 @@ public class HeartServiceTest extends LoginTest {
 
     @Autowired HeartRepository heartRepository;
     @Autowired StoryRepository storyRepository;
-    @Autowired private AuthService authService;
+    @Autowired AuthService authService;
 
 
     @Test
     @DisplayName("좋아요가 생성이 이루어지는가")
-    void addStory() {
+    void addHeart() {
         //given
         Member member = authService.getLoginUser();
         Story story = new Story("좋아요 생성이 제대로", "될까요 ?", LocalDate.of(2000, 4, 22), LocalDate.of(2022, 8, 22), member);
@@ -51,7 +51,7 @@ public class HeartServiceTest extends LoginTest {
 
     @Test
     @DisplayName("좋아요가 눌려있을 때, 다시 누르면 좋아요가 사라지는가")
-    void deleteStory() {
+    void addHeartIsAlready() {
         //given
         Member member = authService.getLoginUser();
         Story story = new Story("좋아요가 제대로", "없어졌을까요 ?", LocalDate.of(2000, 4, 22), LocalDate.of(2022, 8, 22), member);

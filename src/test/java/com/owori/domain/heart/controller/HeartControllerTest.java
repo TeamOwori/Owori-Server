@@ -33,8 +33,8 @@ public class HeartControllerTest extends RestDocsTest {
     @DisplayName("POST /hearts 좋아요 등록 / 취소 API 테스트")
     void toggleHeart() throws Exception {
         //given
-        HeartStatusResponse heartStatusResponse = new HeartStatusResponse(true);
-        given(heartService.toggleHeart(any())).willReturn(heartStatusResponse);
+        HeartStatusResponse expected = new HeartStatusResponse(true);
+        given(heartService.toggleHeart(any())).willReturn(expected);
 
         //when
         ResultActions perform =
