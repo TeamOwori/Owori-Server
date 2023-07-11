@@ -12,4 +12,7 @@ operation::save saying[snippets='http-request,http-response']
 operation::update saying[snippets='http-request,http-response']
 
 === 서로에게 한마디 삭제
-operation::delete saying[snippets='http-request,http-response']]
+operation::delete saying[snippets='http-request,http-response']
+
+=== 서로에게 한마디 가족 단위 조회
+operation::find saying by family[snippets='http-request,http-response']

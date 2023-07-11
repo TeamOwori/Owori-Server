@@ -119,7 +119,6 @@ public class SayingControllerTest extends RestDocsTest {
                 new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of()),
                 new FindSayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()))
         );
-
         given(sayingService.findSayingByFamily()).willReturn(expected);
 
         // when
@@ -134,7 +133,7 @@ public class SayingControllerTest extends RestDocsTest {
         // then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].content").exists())
-                .andExpect(jsonPath("$[0].memberId").exists());
+                .andExpect(jsonPath("$[0].member_id").exists());
 
         // docs
         perform.andDo(print())
