@@ -37,7 +37,7 @@ public class HeartService {
         return new HeartStatusResponse(true);
     }
 
-    public Boolean isAlreadyHeart(Member member, Story story){
+    public boolean isAlreadyHeart(Member member, Story story){
         return heartRepository.findByMemberAndStory(member, story).isPresent();
     }
 
