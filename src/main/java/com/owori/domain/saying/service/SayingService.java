@@ -6,6 +6,7 @@ import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,7 +19,13 @@ public class SayingService {
         return null; // todo: 로직 작성
     }
 
+    @Transactional
     public IdResponse<UUID> updateSaying(UUID sayingId, UpdateSayingRequest request) {
+        return null; // todo: 로직 작성
+    }
+
+    @Transactional
+    public IdResponse<UUID> deleteSaying(UUID sayingId) {
         return null; // todo: 로직 작성
     }
 }

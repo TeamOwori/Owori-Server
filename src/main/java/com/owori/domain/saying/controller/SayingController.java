@@ -38,4 +38,8 @@ public class SayingController {
         return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<IdResponse<UUID>> deleteSaying(@RequestParam UUID sayingId) {
+        return ResponseEntity.ok(sayingService.deleteSaying(sayingId));
+    }
 }

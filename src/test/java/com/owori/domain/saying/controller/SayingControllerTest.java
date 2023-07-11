@@ -84,4 +84,29 @@ public class SayingControllerTest extends RestDocsTest {
         // docs
         perform.andDo(document("update saying", getDocumentRequest(), getDocumentResponse()));
     }
+
+    @Test
+    @DisplayName("DELETE / saying 서로에게 한마디 삭제 API 테스트")
+    void deleteSaying() throws Exception {
+        // given
+        UUID id = UUID.randomUUID();
+        IdResponse<UUID> expected = new IdResponse<>(id);
+        given(sayingService.deleteSaying(any())).willReturn(expected);
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        delete("/saying/delete")
+                                .param("sayingId", id.toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk());
+
+        // docs
+        perform.andDo(document("delete saying",getDocumentRequest(), getDocumentResponse()));
+    }
 }
