@@ -40,7 +40,7 @@ public class CommentController {
     }
 
     /**
-     * 댓글 작성 컨트롤러입니다.
+     * 댓글 수정 컨트롤러입니다.
      * @param commentId 수정할 댓글의 id 입니다.
      * @param request 수정할 내용이 담긴 dto입니다.
      * @return 수정한 댓글의 id를 반환합니다.
