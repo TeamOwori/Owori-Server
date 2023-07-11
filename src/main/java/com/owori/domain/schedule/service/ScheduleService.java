@@ -68,13 +68,14 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         Member member = authService.getLoginUser();
         // 현재 유저 가족 정보 받아오기
         Family family = member.getFamily();
-
+        /*
         List<Schedule> schedules = scheduleRepository.findByMonth(member, fisrtDate,lastDate);
         monthSchedule = schedules.stream()
                 .map(schedule -> new FindScheduleByMonthResponse(schedule.getId(), schedule.getTitle(), schedule.getStartDate(),
                         schedule.getEndDate(), schedule.getMember().getColor(), schedule.getDDayOption(), schedule.getAlarmList()))
                 .collect(Collectors.toList());
-        /*
+         */
+
         // 가족에 포함된 유저들 정보 받기
         Set<Member> familyMembers = family.getMembers();
 
@@ -85,12 +86,11 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
             List<Schedule> schedules = scheduleRepository.findByMonth(familyMember, fisrtDate, lastDate);
             // List<FindScheduleMonthResponse> 형태로 변환하여 추가
             List<FindScheduleByMonthResponse> tmp = schedules.stream()
-                    .map(schedule -> new FindScheduleByMonthResponse(schedule.getTitle(), schedule.getStartDate(),
-                            schedule.getEndDate(), schedule.getMember().getColor(), schedule.getDDayOption(), schedule.getAlarmList()))
+                    .map(schedule -> new FindScheduleByMonthResponse(schedule.getId(), schedule.getTitle(), schedule.getStartDate(),
+                            schedule.getEndDate(), schedule.getScheduleType() ,schedule.getMember().getColor(), schedule.getDDayOption(), schedule.getAlarmList()))
                     .toList();
             monthSchedule.addAll(tmp);
         }
-         */
 
         // startDate 를 기준으로 정렬
         // 정렬 기준 선언
