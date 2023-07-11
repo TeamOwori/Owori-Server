@@ -1,5 +1,6 @@
 package com.owori.domain.story.entity;
 
+import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.member.entity.Member;
@@ -44,6 +45,9 @@ public class Story implements Auditable {
     private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private Set<Heart> hearts = new LinkedHashSet<>();
 
     @Setter
@@ -71,5 +75,9 @@ public class Story implements Auditable {
     public void removeHeart(Heart heart){
         this.hearts.remove(heart);
     }
+
+    public void addComment(Comment comment){ this.comments.add(comment); }
+
+    public void removeComment(Comment comment){ this.comments.remove(comment); }
 
 }
