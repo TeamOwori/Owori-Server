@@ -17,6 +17,7 @@ import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -93,7 +94,7 @@ public class SayingControllerTest extends RestDocsTest {
         // given
         UUID id = UUID.randomUUID();
         IdResponse<UUID> expected = new IdResponse<>(id);
-        given(sayingService.deleteSaying(any())).willReturn(expected);
+        doNothing().when(sayingService).deleteSaying(any());
 
         // when
         ResultActions perform =

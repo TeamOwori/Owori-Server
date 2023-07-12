@@ -46,8 +46,9 @@ public class SayingController {
      * @return 삭제된 서로에게 한마디의 id가 반환됩니다.
      */
     @DeleteMapping
-    public ResponseEntity<IdResponse<UUID>> deleteSaying(@RequestParam UUID sayingId) {
-        return ResponseEntity.ok(sayingService.deleteSaying(sayingId));
+    public ResponseEntity<Void> deleteSaying(@RequestParam UUID sayingId) {
+        sayingService.deleteSaying(sayingId);
+        return ResponseEntity.ok().build();
     }
 
     /**
