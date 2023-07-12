@@ -61,15 +61,13 @@ public class CommentControllerTest extends RestDocsTest {
     @DisplayName("DELETE /comments 댓글 삭제 테스트")
     void deleteComment() throws Exception {
         //given
-        doNothing().when(commentService).removeComment(any(), any());
+        doNothing().when(commentService).removeComment(any());
 
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        delete("/comments")
+                        delete("/comments/{commentId}",UUID.randomUUID())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .param("storyId", "2")
-                                .param("commentId", UUID.randomUUID().toString())
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
                 );

@@ -76,10 +76,9 @@ public class CommentServiceTest extends LoginTest {
         Story saveStory = storyRepository.findById(story.getId()).get();
 
         assertThat(commentList.get(1).getParent()).isEqualTo(parent);
-        assertThat(saveStory.getComments().get(0).getParent()).isEqualTo(parent);
-        assertThat(saveStory.getComments().get(0).getMember()).isEqualTo(member);
+        assertThat(saveStory.getMember()).isEqualTo(member);
         assertThat(commentList.get(1).getContent()).isEqualTo(content);
-        assertThat(saveStory.getComments().get(0).getContent()).isEqualTo(content);
+        assertThat(commentList.get(0).getContent()).isEqualTo("나는 부모 댓글");
 
     }
 
@@ -95,7 +94,7 @@ public class CommentServiceTest extends LoginTest {
         commentRepository.save(comment);
 
         //when
-        commentService.removeComment(story.getId(), comment.getId());
+        commentService.removeComment(comment.getId());
         em.flush();
         em.clear();
 

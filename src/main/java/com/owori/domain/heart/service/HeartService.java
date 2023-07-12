@@ -8,6 +8,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.service.StoryService;
+import com.owori.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +24,16 @@ public class HeartService {
         Member member = authService.getLoginUser();
         Story story = storyService.loadEntity(storyId);
 
-        if(isAlreadyHeart(member, story)){
-            Heart heart = heartRepository.findByMemberAndStory(member, story).orElseGet(null);
+        if(heartRepository.existsByMemberAndStory(member, story)){
+            Heart heart = heartRepository.findByMemberAndStory(member, story).orElseThrow(EntityNotFoundException::new);
             story.removeHeart(heart);
-            heartRepository.delete(heart);
+
             return new HeartStatusResponse(false);
         }
 
         Heart heart = heartMapper.toEntity(member, story);
         heartRepository.save(heart);
-        story.addHeart(heart);
 
         return new HeartStatusResponse(true);
     }
-
-    public boolean isAlreadyHeart(Member member, Story story){
-        return heartRepository.findByMemberAndStory(member, story).isPresent();
-    }
-
 }

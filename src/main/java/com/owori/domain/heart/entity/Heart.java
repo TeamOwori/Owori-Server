@@ -42,5 +42,6 @@ public class Heart implements Auditable {
     public Heart(Member member, Story story) {
         this.member = member;
         this.story = story;
+        story.addHeart(this);
     }
 }

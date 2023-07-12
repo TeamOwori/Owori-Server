@@ -52,15 +52,11 @@ public class Comment implements Auditable {
         this.story = story;
         this.parent = parent;
         this.content = content;
-    }
-
-    public void updateParent(Comment parent){
-        this.parent = parent;
+        story.addComment(this);
     }
 
     public void updateContent(String content){
         this.content = content;
     }
-
 
 }

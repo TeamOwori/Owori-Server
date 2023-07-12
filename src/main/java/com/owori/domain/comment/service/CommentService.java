@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,23 +31,20 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     @Transactional
     public IdResponse<UUID> addComment(AddCommentRequest request) {
         Member member = authService.getLoginUser();
-        Comment parent = request.getParentCommentId() == null ? null : loadEntity(request.getParentCommentId());
         Story story = storyService.loadEntity(request.getStoryId());
+        Optional<Comment> parentComment = Optional.ofNullable(request.getParentCommentId())
+                .map(parentId -> loadEntity(parentId));
 
-        Comment comment = commentMapper.toEntity(member, story, parent, request.getContent());
+        Comment comment = commentMapper.toEntity(member, story, parentComment.orElse(null), request.getContent());
         commentRepository.save(comment);
-        story.addComment(comment);
-        comment.updateParent(parent);
 
         return new IdResponse<>(comment.getId());
     }
 
     @Transactional
-    public void removeComment(Long storyId, UUID commentId) {
-        Story story = storyService.loadEntity(storyId);
+    public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
-        story.removeComment(comment);
-        comment.delete();
+        comment.getStory().removeComment(comment);
     }
 
     public IdResponse<UUID> updateComment(UUID commentId, UpdateCommentRequest request) {

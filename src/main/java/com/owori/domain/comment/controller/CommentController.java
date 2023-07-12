@@ -30,12 +30,11 @@ public class CommentController {
 
     /**
      * 댓글 삭제 컨트롤러입니다.
-     * @param storyId 삭제할 댓글의 이야기 id 입니다.
      * @param commentId 삭제할 댓글의 id 입니다.
      */
-    @DeleteMapping
-    public ResponseEntity<Void> removeComment(@RequestParam Long storyId, @RequestParam UUID commentId){
-        commentService.removeComment(storyId, commentId);
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> removeComment(@PathVariable UUID commentId){
+        commentService.removeComment(commentId);
         return ResponseEntity.ok().build();
     }
 

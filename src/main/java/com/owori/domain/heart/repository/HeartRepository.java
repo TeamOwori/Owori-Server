@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface HeartRepository {
     Heart save(Heart heart);
     Optional<Heart> findByMemberAndStory(Member member, Story story);
-    void delete(Heart heart);
+    boolean existsByMemberAndStory(Member member, Story story);
 }

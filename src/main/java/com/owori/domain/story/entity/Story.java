@@ -74,10 +74,14 @@ public class Story implements Auditable {
 
     public void removeHeart(Heart heart){
         this.hearts.remove(heart);
+        heart.delete();
     }
 
     public void addComment(Comment comment){ this.comments.add(comment); }
 
-    public void removeComment(Comment comment){ this.comments.remove(comment); }
+    public void removeComment(Comment comment){
+        this.comments.remove(comment);
+        comment.delete();
+    }
 
 }
