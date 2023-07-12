@@ -9,9 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Entity
@@ -33,6 +31,10 @@ public class Family implements Auditable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "family")
     private Invite invite;
 
+    @JoinColumn
+    @ElementCollection
+    private List<String> images = new ArrayList<>();
+
     @Setter
     @Embedded
     @Column(nullable = false)
@@ -52,5 +54,9 @@ public class Family implements Auditable {
 
     public void updateGroupName(String familyGroupName) {
         this.familyGroupName = familyGroupName;
+    }
+
+    public void addImage(String image) {
+        this.images.add(image);
     }
 }
