@@ -37,13 +37,6 @@ public class Saying implements Auditable {
     @OneToMany(mappedBy = "saying", cascade = CascadeType.ALL)
     private List<SayingTagMember> tagMembers = new ArrayList<>();
 
-    /*
-    // 태그 기능
-    @ManyToMany
-    @JoinColumn(name = "SAYING_ID")
-    private List<Member> tagMembers = new ArrayList<>();
-    */
-
     @Column(nullable = false)
     private Boolean status;
 

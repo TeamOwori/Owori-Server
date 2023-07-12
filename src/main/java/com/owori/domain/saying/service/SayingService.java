@@ -4,12 +4,16 @@ import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.repository.SayingRepository;
+import com.owori.global.audit.BaseTime;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,6 +36,8 @@ public class SayingService {
     }
 
     public List<FindSayingByFamilyResponse> findSayingByFamily() {
+        // BaseTime baseTime = new BaseTime();
+        // Optional.ofNullable(baseTime.getUpdatedAt()).orElse(baseTime.getCreatedAt());
         return null; // todo: 로직 작성
     }
 

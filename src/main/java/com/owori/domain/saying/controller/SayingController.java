@@ -35,7 +35,7 @@ public class SayingController {
      * @param request 수정된 서로에게 한마디 정보입니다.
      * @return 수정된 서로에게 한마디의 id가 반환됩니다.
      */
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<IdResponse<UUID>> updateSaying(@RequestParam UUID sayingId, @RequestBody UpdateSayingRequest request) {
         return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
@@ -45,7 +45,7 @@ public class SayingController {
      * @param sayingId 삭제할 서로에게 한마디 id 입니다.
      * @return 삭제된 서로에게 한마디의 id가 반환됩니다.
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<IdResponse<UUID>> deleteSaying(@RequestParam UUID sayingId) {
         return ResponseEntity.ok(sayingService.deleteSaying(sayingId));
     }
@@ -54,7 +54,7 @@ public class SayingController {
      * 로그인 유저가 포함된 가족의 서로에게 한마디를 조회합니다.
      * @return 가족의 서로에게 한마디를 정보를 반환합니다.
      */
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<List<FindSayingByFamilyResponse>> findSayingByFamily(){
         return ResponseEntity.ok(sayingService.findSayingByFamily());
     }

@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,7 +72,7 @@ public class SayingControllerTest extends RestDocsTest {
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        patch("/saying/update")
+                        patch("/saying")
                                 .param("sayingId", id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
@@ -97,7 +98,7 @@ public class SayingControllerTest extends RestDocsTest {
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        delete("/saying/delete")
+                        delete("/saying")
                                 .param("sayingId", id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
@@ -116,15 +117,15 @@ public class SayingControllerTest extends RestDocsTest {
     void findSayingByFamily() throws Exception {
         // given
         List<FindSayingByFamilyResponse> expected = List.of(
-                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of()),
-                new FindSayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()))
+                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of(), LocalDateTime.now()),
+                new FindSayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()), LocalDateTime.now())
         );
         given(sayingService.findSayingByFamily()).willReturn(expected);
 
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        get("/saying/search")
+                        get("/saying")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
