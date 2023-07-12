@@ -11,9 +11,9 @@ import java.util.UUID;
 
 @Component
 public class MemberMapper {
-    public Member toEntity(MemberRequest memberRequest) {
+    public Member toEntity(String clientId, MemberRequest memberRequest) {
         return Member.builder()
-                .oAuth2Info(new OAuth2Info(memberRequest.getToken(), memberRequest.getAuthProvider()))
+                .oAuth2Info(new OAuth2Info(clientId, memberRequest.getAuthProvider()))
                 .build();
     }
 

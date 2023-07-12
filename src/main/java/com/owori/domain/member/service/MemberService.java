@@ -1,6 +1,8 @@
 package com.owori.domain.member.service;
 
 import com.owori.config.security.jwt.JwtToken;
+import com.owori.domain.member.client.KakaoMemberClient;
+import com.owori.domain.member.dto.client.KakaoMemberResponse;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
@@ -27,6 +29,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberMapper memberMapper;
     private final AuthService authService;
     private final S3ImageComponent s3ImageComponent;
+    private final KakaoMemberClient kakaoMemberClient;
 
     @Override
     public Member loadEntity(final UUID id) {
@@ -35,15 +38,21 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     public MemberJwtResponse saveIfNone(final MemberRequest memberRequest) {
-        Member member = memberRepository.findByTokenAndAuthProvider(memberRequest.getToken(), memberRequest.getAuthProvider())
-                .orElseGet(() -> memberRepository.save(memberMapper.toEntity(memberRequest)));
+        String clientId = Long.toString(requestToKakao(memberRequest.getToken()).getId());
 
-        JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getToken());
+        Member member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider())
+                .orElseGet(() -> memberRepository.save(memberMapper.toEntity(clientId, memberRequest)));
+
+        JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getClientId());
         return memberMapper.toJwtResponse(jwtToken, member.getId());
     }
 
     private JwtToken createMemberJwtToken(final Member member, final String token) {
         return authService.createAndUpdateToken(member, token);
+    }
+
+    private KakaoMemberResponse requestToKakao(final String token) {
+        return kakaoMemberClient.requestToKakao(token);
     }
 
     @Transactional
