@@ -29,7 +29,7 @@ public class Saying implements Auditable {
     @Column(nullable = false, length = 50)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
@@ -44,4 +44,33 @@ public class Saying implements Auditable {
     @Embedded
     @Column(nullable = false)
     private BaseTime baseTime;
+
+    @Builder
+    public Saying(String content, Member member, List<Member> tagMembers) {
+        this.content = content;
+        this.member = member;
+        organize(tagMembers);
+        this.status = true;
+    }
+
+    public void update(String content, List<Member> tagMembers) {
+        this.content = content;
+        change(tagMembers);
+    }
+
+    private void organize(List<Member> tagMembers) {
+        this.tagMembers = tagMembers.stream()
+                .map(tagMember -> new SayingTagMember(this, tagMember))
+                .toList();
+    }
+
+    private void change(List<Member> tagMembers) {
+        // 기존에 있던거 삭제
+        this.tagMembers.forEach(SayingTagMember::delete);
+        // 새로운 태그된 멤버들 추가
+        this.tagMembers = tagMembers.stream()
+                .map(tagMember -> new SayingTagMember(this, tagMember))
+                .toList();
+    }
+
 }

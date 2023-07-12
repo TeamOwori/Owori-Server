@@ -4,10 +4,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
@@ -27,12 +24,12 @@ public class SayingTagMember implements Auditable {
     private UUID id;
 
     // Saying
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SAYING_ID")
     private Saying saying;
 
     // Tag된 Member
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
@@ -40,4 +37,11 @@ public class SayingTagMember implements Auditable {
     @Embedded
     @Column(nullable = false)
     private BaseTime baseTime;
+
+    @Builder
+    public SayingTagMember(Saying saying, Member member) {
+        this.saying = saying;
+        this.member = member;
+    }
+
 }

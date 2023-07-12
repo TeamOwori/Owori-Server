@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -78,5 +79,14 @@ public class MemberService implements EntityLoader<Member, UUID> {
     @Transactional
     public void deleteMember() {
         authService.getLoginUser().delete();
+    }
+
+    /**
+     * 멤버 아이디 리스트를 통해 멤버 리스트를 반환해주는 함수
+     * @param memberIds 멤버 아이디 리스트
+     * @return 멤버 리스트
+     */
+    public List<Member> findMembersByIds(List<UUID> memberIds) {
+        return memberRepository.findAllByIdIn(memberIds);
     }
 }
