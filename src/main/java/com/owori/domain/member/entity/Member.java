@@ -11,10 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Entity
@@ -105,5 +102,18 @@ public class Member implements Auditable {
         this.nickname = nickname;
         this.birthDay = birthday;
         updateColor(color);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(oAuth2Info, member.oAuth2Info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(oAuth2Info);
     }
 }

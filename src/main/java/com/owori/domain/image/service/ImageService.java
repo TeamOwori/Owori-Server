@@ -1,9 +1,9 @@
 package com.owori.domain.image.service;
 
 import com.owori.domain.image.entity.Image;
+import com.owori.domain.image.exception.ImageLimitExceededException;
 import com.owori.domain.image.mapper.ImageMapper;
 import com.owori.domain.image.repository.ImageRepository;
-import com.owori.domain.image.exception.ImageLimitExceededException;
 import com.owori.domain.story.entity.Story;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;

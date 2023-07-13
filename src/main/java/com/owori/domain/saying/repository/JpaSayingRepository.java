@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface JpaSayingRepository extends JpaRepository<Saying, UUID>, SayingRepository{
 
+
 }

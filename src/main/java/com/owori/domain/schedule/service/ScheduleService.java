@@ -2,9 +2,7 @@ package com.owori.domain.schedule.service;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.AddScheduleResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.UpdateScheduleResponse;
 import com.owori.domain.schedule.repository.ScheduleRepository;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
