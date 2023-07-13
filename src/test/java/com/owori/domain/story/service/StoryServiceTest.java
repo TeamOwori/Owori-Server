@@ -7,8 +7,7 @@ import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
-import com.owori.domain.story.dto.response.FindListStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.support.database.DatabaseTest;
@@ -20,7 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,38 +51,8 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("이야기 앨범형 최신순 조회가 수행되는가")
-    void findAlbumStoryByCreateAt() {
-        //given
-        String title = "기다리고 기다리던 하루";
-        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
-
-        //when
-        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createdAt")), LocalDate.of(2023, 8, 31));
-
-        //then
-        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
-        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
-    }
-
-    @Test
-    @DisplayName("이야기 앨범형 날짜순 조회가 수행되는가")
-    void findAlbumStoryByEventAt() {
-        //given
-        String title = "기다리고 기다리던 하루";
-        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
-
-        //when
-        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("startDate")), LocalDate.now());
-
-        //then
-        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo("2017.12");
-        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
-    }
-
-    @Test
-    @DisplayName("최신순 이야기 목록 조회가 수행되는가")
-    void findListStoryByCreatedAt() {
+    @DisplayName("최신순 이야기 전체 조회가 수행되는가")
+    void findAllStoryByCreatedAt() {
         //given
         Member member = authService.getLoginUser();
         String title = "기다리고 기다리던 하루";
@@ -94,7 +62,7 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story));
 
         //when
-        FindListStoryGroupResponse response = storyService.findListStory(PageRequest.of(0, 4, Sort.by("createdAt")), null);
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("createdAt")), null);
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
@@ -103,8 +71,8 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("날짜순 이야기 목록 조회가 수행되는가")
-    void findListStoryByEventAt() {
+    @DisplayName("날짜순 이야기 전체 조회가 수행되는가")
+    void findAllStoryByEventAt() {
         //given
         Member member = authService.getLoginUser();
         Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
@@ -115,7 +83,7 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story));
 
         //when
-        FindListStoryGroupResponse response = storyService.findListStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");

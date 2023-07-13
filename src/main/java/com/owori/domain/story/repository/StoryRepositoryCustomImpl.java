@@ -20,47 +20,10 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     private final StoryOrderConverter storyOrderConverter;
 
     /*
-    *  최신순 앨범형 조회 - createAt 기준
-    */
-    @Override
-    public Slice<Story> findAllAlbumStoryByCreatedAt(Pageable pageable, LocalDate createAt, Member member) {
-        List<Story> storyList = queryFactory
-                .selectFrom(story)
-                .where(
-                        story.member.eq(member)
-                                .and(ltStoryCreateAt(createAt))
-                )
-                .orderBy(storyOrderConverter.convert(pageable.getSort()))
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-
-        return checkLastPage(pageable, storyList);
-    }
-
-
-    /*
-     *  날짜순 앨범형 조회 - StartDate 기준
+     *  최신순 조회 - createAt 기준
      */
     @Override
-    public Slice<Story> findAllAlbumStoryByEventAt(Pageable pageable, LocalDate startDate, Member member) {
-        List<Story> storyList = queryFactory
-                .selectFrom(story)
-                .where(
-                        story.member.eq(member)
-                                        .and(ltStoryStartDate(startDate))
-                )
-                .orderBy(storyOrderConverter.convert(pageable.getSort()))
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-
-        return checkLastPage(pageable, storyList);
-    }
-
-    /*
-     *  최신순 목록형 조회 - createAt 기준
-     */
-    @Override
-    public Slice<Story> findAllListStoryByCreatedAt(Pageable pageable, Member member, LocalDate createdAt) {
+    public Slice<Story> findAllStoryByCreatedAt(Pageable pageable, Member member, LocalDate createdAt) {
         List<Story> results = queryFactory
                 .selectFrom(story)
                 .where(
@@ -75,10 +38,10 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     }
 
     /*
-     *  날짜순 목록형 조회 - StartDate 기준
+     *  날짜순 조회 - StartDate 기준
      */
     @Override
-    public Slice<Story> findAllListStoryByEventAt(Pageable pageable, Member member, LocalDate startDate) {
+    public Slice<Story> findAllStoryByEventAt(Pageable pageable, Member member, LocalDate startDate) {
         List<Story> results = queryFactory
                 .selectFrom(story)
                 .where(

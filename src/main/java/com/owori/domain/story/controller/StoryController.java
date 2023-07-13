@@ -1,8 +1,7 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
-import com.owori.domain.story.dto.response.FindListStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.service.StoryService;
 import com.owori.global.dto.IdResponse;
@@ -36,29 +35,16 @@ public class StoryController {
     }
 
     /**
-     * 이야기를 앨범형으로 조회합니다.
+     * 이야기를 전체 조회를 위한 컨트롤러입니다.
      * @param pageable
      * @param lastViewed 조회할 게시글의 기준 (year_month) 입니다.
      * @return 앨범형 조회 dto가 반환됩니다.
      */
-    @GetMapping("/album")
-    public ResponseEntity<FindAlbumStoryGroupResponse> findAlbumStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
+    @GetMapping
+    public ResponseEntity<FindAllStoryGroupResponse> findAllStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
+                                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
 
-        return ResponseEntity.ok(storyService.findAlbumStory(pageable, lastViewed));
-    }
-
-    /**
-     * 이야기를 목록형으로 조회합니다.
-     * @param pageable
-     * @param lastViewed 조회할 게시글의 기준 (year_month) 입니다.
-     * @return 앨범형 조회 dto가 반환됩니다.
-     */
-    @GetMapping("/list")
-    public ResponseEntity<FindListStoryGroupResponse> findListStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
-
-        return ResponseEntity.ok(storyService.findListStory(pageable, lastViewed));
+        return ResponseEntity.ok(storyService.findAllStory(pageable, lastViewed));
     }
 
     @GetMapping("/{storyId}")

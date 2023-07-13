@@ -61,22 +61,24 @@ public class StoryControllerTest extends RestDocsTest{
     }
 
     @Test
-    @DisplayName("GET /stories/list 이야기 리스트형 조회 API 테스트")
-    void findStoryList() throws Exception {
+    @DisplayName("GET /stories 이야기 전체 조회 (날짜순) API 테스트")
+    void findAllStoryByEventAt() throws Exception {
         //given
-        List<FindListStoryResponse> response = List.of(
-                new FindListStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5, 2, "허망고", LocalDate.of(2022, 02, 01), null),
-                new FindListStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2, 5, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)),
+                new FindAllStoryResponse(1L,"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(1L,"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
 
-        FindListStoryGroupResponse findListStoryGroupResponse = new FindListStoryGroupResponse(response, true);
-        given(storyService.findListStory(any(),any())).willReturn(findListStoryGroupResponse);
+        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
+        given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        get("/stories/list")
-                                .param("sort", "createdAt")
-                                .param("lastViewed","2023-07-31")
+                        get("/stories")
+                                .param("sort", "startDate")
+                                .param("lastViewed","2022-03-31")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
@@ -87,107 +89,40 @@ public class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story list", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story by eventAt", getDocumentRequest(), getDocumentResponse()));
     }
 
     @Test
-    @DisplayName("GET /stories/album 이야기 앨범형 조회 (최신순) API 테스트")
-    void findStoryAlbumByCreateAt() throws Exception {
+    @DisplayName("GET /stories 이야기 전체 조회 (최신순) API 테스트")
+    void findAllStoryByCreatedAt() throws Exception {
         //given
-        String size = "7";
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
+                new FindAllStoryResponse(1L,"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(1L,"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
-        List<FindAlbumStoryResponse> storyResponses1 = List.of(
-                new FindAlbumStoryResponse(5L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
-                new FindAlbumStoryResponse(4L, null),
-                new FindAlbumStoryResponse(3L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
-                new FindAlbumStoryResponse(2L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
-
-        List<FindAlbumStoryResponse> storyResponses2 = List.of(
-                new FindAlbumStoryResponse(6L, null),
-                new FindAlbumStoryResponse(1L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
-
-        List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
-
-        List<FindAlbumStoryByMonthResponse> responses = List.of(
-                new FindAlbumStoryByMonthResponse("2022.08", storyResponses1),
-                new FindAlbumStoryByMonthResponse("2022.07", storyResponses2),
-                new FindAlbumStoryByMonthResponse("2021.04", storyResponses3)
-                );
-
-        FindAlbumStoryGroupResponse expected = new FindAlbumStoryGroupResponse(responses, true);
-
-        given(storyService.findAlbumStory(any(),any())).willReturn(expected);
+        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
+        given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        get("/stories/album")
+                        get("/stories")
                                 .param("sort", "createdAt")
-                                .param("lastViewed","2023-07-31")
-                                .param("size", size)
+                                .param("lastViewed","2023-08-31")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
                 );
-
 
         //then
         perform.andExpect(status().isOk());
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story album by createAt", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story by createdAt", getDocumentRequest(), getDocumentResponse()));
     }
-
-    @Test
-    @DisplayName("GET /stories/album 이야기 앨범형 조회 (날짜순) API 테스트")
-    void findStoryAlbumByEventAt() throws Exception {
-        //given
-        String size = "7";
-
-        List<FindAlbumStoryResponse> storyResponses1 = List.of(
-                new FindAlbumStoryResponse(5L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
-                new FindAlbumStoryResponse(4L, null),
-                new FindAlbumStoryResponse(3L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"),
-                new FindAlbumStoryResponse(2L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
-
-        List<FindAlbumStoryResponse> storyResponses2 = List.of(
-                new FindAlbumStoryResponse(6L, null),
-                new FindAlbumStoryResponse(1L, "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png"));
-
-        List<FindAlbumStoryResponse> storyResponses3 = List.of(new FindAlbumStoryResponse(10L, null));
-
-        List<FindAlbumStoryByMonthResponse> responses = List.of(
-                new FindAlbumStoryByMonthResponse("2022.08", storyResponses1),
-                new FindAlbumStoryByMonthResponse("2022.07", storyResponses2),
-                new FindAlbumStoryByMonthResponse("2021.04", storyResponses3)
-        );
-
-        FindAlbumStoryGroupResponse expected = new FindAlbumStoryGroupResponse(responses, false);
-
-        given(storyService.findAlbumStory(any(),any())).willReturn(expected);
-
-        //when
-        ResultActions perform =
-                mockMvc.perform(
-                        get("/stories/album")
-                                .param("sort", "startDate")
-                                .param("lastViewed","2023-07-31")
-                                .param("size", size)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
-                );
-
-
-        //then
-        perform.andExpect(status().isOk());
-
-        //docs
-        perform.andDo(print())
-                .andDo(document("find story album by eventAt", getDocumentRequest(), getDocumentResponse()));
-    }
-
 
     @Test
     @DisplayName("GET /stories/{storyId} 이야기 상세 조회 API 테스트")
