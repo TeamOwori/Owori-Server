@@ -11,6 +11,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
 import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
+import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import com.owori.utils.S3ImageComponent;
@@ -63,9 +64,10 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public void updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
+    public ImageResponse updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
         String profileImageUrl = uploadImage(profileImage);
         authService.getLoginUser().updateProfileImage(profileImageUrl);
+        return new ImageResponse(profileImageUrl);
     }
 
     private String uploadImage(final MultipartFile profileImage) throws IOException {
