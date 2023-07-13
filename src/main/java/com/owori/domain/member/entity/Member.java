@@ -103,4 +103,17 @@ public class Member implements Auditable {
         this.birthDay = birthday;
         updateColor(color);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(oAuth2Info, member.oAuth2Info);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(oAuth2Info);
+    }
 }
