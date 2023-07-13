@@ -4,6 +4,8 @@ import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.repository.HeartRepository;
+import com.owori.domain.image.entity.Image;
+import com.owori.domain.image.repository.ImageRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
@@ -30,6 +32,7 @@ public class StoryServiceTest extends LoginTest {
     @Autowired private StoryRepository storyRepository;
     @Autowired private CommentRepository commentRepository;
     @Autowired private HeartRepository heartRepository;
+    @Autowired private ImageRepository imageRepository;
     @Autowired private AuthService authService;
 
 
@@ -77,10 +80,13 @@ public class StoryServiceTest extends LoginTest {
         Member member = authService.getLoginUser();
         Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
         Story story2 = new Story("제목2", "내용2", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        Image image = new Image("a.png", 1L);
         storyRepository.save(story);
         storyRepository.save(story2);
         commentRepository.save(new Comment(member, story,null, "댓글"));
         heartRepository.save(new Heart(member, story));
+        imageRepository.save(image);
+        image.updateStory(story);
 
         //when
         FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
@@ -90,5 +96,6 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
         assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
         assertThat(response.getStories().get(1).getContents()).isEqualTo("내용2");
+        assertThat(response.getStories().get(0).getImage()).isEqualTo("a.png");
     }
 }

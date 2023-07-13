@@ -24,7 +24,7 @@ public class StoryMapper {
                 .id(story.getId())
                 .title(story.getTitle())
                 .contents(story.getContents())
-                .image(story.getImages() == null || story.getImages().isEmpty() ? null : story.getImages().get(0).getUrl())
+                .image(story.getMainImage())
                 .heartCnt(story.getHearts().size())
                 .commentCnt(story.getComments().size())
                 .writer(story.getMember().getNickname())

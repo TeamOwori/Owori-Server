@@ -1,5 +1,6 @@
 package com.owori.domain.story.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class FindAllStoryResponse {
     private UUID id;
@@ -19,18 +22,4 @@ public class FindAllStoryResponse {
     private String writer;
     private LocalDate startDate;
     private LocalDate endDate;
-
-    @Builder
-    public FindAllStoryResponse(UUID id, String title, String contents, String image, Integer heartCnt,
-                                Integer commentCnt, String writer, LocalDate startDate, LocalDate endDate){
-        this.id = id;
-        this.title = title;
-        this.contents = contents;
-        this.image = image;
-        this.heartCnt = heartCnt;
-        this.commentCnt = commentCnt;
-        this.writer = writer;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
 }

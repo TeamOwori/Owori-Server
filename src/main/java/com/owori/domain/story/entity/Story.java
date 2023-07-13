@@ -87,4 +87,8 @@ public class Story implements Auditable {
         comment.delete();
     }
 
+    public String getMainImage(){
+        return images == null || images.isEmpty() ? null : images.get(0).getUrl();
+    }
+
 }
