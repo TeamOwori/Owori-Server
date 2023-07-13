@@ -44,7 +44,7 @@ public class CommentControllerTest extends RestDocsTest {
                         post("/comments")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
-                                        toRequestBody(new AddCommentRequest(1L, null, "여기엔 댓글 내용을 적어주시면 됩니다. 작성하는 댓글이 최상위 댓글인 경우에는 parentCommentId에 null을 담아주세요 >_<")))
+                                        toRequestBody(new AddCommentRequest(UUID.randomUUID(), null, "여기엔 댓글 내용을 적어주시면 됩니다. 작성하는 댓글이 최상위 댓글인 경우에는 parentCommentId에 null을 담아주세요 >_<")))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
                 );

@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor
 public class FindStoryResponse {
-    private Long id;
+    private UUID id;
     private Boolean isLiked;
     private List<String> images;
     private String title;

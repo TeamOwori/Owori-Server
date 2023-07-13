@@ -22,14 +22,14 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class StoryService implements EntityLoader<Story, Long> {
+public class StoryService implements EntityLoader<Story, UUID> {
 
     private final StoryRepository storyRepository;
     private final StoryMapper storyMapper;
     private final ImageService imageService;
     private final AuthService authService;
 
-    public IdResponse<Long> addStory(AddStoryRequest request) {
+    public IdResponse<UUID> addStory(AddStoryRequest request) {
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
         List<UUID> imagesIds = request.getImagesId();
@@ -59,13 +59,13 @@ public class StoryService implements EntityLoader<Story, Long> {
         return new FindAllStoryGroupResponse(stories, storyBySlice.hasNext());
     }
 
-    public FindStoryResponse findStory(Long storyId) {
+    public FindStoryResponse findStory(UUID storyId) {
         // todo: 로직 작성
         return null;
     }
 
     @Override
-    public Story loadEntity(Long id) {
+    public Story loadEntity(UUID id) {
         return storyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

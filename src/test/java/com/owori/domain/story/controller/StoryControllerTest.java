@@ -37,7 +37,7 @@ public class StoryControllerTest extends RestDocsTest{
     @DisplayName("POST /stories 이야기 등록 API 테스트")
     void addStory() throws Exception {
         //given
-        IdResponse<Long> expected = new IdResponse<>(2L);
+        IdResponse<UUID> expected = new IdResponse<>(UUID.randomUUID());
         given(storyService.addStory(any())).willReturn(expected);
 
         List<UUID> imgId = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
@@ -65,10 +65,10 @@ public class StoryControllerTest extends RestDocsTest{
     void findAllStoryByEventAt() throws Exception {
         //given
         List<FindAllStoryResponse> response = List.of(
-                new FindAllStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)),
-                new FindAllStoryResponse(1L,"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
-                new FindAllStoryResponse(1L,"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
-                new FindAllStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
+                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
 
         FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
         given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
@@ -97,10 +97,10 @@ public class StoryControllerTest extends RestDocsTest{
     void findAllStoryByCreatedAt() throws Exception {
         //given
         List<FindAllStoryResponse> response = List.of(
-                new FindAllStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
-                new FindAllStoryResponse(1L,"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
-                new FindAllStoryResponse(1L,"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
-                new FindAllStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
+                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
         FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
         given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
@@ -131,19 +131,19 @@ public class StoryControllerTest extends RestDocsTest{
         List<String> images = List.of("image2.png","image3.png","image2.png","image3.png","image3.png");
 
         List<CommentResponse> comments = List.of(
-                new CommentResponse(null,1L,"야호 첫번째 최상위 댓글입니다.","허지렁지렁","3시간 전"),
-                new CommentResponse(1L,2L,"첫번째 대댓글입니다.","김건빵","2시간 전"),
-                new CommentResponse(1L,3L,"두번째 대댓글입니다.","고구마","30분 전"),
-                new CommentResponse(null,4L,"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
+                new CommentResponse(null, UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"),"야호 첫번째 최상위 댓글입니다.","허지렁지렁","3시간 전"),
+                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"첫번째 대댓글입니다.","김건빵","2시간 전"),
+                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"두번째 대댓글입니다.","고구마","30분 전"),
+                new CommentResponse(null, UUID.randomUUID(),"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
         );
 
-        FindStoryResponse response = new FindStoryResponse(1L,true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
+        FindStoryResponse response = new FindStoryResponse(UUID.randomUUID(),true,images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5L, 4L, comments);
         given(storyService.findStory(any())).willReturn(response);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        get("/stories/{storyId}", 2L)
+                        get("/stories/{storyId}", UUID.randomUUID())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())

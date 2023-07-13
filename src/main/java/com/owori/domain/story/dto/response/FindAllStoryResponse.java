@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 public class FindAllStoryResponse {
-    private Long id;
+    private UUID id;
     private String title;
     private String contents;
     private String image;
@@ -20,7 +21,7 @@ public class FindAllStoryResponse {
     private LocalDate endDate;
 
     @Builder
-    public FindAllStoryResponse(Long id, String title, String contents, String image, Integer heartCnt,
+    public FindAllStoryResponse(UUID id, String title, String contents, String image, Integer heartCnt,
                                 Integer commentCnt, String writer, LocalDate startDate, LocalDate endDate){
         this.id = id;
         this.title = title;
