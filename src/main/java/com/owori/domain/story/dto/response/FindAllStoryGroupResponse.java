@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class FindListStoryGroupResponse {
-    private List<FindListStoryResponse> stories;
+public class FindAllStoryGroupResponse {
+    private List<FindAllStoryResponse> stories;
     private Boolean hasNext;
 }

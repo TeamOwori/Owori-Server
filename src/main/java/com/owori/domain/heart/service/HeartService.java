@@ -12,6 +12,8 @@ import com.owori.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class HeartService {
@@ -20,7 +22,7 @@ public class HeartService {
     private final StoryService storyService;
     private final AuthService authService;
 
-    public HeartStatusResponse toggleHeart(Long storyId){
+    public HeartStatusResponse toggleHeart(UUID storyId){
         Member member = authService.getLoginUser();
         Story story = storyService.loadEntity(storyId);
 

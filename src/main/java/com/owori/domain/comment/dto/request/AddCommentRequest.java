@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddCommentRequest {
-    private Long StoryId;
+    private UUID StoryId;
     private UUID parentCommentId;
     private String content;
 }
