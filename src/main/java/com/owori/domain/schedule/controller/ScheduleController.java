@@ -37,7 +37,7 @@ public class ScheduleController {
      * @param updateScheduleRequest 수정된 일정의 정보입니다.
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
-    @PatchMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
         return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
     }

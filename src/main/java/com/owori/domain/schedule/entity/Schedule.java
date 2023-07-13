@@ -72,7 +72,6 @@ public class Schedule implements Auditable {
         this.title = updateScheduleRequest.getTitle();
         this.startDate = updateScheduleRequest.getStartDate();
         this.endDate = updateScheduleRequest.getEndDate();
-        this.scheduleType = updateScheduleRequest.getType();
         this.dDayOption = updateScheduleRequest.getDDayOption();
         this.alarmList = updateScheduleRequest.getAlarmOptions();
     }

@@ -66,18 +66,18 @@ public class ScheduleControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("PATCH / schedule 일정 수정 API 테스트")
+    @DisplayName("POST / schedule 일정 수정 API 테스트")
     void updateSchedule() throws Exception {
         // given
         IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
         given(scheduleService.updateSchedule(any(), any())).willReturn(expected);
 
-        UpdateScheduleRequest request = new UpdateScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), 가족, true, List.of());
+        UpdateScheduleRequest request = new UpdateScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), true, List.of());
 
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        patch("/schedule/update")
+                        post("/schedule/update")
                                 .param("scheduleId", UUID.randomUUID().toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
@@ -97,9 +97,9 @@ public class ScheduleControllerTest extends RestDocsTest {
     void findScheduleByMonth() throws Exception {
         // given
         List<FindScheduleByMonthResponse> expected = List.of(
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), 개인, Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"),개인 , Color.BLUE, true, List.of(당일)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), 가족, Color.BLUE, true, List.of(하루전, 일주일전))
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), 개인, UUID.randomUUID(), Color.BLUE, true, List.of(당일)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), 개인 , UUID.randomUUID(), Color.BLUE, true, List.of(당일)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), 가족, UUID.randomUUID(), Color.BLUE, true, List.of(하루전, 일주일전))
         );
 
         given(scheduleService.findScheduleByMonth(any())).willReturn(expected);
