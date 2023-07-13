@@ -6,7 +6,6 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.story.exception.StoryOrderException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
@@ -41,16 +40,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
-        String sort = pageable.getSort().toList().get(0).getProperty();
-
-        Slice<Story> storyBySlice;
-        if (sort.equals("startDate")){
-            storyBySlice = storyRepository.findAllStoryByEventAt(pageable, member, lastViewed);
-        } else if (sort.equals("createdAt") || sort == null) {
-            storyBySlice = storyRepository.findAllStoryByCreatedAt(pageable, member, lastViewed);
-        } else {
-            throw new StoryOrderException();
-        }
+        Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, member, lastViewed);
 
         List<FindAllStoryResponse> stories = storyBySlice.getContent().stream()
                 .map(story -> storyMapper.of(story))

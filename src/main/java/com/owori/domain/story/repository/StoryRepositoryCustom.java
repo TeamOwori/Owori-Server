@@ -8,6 +8,5 @@ import org.springframework.data.domain.Slice;
 import java.time.LocalDate;
 
 public interface StoryRepositoryCustom {
-    Slice<Story> findAllStoryByCreatedAt(Pageable pageable, Member member, LocalDate createdAt);
-    Slice<Story> findAllStoryByEventAt(Pageable pageable, Member member, LocalDate startDate);
+    Slice<Story> findAllStory(Pageable pageable, Member member, LocalDate date);
 }

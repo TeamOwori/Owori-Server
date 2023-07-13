@@ -1,11 +1,15 @@
 package com.owori.domain.story.repository;
 
+import com.owori.domain.story.exception.StoryOrderException;
 import com.owori.global.converter.OrderConverter;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +38,20 @@ public class StoryOrderConverter implements OrderConverter {
                             return path.desc();
                         })
                 .toArray(OrderSpecifier[]::new);
+    }
+
+    public BooleanExpression createOrderExpression(Pageable pageable, LocalDate date) {
+        if (date == null) { return null; }
+        String sortProperty = pageable.getSort().toList().get(0).getProperty();
+
+        switch (sortProperty) {
+            case "createdAt":
+                return story.baseTime.createdAt.lt(date.atStartOfDay());
+            case "startDate":
+                return story.startDate.lt(date);
+            default:
+                throw new StoryOrderException();
+        }
     }
 }
 
