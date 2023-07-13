@@ -98,12 +98,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
      * @param memberIds 멤버 아이디 리스트
      * @return 멤버 리스트
      */
-    public List<Member> findMembersByIds(List<UUID> memberIds) {
+    public List<Member> findMembersByIds(final List<UUID> memberIds) {
         return memberRepository.findAllByIdIn(memberIds);
     }
 
     @Transactional
-    public void updateEmotionalBadge(EmotionalBadgeRequest emotionalBadgeRequest) {
+    public void updateEmotionalBadge(final EmotionalBadgeRequest emotionalBadgeRequest) {
         authService.getLoginUser().updateEmotionalBadge(emotionalBadgeRequest.getEmotionalBadge());
     }
 }
