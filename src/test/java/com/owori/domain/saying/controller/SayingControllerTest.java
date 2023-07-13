@@ -61,7 +61,7 @@ public class SayingControllerTest extends RestDocsTest {
     }
 
     @Test
-    @DisplayName("PATCH / saying 서로에게 한마디 수정 API 테스트")
+    @DisplayName("POST / saying 서로에게 한마디 수정 API 테스트")
     void updateSaying() throws Exception {
         // given
         UUID id = UUID.randomUUID();
@@ -73,7 +73,7 @@ public class SayingControllerTest extends RestDocsTest {
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        patch("/saying")
+                        post("/saying/update")
                                 .param("sayingId", id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")

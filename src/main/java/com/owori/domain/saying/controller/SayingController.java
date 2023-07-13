@@ -35,7 +35,7 @@ public class SayingController {
      * @param request 수정된 서로에게 한마디 정보입니다.
      * @return 수정된 서로에게 한마디의 id가 반환됩니다.
      */
-    @PatchMapping
+    @PostMapping("/update")
     public ResponseEntity<IdResponse<UUID>> updateSaying(@RequestParam UUID sayingId, @RequestBody UpdateSayingRequest request) {
         return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
