@@ -1,16 +1,15 @@
 package com.owori.domain.member.controller;
 
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
+import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.service.MemberService;
+import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -53,8 +52,30 @@ public class MemberController {
      * @throws IOException 파일 업로드시 발생할 수 있는 예외입니다.
      */
     @PostMapping("/profile-image")
-    public ResponseEntity<Void> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
-        memberService.updateMemberProfileImage(profileImage);
+    public ResponseEntity<ImageResponse> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
+        return ResponseEntity.ok(memberService.updateMemberProfileImage(profileImage));
+    }
+
+    /**
+     * 멤버 프로필 업데이트 컨트롤러입니다.
+     * 멤버 프로필 정보를 받아와 업데이트한 후 상태코드 200번을 빈 body 와 함께 response 합니다.
+     * @param memberProfileRequest 멤버의 수정 요청한 프로필 정보입니다.
+     * @return 바디로 response 하는 정보는 없습니다.
+     */
+    @PostMapping("/profile")
+    public ResponseEntity<Void> updateMemberProfile(@RequestBody @Valid MemberProfileRequest memberProfileRequest) {
+        memberService.updateMemberProfile(memberProfileRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 멤버 회원 탈퇴 컨트롤러입니다.
+     * 멤버를 삭제한 후 상태코드 200번을 빈 body 와 함께 response 합니다.
+     * @return 바디로 response 하는 정보는 없습니다.
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember() {
+        memberService.deleteMember();
         return ResponseEntity.ok().build();
     }
 }

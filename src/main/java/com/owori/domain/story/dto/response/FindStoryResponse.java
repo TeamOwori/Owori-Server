@@ -1,5 +1,6 @@
 package com.owori.domain.story.dto.response;
 
+import com.owori.domain.comment.dto.response.CommentResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

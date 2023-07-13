@@ -39,7 +39,7 @@ public class StoryServiceTest extends LoginTest {
         storyService.addStory(request);
 
         //then
-        Story story = storyRepository.findById(1L).orElseThrow();
+        Story story = storyRepository.findAll().get(0);
 
         assertThat(story.getTitle()).isEqualTo(title);
         assertThat(story.getMember()).isEqualTo(authService.getLoginUser());

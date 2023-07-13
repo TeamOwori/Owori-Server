@@ -10,11 +10,16 @@ import com.owori.domain.family.mapper.FamilyMapper;
 import com.owori.domain.family.repository.FamilyRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
+import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
+import com.owori.utils.S3ImageComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,6 +29,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     private final FamilyRepository familyRepository;
     private final FamilyMapper familyMapper;
     private final AuthService authService;
+    private final S3ImageComponent s3ImageComponent;
 
     public InviteCodeResponse saveFamily(final FamilyRequest familyRequest) {
         Member member = authService.getLoginUser();
@@ -65,5 +71,22 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     public Family loadEntity(final UUID id) {
         return familyRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Transactional
+    public void updateGroupName(final FamilyRequest groupNameRequest) {
+        Family family = authService.getLoginUser().getFamily();
+        family.updateGroupName(groupNameRequest.getFamilyGroupName());
+    }
+
+    public ImageResponse saveFamilyImage(MultipartFile multipartFile) throws IOException {
+        Family family = authService.getLoginUser().getFamily();
+        String imageUrl = uploadImage(multipartFile);
+        family.addImage(imageUrl);
+        return new ImageResponse(imageUrl);
+    }
+
+    private String uploadImage(MultipartFile multipartFile) throws IOException {
+        return s3ImageComponent.uploadImage("family-image", multipartFile);
     }
 }

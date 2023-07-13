@@ -1,0 +1,18 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+
+== Saying
+=== 서로에게 한마디 등록
+operation::save saying[snippets='http-request,http-response']
+
+=== 서로에게 한마디 수정
+operation::update saying[snippets='http-request,http-response']
+
+=== 서로에게 한마디 삭제
+operation::delete saying[snippets='http-request,http-response']
+
+=== 서로에게 한마디 가족 단위 조회
+operation::find saying by family[snippets='http-request,http-response']

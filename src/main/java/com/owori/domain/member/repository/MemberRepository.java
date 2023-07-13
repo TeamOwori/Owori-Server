@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface MemberRepository {
     Optional<Member> findById(UUID id);
-    Optional<Member> findByTokenAndAuthProvider(String accountId, AuthProvider authProvider);
+    Optional<Member> findByClientIdAndAuthProvider(String clientId, AuthProvider authProvider);
     Member save(Member member);
     void updateRefreshToken(UUID id, String refreshToken);
     String findRefreshTokenById(UUID id);
