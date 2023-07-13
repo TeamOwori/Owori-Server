@@ -3,10 +3,12 @@ package com.owori.domain.member.service;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.member.client.KakaoMemberClient;
 import com.owori.domain.member.dto.client.KakaoMemberResponse;
+import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
 import com.owori.domain.member.mapper.MemberMapper;
@@ -40,13 +42,20 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     public MemberJwtResponse saveIfNone(final MemberRequest memberRequest) {
-        String clientId = Long.toString(requestToKakao(memberRequest.getToken()).getId());
+        String clientId = getClientId(memberRequest);
 
         Member member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider())
                 .orElseGet(() -> memberRepository.save(memberMapper.toEntity(clientId, memberRequest)));
 
         JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getClientId());
         return memberMapper.toJwtResponse(jwtToken, member.getId());
+    }
+
+    private String getClientId(final MemberRequest memberRequest) {
+        if (memberRequest.getAuthProvider().equals(AuthProvider.KAKAO)) {
+            return Long.toString(requestToKakao(memberRequest.getToken()).getId());
+        }
+        return memberRequest.getToken();
     }
 
     private JwtToken createMemberJwtToken(final Member member, final String token) {
@@ -97,7 +106,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
      * @param memberIds 멤버 아이디 리스트
      * @return 멤버 리스트
      */
-    public List<Member> findMembersByIds(List<UUID> memberIds) {
+    public List<Member> findMembersByIds(final List<UUID> memberIds) {
         return memberRepository.findAllByIdIn(memberIds);
+    }
+
+    @Transactional
+    public void updateEmotionalBadge(final EmotionalBadgeRequest emotionalBadgeRequest) {
+        authService.getLoginUser().updateEmotionalBadge(emotionalBadgeRequest.getEmotionalBadge());
     }
 }

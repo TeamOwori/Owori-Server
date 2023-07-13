@@ -19,3 +19,6 @@ operation::update member profile[snippets='http-request,http-response']
 
 === 멤버 회원 탈퇴
 operation::delete member[snippets='http-request,http-response']
+
+=== 멤버 감정 뱃지 업데이트
+operation::update member emotional badge[snippets='http-request,http-response']
