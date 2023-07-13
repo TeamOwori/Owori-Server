@@ -23,7 +23,7 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     *  최신순 앨범형 조회 - createAt 기준
     */
     @Override
-    public Slice<Story> findAllStoryByCreateAt(Pageable pageable, LocalDate createAt, Member member) {
+    public Slice<Story> findAllAlbumStoryByCreatedAt(Pageable pageable, LocalDate createAt, Member member) {
         List<Story> storyList = queryFactory
                 .selectFrom(story)
                 .where(
@@ -37,15 +37,12 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
         return checkLastPage(pageable, storyList);
     }
 
-    private BooleanExpression ltStoryCreateAt(LocalDate createAt) {
-        return createAt == null ? null : story.baseTime.createdAt.lt(createAt.atStartOfDay());
-    }
 
     /*
      *  날짜순 앨범형 조회 - StartDate 기준
      */
     @Override
-    public Slice<Story> findAllStoryByEventAt(Pageable pageable, LocalDate startDate, Member member) {
+    public Slice<Story> findAllAlbumStoryByEventAt(Pageable pageable, LocalDate startDate, Member member) {
         List<Story> storyList = queryFactory
                 .selectFrom(story)
                 .where(
@@ -59,16 +56,52 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
         return checkLastPage(pageable, storyList);
     }
 
+    /*
+     *  최신순 목록형 조회 - createAt 기준
+     */
+    @Override
+    public Slice<Story> findAllListStoryByCreatedAt(Pageable pageable, Member member, LocalDate createdAt) {
+        List<Story> results = queryFactory
+                .selectFrom(story)
+                .where(
+                        story.member.eq(member)
+                                .and(ltStoryCreateAt(createdAt)
+                        ))
+                .orderBy(storyOrderConverter.convert(pageable.getSort()))
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return checkLastPage(pageable, results);
+    }
+
+    /*
+     *  날짜순 목록형 조회 - StartDate 기준
+     */
+    @Override
+    public Slice<Story> findAllListStoryByEventAt(Pageable pageable, Member member, LocalDate startDate) {
+        List<Story> results = queryFactory
+                .selectFrom(story)
+                .where(
+                        story.member.eq(member)
+                                .and(ltStoryStartDate(startDate)
+                                ))
+                .orderBy(storyOrderConverter.convert(pageable.getSort()))
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        return checkLastPage(pageable, results);
+    }
+
+    private BooleanExpression ltStoryCreateAt(LocalDate createAt) { return createAt == null ? null : story.baseTime.createdAt.lt(createAt.atStartOfDay()); }
+
     private BooleanExpression ltStoryStartDate(LocalDate startDate) { return startDate == null ? null : story.startDate.lt(startDate); }
 
     private Slice<Story> checkLastPage(Pageable pageable, List<Story> results) {
         boolean hasNext = false; // pagesize보다 1 크게 가져와서 다음 페이지가 남았는지 확인
-
         if (results.size() > pageable.getPageSize()) {
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
-
         return new SliceImpl<>(results, pageable, hasNext);
     }
 

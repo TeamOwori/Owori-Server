@@ -21,7 +21,7 @@ public class StoryOrderConverter implements OrderConverter {
     }
 
     private void initializeMap() {
-        keywordMap.put("createAt", story.baseTime.createdAt);
+        keywordMap.put("createdAt", story.baseTime.createdAt);
         keywordMap.put("startDate", story.startDate);
     }
 

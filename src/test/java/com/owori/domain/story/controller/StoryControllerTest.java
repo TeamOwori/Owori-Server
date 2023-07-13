@@ -64,11 +64,9 @@ public class StoryControllerTest extends RestDocsTest{
     @DisplayName("GET /stories/list 이야기 리스트형 조회 API 테스트")
     void findStoryList() throws Exception {
         //given
-        Long lastId = 2L;
-
         List<FindListStoryResponse> response = List.of(
-                new FindListStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5L, 2L, "허망고", "2022-02-01"),
-                new FindListStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2L, 5L, "허지롱이", "2022-02-01 - 2022-02-04"));
+                new FindListStoryResponse(1L,"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 5, 2, "허망고", LocalDate.of(2022, 02, 01), null),
+                new FindListStoryResponse(2L,"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "image.png", 2, 5, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
         FindListStoryGroupResponse findListStoryGroupResponse = new FindListStoryGroupResponse(response, true);
         given(storyService.findListStory(any(),any())).willReturn(findListStoryGroupResponse);
@@ -77,8 +75,8 @@ public class StoryControllerTest extends RestDocsTest{
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/list")
-                                .param("sort", "createAt")
-                                .param("lastId", lastId.toString())
+                                .param("sort", "createdAt")
+                                .param("lastViewed","2023-07-31")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
@@ -124,7 +122,7 @@ public class StoryControllerTest extends RestDocsTest{
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/album")
-                                .param("sort", "createAt")
+                                .param("sort", "createdAt")
                                 .param("lastViewed","2023-07-31")
                                 .param("size", size)
                                 .contentType(MediaType.APPLICATION_JSON)

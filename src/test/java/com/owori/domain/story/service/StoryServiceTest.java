@@ -1,8 +1,14 @@
 package com.owori.domain.story.service;
 
+import com.owori.domain.comment.entity.Comment;
+import com.owori.domain.comment.repository.CommentRepository;
+import com.owori.domain.heart.entity.Heart;
+import com.owori.domain.heart.repository.HeartRepository;
+import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindListStoryGroupResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.support.database.DatabaseTest;
@@ -24,7 +30,8 @@ public class StoryServiceTest extends LoginTest {
 
     @Autowired private StoryService storyService;
     @Autowired private StoryRepository storyRepository;
-
+    @Autowired private CommentRepository commentRepository;
+    @Autowired private HeartRepository heartRepository;
     @Autowired private AuthService authService;
 
 
@@ -53,7 +60,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
 
         //when
-        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createAt")), LocalDate.of(2023, 8, 31));
+        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createdAt")), LocalDate.of(2023, 8, 31));
 
         //then
         assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
@@ -73,5 +80,47 @@ public class StoryServiceTest extends LoginTest {
         //then
         assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo("2017.12");
         assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
+    }
+
+    @Test
+    @DisplayName("최신순 이야기 목록 조회가 수행되는가")
+    void findListStoryByCreatedAt() {
+        //given
+        Member member = authService.getLoginUser();
+        String title = "기다리고 기다리던 하루";
+        Story story = new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        storyRepository.save(story);
+        commentRepository.save(new Comment(member, story,null, "댓글"));
+        heartRepository.save(new Heart(member, story));
+
+        //when
+        FindListStoryGroupResponse response = storyService.findListStory(PageRequest.of(0, 4, Sort.by("createdAt")), null);
+
+        //then
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
+        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("날짜순 이야기 목록 조회가 수행되는가")
+    void findListStoryByEventAt() {
+        //given
+        Member member = authService.getLoginUser();
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        Story story2 = new Story("제목2", "내용2", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        storyRepository.save(story);
+        storyRepository.save(story2);
+        commentRepository.save(new Comment(member, story,null, "댓글"));
+        heartRepository.save(new Heart(member, story));
+
+        //when
+        FindListStoryGroupResponse response = storyService.findListStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
+
+        //then
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
+        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(1).getContents()).isEqualTo("내용2");
     }
 }

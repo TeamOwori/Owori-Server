@@ -52,10 +52,10 @@ public class StoryService implements EntityLoader<Story, Long> {
         Slice<Story> storyBySlice;
         Map<String, List<Story>> groupedStories;
         if (sort.equals("startDate")){
-            storyBySlice = storyRepository.findAllStoryByEventAt(pageable, lastViewed, loginUser);
+            storyBySlice = storyRepository.findAllAlbumStoryByEventAt(pageable, lastViewed, loginUser);
             groupedStories = storyBySlice.getContent().stream().collect(Collectors.groupingBy(s -> s.getStartDate().format(formatter)));
-        } else if (sort.equals("createAt") || sort == null) {
-            storyBySlice = storyRepository.findAllStoryByCreateAt(pageable, lastViewed, loginUser);
+        } else if (sort.equals("createdAt") || sort == null) {
+            storyBySlice = storyRepository.findAllAlbumStoryByCreatedAt(pageable, lastViewed, loginUser);
             groupedStories = storyBySlice.getContent().stream().collect(Collectors.groupingBy(s -> s.getBaseTime().getCreatedAt().format(formatter)));
         } else {
             throw new StoryOrderException();
@@ -71,9 +71,27 @@ public class StoryService implements EntityLoader<Story, Long> {
         return new FindAlbumStoryGroupResponse(storyAlbumGroup.getStoryGroupResponses(), storyBySlice.hasNext());
     }
 
-    public FindListStoryGroupResponse findListStory(Pageable pageable, Long lastId) {
-        // todo: 로직 작성
-        return null;
+    public FindListStoryGroupResponse findListStory(Pageable pageable, LocalDate lastViewed) {
+        Member member = authService.getLoginUser();
+        String sort = pageable.getSort().toList().get(0).getProperty();
+
+        Slice<Story> storyBySlice;
+        if (sort.equals("startDate")){
+            storyBySlice = storyRepository.findAllListStoryByEventAt(pageable, member, lastViewed);
+        } else if (sort.equals("createdAt") || sort == null) {
+            storyBySlice = storyRepository.findAllListStoryByCreatedAt(pageable, member, lastViewed);
+        } else {
+            throw new StoryOrderException();
+        }
+
+        List<FindListStoryResponse> stories = storyBySlice.getContent().stream()
+                .map(s -> new FindListStoryResponse(
+                        s.getId(), s.getTitle(), s.getContents(),
+                        s.getImages() == null || s.getImages().isEmpty() ? null : s.getImages().get(0).getUrl(),
+                        s.getHearts().size(), s.getComments().size(), s.getMember().getNickname(), s.getStartDate(), s.getEndDate()))
+                .toList();
+
+        return new FindListStoryGroupResponse(stories, storyBySlice.hasNext());
     }
 
     public FindStoryResponse findStory(Long storyId) {
