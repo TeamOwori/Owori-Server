@@ -30,16 +30,12 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        return checkLastPage(pageable, results);
-    }
-
-    private Slice<Story> checkLastPage(Pageable pageable, List<Story> results) {
         boolean hasNext = false; // pagesize보다 1 크게 가져와서 다음 페이지가 남았는지 확인
         if (results.size() > pageable.getPageSize()) {
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
+
         return new SliceImpl<>(results, pageable, hasNext);
     }
-
 }
