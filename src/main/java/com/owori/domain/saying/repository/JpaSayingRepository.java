@@ -1,6 +1,5 @@
 package com.owori.domain.saying.repository;
 
-import com.owori.domain.member.entity.Member;
 import com.owori.domain.saying.entity.Saying;
 import org.springframework.data.jpa.repository.JpaRepository;
 

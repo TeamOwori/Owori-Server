@@ -8,11 +8,9 @@ import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
-import com.owori.domain.saying.entity.SayingTagMember;
 import com.owori.domain.saying.exception.NoAuthorityUpdateException;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.saying.repository.SayingRepository;
-import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -20,13 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
