@@ -1,4 +1,4 @@
-package com.owori.domain.saying.SayingServiceTest;
+package com.owori.domain.saying.service;
 
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.entity.Family;
@@ -13,7 +13,6 @@ import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
-import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
@@ -54,7 +53,7 @@ public class SayingServiceTest extends LoginTest {
 
         assertThat(saying.getContent()).isEqualTo(content);
         assertThat(saying.getMember()).isEqualTo(authService.getLoginUser());
-        assertThat(saying.getStatus()).isTrue();
+        assertThat(saying.getModifiable()).isTrue();
     }
 
     @Test
@@ -85,7 +84,7 @@ public class SayingServiceTest extends LoginTest {
         Optional<Saying> deleteSaying = sayingRepository.findById(saying.getId());
 
         // then
-        deleteSaying.ifPresent(value -> assertThat(value.getStatus()).isFalse());
+        deleteSaying.ifPresent(value -> assertThat(value.getModifiable()).isFalse());
     }
 
     @Test
