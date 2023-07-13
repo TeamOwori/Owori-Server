@@ -28,7 +28,7 @@ public class SayingTagMember implements Auditable {
     @JoinColumn(name = "SAYING_ID")
     private Saying saying;
 
-    // Tag된 Member
+    // Tag 된 Member
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;

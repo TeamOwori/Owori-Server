@@ -7,6 +7,7 @@ import com.owori.global.audit.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class Saying implements Auditable {
     private UUID id;
 
     // 내용 글자 수 최대 50
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
+    @Length(max = 50)
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)

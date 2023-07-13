@@ -58,7 +58,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         // 서로에게 한마디 작성자와 현재 유저가 동일하지 않을 경우 예외처리
         if(!member.equals(saying.getMember())) throw new NoAuthorityUpdateException();
 
-        // tagMemberIds를 통해 tagMembers 구하기
+        // tagMemberIds 를 통해 tagMembers 구하기
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
 
         // 새로운 정보로 업데이트

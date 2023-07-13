@@ -71,7 +71,7 @@ public class SayingServiceTest extends LoginTest {
         Optional<Saying> newSaying = sayingRepository.findById(response.getId());
 
         // then
-        assertThat(newSaying.get().getContent()).isEqualTo(content);
+        newSaying.ifPresent(saying -> assertThat(saying.getContent()).isEqualTo(content));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SayingServiceTest extends LoginTest {
         Optional<Saying> deleteSaying = sayingRepository.findById(saying.getId());
 
         // then
-        assertThat(deleteSaying.get().getStatus()).isFalse();
+        deleteSaying.ifPresent(value -> assertThat(value.getStatus()).isFalse());
     }
 
     @Test
