@@ -1,6 +1,8 @@
 package com.owori.domain.member.service;
 
 import com.owori.config.security.jwt.JwtToken;
+import com.owori.domain.member.client.KakaoMemberClient;
+import com.owori.domain.member.dto.client.KakaoMemberResponse;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
@@ -9,6 +11,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
 import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
+import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import com.owori.utils.S3ImageComponent;
@@ -28,6 +31,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberMapper memberMapper;
     private final AuthService authService;
     private final S3ImageComponent s3ImageComponent;
+    private final KakaoMemberClient kakaoMemberClient;
 
     @Override
     public Member loadEntity(final UUID id) {
@@ -36,15 +40,21 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     public MemberJwtResponse saveIfNone(final MemberRequest memberRequest) {
-        Member member = memberRepository.findByTokenAndAuthProvider(memberRequest.getToken(), memberRequest.getAuthProvider())
-                .orElseGet(() -> memberRepository.save(memberMapper.toEntity(memberRequest)));
+        String clientId = Long.toString(requestToKakao(memberRequest.getToken()).getId());
 
-        JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getToken());
+        Member member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider())
+                .orElseGet(() -> memberRepository.save(memberMapper.toEntity(clientId, memberRequest)));
+
+        JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getClientId());
         return memberMapper.toJwtResponse(jwtToken, member.getId());
     }
 
     private JwtToken createMemberJwtToken(final Member member, final String token) {
         return authService.createAndUpdateToken(member, token);
+    }
+
+    private KakaoMemberResponse requestToKakao(final String token) {
+        return kakaoMemberClient.requestToKakao(token);
     }
 
     @Transactional
@@ -55,9 +65,10 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public void updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
+    public ImageResponse updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
         String profileImageUrl = uploadImage(profileImage);
         authService.getLoginUser().updateProfileImage(profileImageUrl);
+        return new ImageResponse(profileImageUrl);
     }
 
     private String uploadImage(final MultipartFile profileImage) throws IOException {

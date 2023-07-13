@@ -12,8 +12,8 @@ import java.util.UUID;
 
 public interface JpaMemberRepository extends JpaRepository<Member, UUID>, MemberRepository {
 
-    @Query("SELECT m FROM Member m WHERE m.oAuth2Info.token = :token AND m.oAuth2Info.authProvider = :authProvider")
-    Optional<Member> findByTokenAndAuthProvider(String token, AuthProvider authProvider);
+    @Query("SELECT m FROM Member m WHERE m.oAuth2Info.clientId = :clientId AND m.oAuth2Info.authProvider = :authProvider")
+    Optional<Member> findByClientIdAndAuthProvider(String clientId, AuthProvider authProvider);
 
     @Modifying
     @Transactional
