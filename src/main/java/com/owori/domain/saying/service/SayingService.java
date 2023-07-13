@@ -1,5 +1,6 @@
 package com.owori.domain.saying.service;
 
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.member.service.MemberService;
@@ -7,9 +8,11 @@ import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
+import com.owori.domain.saying.entity.SayingTagMember;
 import com.owori.domain.saying.exception.NoAuthorityUpdateException;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.saying.repository.SayingRepository;
+import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -20,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,12 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     public IdResponse<UUID> addSaying(AddSayingRequest request) {
         Member member = authService.getLoginUser();
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
+
+        // 이전 서로에게 한마디 삭제하기
+        Saying oldSaying = sayingRepository.findByMemberAndStatus(member, true);
+        oldSaying.delete();
+
+        // 새로운 서로에게 한마디 생성하기
         Saying newSaying = sayingRepository.save(sayingMapper.toEntity(request.getContent(), member, tagMembers));
         return new IdResponse<>(newSaying.getId());
     }
@@ -61,9 +72,23 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     }
 
     public List<FindSayingByFamilyResponse> findSayingByFamily() {
-        // BaseTime baseTime = new BaseTime();
-        // Optional.ofNullable(baseTime.getUpdatedAt()).orElse(baseTime.getCreatedAt());
-        return null; // todo: 로직 작성
+        Member nowMember = authService.getLoginUser();
+        Family family = nowMember.getFamily();
+
+        List<Saying> sayingList = family.getMembers().stream()
+                .map(member -> sayingRepository.findByMemberAndStatus(member, true))
+                .toList();
+
+        /*
+        List<Saying> sayingList = family.getMembers().stream()
+                .map(Member::getSaying)
+                .toList();
+        */
+        return sayingList.stream()
+                .map(saying -> new FindSayingByFamilyResponse(saying.getId(), saying.getContent(), saying.getMember().getId(),
+                        saying.getTagMembers().stream().map(SayingTagMember::getMember).map(Member::getId).toList(),
+                        Optional.ofNullable(saying.getBaseTime().getUpdatedAt()).orElse(saying.getBaseTime().getCreatedAt())))
+                .toList();
     }
 
     @Override

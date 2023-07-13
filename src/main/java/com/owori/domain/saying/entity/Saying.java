@@ -29,13 +29,15 @@ public class Saying implements Auditable {
     @Column(nullable = false, length = 50)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     // 태그 기능
     @OneToMany(mappedBy = "saying", cascade = CascadeType.ALL)
     private List<SayingTagMember> tagMembers = new ArrayList<>();
+
+    private Boolean status;
 
     @Setter
     @Embedded
@@ -46,6 +48,7 @@ public class Saying implements Auditable {
     public Saying(String content, Member member, List<Member> tagMembers) {
         this.content = content;
         this.member = member;
+        this.status = true;
         organize(tagMembers);
     }
 
@@ -60,6 +63,7 @@ public class Saying implements Auditable {
                 .toList();
     }
 
+
     private void change(List<Member> tagMembers) {
         // 기존에 있던거 삭제
         this.tagMembers.forEach(SayingTagMember::delete);
@@ -68,5 +72,4 @@ public class Saying implements Auditable {
                 .map(tagMember -> new SayingTagMember(this, tagMember))
                 .toList();
     }
-
 }
