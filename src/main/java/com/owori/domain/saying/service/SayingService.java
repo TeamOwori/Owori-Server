@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,13 +36,14 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     private final SayingMapper sayingMapper;
     private final AuthService authService;
 
+    @Transactional
     public IdResponse<UUID> addSaying(AddSayingRequest request) {
         Member member = authService.getLoginUser();
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
 
         // 이전 서로에게 한마디 삭제하기
-        Saying oldSaying = sayingRepository.findByMemberAndStatus(member, true);
-        oldSaying.delete();
+        Optional<Saying> oldSaying = sayingRepository.findByMemberAndStatus(member, true);
+        oldSaying.ifPresent(Saying::changeStatus);
 
         // 새로운 서로에게 한마디 생성하기
         Saying newSaying = sayingRepository.save(sayingMapper.toEntity(request.getContent(), member, tagMembers));
@@ -54,7 +56,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         Saying saying = loadEntity(sayingId);
 
         // 서로에게 한마디 작성자와 현재 유저가 동일하지 않을 경우 예외처리
-        if(member != saying.getMember()) throw new NoAuthorityUpdateException();
+        if(!member.equals(saying.getMember())) throw new NoAuthorityUpdateException();
 
         // tagMemberIds를 통해 tagMembers 구하기
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
@@ -68,7 +70,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     @Transactional
     public void deleteSaying(UUID sayingId) {
         Saying saying = loadEntity(sayingId);
-        saying.delete();
+        saying.changeStatus();
     }
 
     public List<FindSayingByFamilyResponse> findSayingByFamily() {
@@ -77,18 +79,11 @@ public class SayingService implements EntityLoader<Saying, UUID> {
 
         List<Saying> sayingList = family.getMembers().stream()
                 .map(member -> sayingRepository.findByMemberAndStatus(member, true))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
 
-        /*
-        List<Saying> sayingList = family.getMembers().stream()
-                .map(Member::getSaying)
-                .toList();
-        */
-        return sayingList.stream()
-                .map(saying -> new FindSayingByFamilyResponse(saying.getId(), saying.getContent(), saying.getMember().getId(),
-                        saying.getTagMembers().stream().map(SayingTagMember::getMember).map(Member::getId).toList(),
-                        Optional.ofNullable(saying.getBaseTime().getUpdatedAt()).orElse(saying.getBaseTime().getCreatedAt())))
-                .toList();
+        return sayingMapper.toResponseList(sayingList);
     }
 
     @Override

@@ -37,7 +37,8 @@ public class Saying implements Auditable {
     @OneToMany(mappedBy = "saying", cascade = CascadeType.ALL)
     private List<SayingTagMember> tagMembers = new ArrayList<>();
 
-    private Boolean status;
+    @Column(nullable = false)
+    private Boolean status = Boolean.TRUE;
 
     @Setter
     @Embedded
@@ -48,7 +49,6 @@ public class Saying implements Auditable {
     public Saying(String content, Member member, List<Member> tagMembers) {
         this.content = content;
         this.member = member;
-        this.status = true;
         organize(tagMembers);
     }
 
@@ -71,5 +71,10 @@ public class Saying implements Auditable {
         this.tagMembers = tagMembers.stream()
                 .map(tagMember -> new SayingTagMember(this, tagMember))
                 .toList();
+    }
+
+    public void changeStatus() {
+        this.status = Boolean.FALSE;
+        this.delete();
     }
 }

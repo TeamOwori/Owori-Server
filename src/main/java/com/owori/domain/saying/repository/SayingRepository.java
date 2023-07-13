@@ -10,6 +10,6 @@ public interface SayingRepository {
 
     Optional<Saying> findById(UUID uuid);
     Saying save(Saying saying);
-    Saying findByMemberAndStatus(Member member, Boolean status);
+    Optional<Saying> findByMemberAndStatus(Member member, Boolean status);
 
 }
