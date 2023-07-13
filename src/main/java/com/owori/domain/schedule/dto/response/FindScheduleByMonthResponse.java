@@ -1,7 +1,7 @@
 package com.owori.domain.schedule.dto.response;
 
-import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.member.entity.Color;
+import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.schedule.entity.ScheduleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

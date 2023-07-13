@@ -8,14 +8,11 @@
 === 이야기 등록
 operation::save story[snippets='http-request,http-response']
 
-=== 이야기 목록형 조회
-operation::find story list[snippets='http-request,http-response']
+=== 이야기 전체 조회 (최신순)
+operation::find story by createdAt[snippets='http-request,http-response']
 
-=== 이야기 앨범형 조회 (최신순)
-operation::find story album by createAt[snippets='http-request,http-response']
-
-=== 이야기 앨범형 조회 (날짜순)
-operation::find story album by eventAt[snippets='http-request,http-response']
+=== 이야기 전체 조회 (날짜순)
+operation::find story by eventAt[snippets='http-request,http-response']
 
 === 이야기 상세 조회
 operation::find story[snippets='http-request,http-response']

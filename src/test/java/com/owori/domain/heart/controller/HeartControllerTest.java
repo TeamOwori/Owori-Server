@@ -39,7 +39,7 @@ public class HeartControllerTest extends RestDocsTest {
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        post("/hearts/{storyId}",1)
+                        post("/hearts/{storyId}",UUID.randomUUID())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("memberId", UUID.randomUUID().toString())
