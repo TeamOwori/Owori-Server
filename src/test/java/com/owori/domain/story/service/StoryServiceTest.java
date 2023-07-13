@@ -1,8 +1,15 @@
 package com.owori.domain.story.service;
 
+import com.owori.domain.comment.entity.Comment;
+import com.owori.domain.comment.repository.CommentRepository;
+import com.owori.domain.heart.entity.Heart;
+import com.owori.domain.heart.repository.HeartRepository;
+import com.owori.domain.image.entity.Image;
+import com.owori.domain.image.repository.ImageRepository;
+import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
-import com.owori.domain.story.dto.response.FindAlbumStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.support.database.DatabaseTest;
@@ -14,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +30,9 @@ public class StoryServiceTest extends LoginTest {
 
     @Autowired private StoryService storyService;
     @Autowired private StoryRepository storyRepository;
-
+    @Autowired private CommentRepository commentRepository;
+    @Autowired private HeartRepository heartRepository;
+    @Autowired private ImageRepository imageRepository;
     @Autowired private AuthService authService;
 
 
@@ -46,32 +54,48 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("이야기 앨범형 최신순 조회가 수행되는가")
-    void findAlbumStoryByCreateAt() {
+    @DisplayName("최신순 이야기 전체 조회가 수행되는가")
+    void findAllStoryByCreatedAt() {
         //given
+        Member member = authService.getLoginUser();
         String title = "기다리고 기다리던 하루";
-        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
+        Story story = new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        storyRepository.save(story);
+        commentRepository.save(new Comment(member, story,null, "댓글"));
+        heartRepository.save(new Heart(member, story));
 
         //when
-        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("createAt")), LocalDate.of(2023, 8, 31));
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("createdAt")), null);
 
         //then
-        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM")));
-        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
+        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("이야기 앨범형 날짜순 조회가 수행되는가")
-    void findAlbumStoryByEventAt() {
+    @DisplayName("날짜순 이야기 전체 조회가 수행되는가")
+    void findAllStoryByEventAt() {
         //given
-        String title = "기다리고 기다리던 하루";
-        storyRepository.save(new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser()));
+        Member member = authService.getLoginUser();
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        Story story2 = new Story("제목2", "내용2", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        Image image = new Image("a.png", 1L);
+        storyRepository.save(story);
+        storyRepository.save(story2);
+        commentRepository.save(new Comment(member, story,null, "댓글"));
+        heartRepository.save(new Heart(member, story));
+        imageRepository.save(image);
+        image.updateStory(story);
 
         //when
-        FindAlbumStoryGroupResponse response = storyService.findAlbumStory(PageRequest.of(0, 4, Sort.by("startDate")), LocalDate.now());
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
 
         //then
-        assertThat(response.getResponses().get(0).getYearMonth()).isEqualTo("2017.12");
-        assertThat(response.getResponses().get(0).getStories().get(0).getUrl()).isEqualTo(null);
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
+        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(1).getContents()).isEqualTo("내용2");
+        assertThat(response.getStories().get(0).getImage()).isEqualTo("a.png");
     }
 }

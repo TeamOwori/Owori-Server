@@ -8,6 +8,7 @@ import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,8 +25,10 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Story implements Auditable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(nullable = false)
     private String title;
@@ -85,6 +88,10 @@ public class Story implements Auditable {
     public void removeComment(Comment comment){
         this.comments.remove(comment);
         comment.delete();
+    }
+
+    public String getMainImage(){
+        return images == null || images.isEmpty() ? null : images.get(0).getUrl();
     }
 
 }
