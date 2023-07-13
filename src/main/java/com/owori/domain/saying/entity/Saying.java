@@ -7,7 +7,6 @@ import com.owori.global.audit.BaseTime;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,8 +26,7 @@ public class Saying implements Auditable {
     private UUID id;
 
     // 내용 글자 수 최대 50
-    @Column(nullable = false)
-    @Length(max = 50)
+    @Column(nullable = false, length = 50)
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -40,7 +38,7 @@ public class Saying implements Auditable {
     private List<SayingTagMember> tagMembers = new ArrayList<>();
 
     @Column(nullable = false)
-    private Boolean status = Boolean.TRUE;
+    private Boolean modifiable = Boolean.TRUE;
 
     @Setter
     @Embedded
@@ -65,7 +63,6 @@ public class Saying implements Auditable {
                 .toList();
     }
 
-
     private void change(List<Member> tagMembers) {
         // 기존에 있던거 삭제
         this.tagMembers.forEach(SayingTagMember::delete);
@@ -75,8 +72,8 @@ public class Saying implements Auditable {
                 .toList();
     }
 
-    public void changeStatus() {
-        this.status = Boolean.FALSE;
+    public void changeModifiable() {
+        this.modifiable = Boolean.FALSE;
         this.delete();
     }
 }

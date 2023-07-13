@@ -36,8 +36,8 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
 
         // 이전 서로에게 한마디 삭제하기
-        Optional<Saying> oldSaying = sayingRepository.findByMemberAndStatus(member, true);
-        oldSaying.ifPresent(Saying::changeStatus);
+        Optional<Saying> oldSaying = sayingRepository.findByMemberAndModifiable(member, true);
+        oldSaying.ifPresent(Saying::changeModifiable);
 
         // 새로운 서로에게 한마디 생성하기
         Saying newSaying = sayingRepository.save(sayingMapper.toEntity(request.getContent(), member, tagMembers));
@@ -64,7 +64,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     @Transactional
     public void deleteSaying(UUID sayingId) {
         Saying saying = loadEntity(sayingId);
-        saying.changeStatus();
+        saying.changeModifiable();
     }
 
     public List<FindSayingByFamilyResponse> findSayingByFamily() {
@@ -72,7 +72,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         Family family = nowMember.getFamily();
 
         List<Saying> sayingList = family.getMembers().stream()
-                .map(member -> sayingRepository.findByMemberAndStatus(member, true))
+                .map(member -> sayingRepository.findByMemberAndModifiable(member, true))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
