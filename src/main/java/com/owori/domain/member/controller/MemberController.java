@@ -5,6 +5,7 @@ import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.service.MemberService;
+import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,9 +52,8 @@ public class MemberController {
      * @throws IOException 파일 업로드시 발생할 수 있는 예외입니다.
      */
     @PostMapping("/profile-image")
-    public ResponseEntity<Void> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
-        memberService.updateMemberProfileImage(profileImage);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ImageResponse> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
+        return ResponseEntity.ok(memberService.updateMemberProfileImage(profileImage));
     }
 
     /**

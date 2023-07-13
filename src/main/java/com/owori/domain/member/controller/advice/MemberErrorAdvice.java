@@ -2,6 +2,7 @@ package com.owori.domain.member.controller.advice;
 
 import com.owori.domain.member.exception.JwtProcessingException;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
+import com.owori.domain.member.exception.WebClientException;
 import com.owori.global.advice.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,11 @@ public class MemberErrorAdvice {
 
     @ExceptionHandler(NoSuchProfileImageException.class)
     public ResponseEntity<ErrorResponse> noSuchProfileImageException(NoSuchProfileImageException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(WebClientException.class)
+    public ResponseEntity<ErrorResponse> webClientException(WebClientException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
     }
 }
