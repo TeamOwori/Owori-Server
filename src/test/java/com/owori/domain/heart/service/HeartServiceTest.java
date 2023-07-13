@@ -43,7 +43,7 @@ public class HeartServiceTest extends LoginTest {
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
         Heart heart = heartRepository.findByMemberAndStory(member, story).get();
 
-        assertThat(response.isLiked()).isEqualTo(true);
+        assertThat(response.getIsLiked()).isEqualTo(true);
         assertThat(heart.getStory()).isEqualTo(story);
         assertThat(heart.getMember()).isEqualTo(member);
         assertThat(hearts.iterator().next()).isEqualTo(heart);
@@ -65,7 +65,7 @@ public class HeartServiceTest extends LoginTest {
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
         Heart heart = heartRepository.findByMemberAndStory(member, story).orElse(null);
 
-        assertThat(response.isLiked()).isEqualTo(false);
+        assertThat(response.getIsLiked()).isEqualTo(false);
         assertThat(heart).isEqualTo(null);
         assertThat(hearts.isEmpty()).isEqualTo(true);
     }

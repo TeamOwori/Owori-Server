@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class HeartStatusResponse {
-    private boolean isLiked;
+    private Boolean isLiked;
 }
