@@ -48,6 +48,9 @@ public class Member implements Auditable {
     @Embedded
     private OAuth2Info oAuth2Info;
 
+    @Enumerated(EnumType.STRING)
+    private EmotionalBadge emotionalBadge = EmotionalBadge.NONE;
+
     @Setter
     @Embedded
     @Column(nullable = false)
@@ -115,5 +118,9 @@ public class Member implements Auditable {
     @Override
     public int hashCode() {
         return Objects.hash(oAuth2Info);
+    }
+
+    public void updateEmotionalBadge(EmotionalBadge emotionalBadge) {
+        this.emotionalBadge = emotionalBadge;
     }
 }

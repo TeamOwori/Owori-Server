@@ -1,5 +1,6 @@
 package com.owori.domain.member.controller;
 
+import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
@@ -76,6 +77,18 @@ public class MemberController {
     @DeleteMapping
     public ResponseEntity<Void> deleteMember() {
         memberService.deleteMember();
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 멤버 감정 뱃지 업데이트 컨트롤러입니다.
+     * 멤버의 감정 뱃지를 받아와 수정합니다.
+     * @param emotionalBadgeRequest 수정할 감정 뱃지 정보를 갖습니다.
+     * @return 바디로 response 하는 정보는 없습니다.
+     */
+    @PostMapping("/emotional-badge")
+    public ResponseEntity<Void> updateEmotionalBadge(@RequestBody EmotionalBadgeRequest emotionalBadgeRequest) {
+        memberService.updateEmotionalBadge(emotionalBadgeRequest);
         return ResponseEntity.ok().build();
     }
 }

@@ -3,6 +3,7 @@ package com.owori.domain.member.service;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.member.client.KakaoMemberClient;
 import com.owori.domain.member.dto.client.KakaoMemberResponse;
+import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
@@ -97,7 +98,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
      * @param memberIds 멤버 아이디 리스트
      * @return 멤버 리스트
      */
-    public List<Member> findMembersByIds(List<UUID> memberIds) {
+    public List<Member> findMembersByIds(final List<UUID> memberIds) {
         return memberRepository.findAllByIdIn(memberIds);
+    }
+
+    @Transactional
+    public void updateEmotionalBadge(final EmotionalBadgeRequest emotionalBadgeRequest) {
+        authService.getLoginUser().updateEmotionalBadge(emotionalBadgeRequest.getEmotionalBadge());
     }
 }
