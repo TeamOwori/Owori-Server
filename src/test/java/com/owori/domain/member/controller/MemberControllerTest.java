@@ -1,12 +1,14 @@
 package com.owori.domain.member.controller;
 
 import com.owori.config.security.jwt.JwtToken;
+import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
+import com.owori.domain.member.entity.EmotionalBadge;
 import com.owori.domain.member.service.MemberService;
 import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -159,5 +161,28 @@ class MemberControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("delete member", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("멤버 감정뱃지 업데이트가 수행되는가")
+    void updateEmotionalBadge() throws Exception {
+        //given
+        doNothing().when(memberService).updateEmotionalBadge(any());
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/members/emotional-badge")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toRequestBody(new EmotionalBadgeRequest(EmotionalBadge.HAPPY)))
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("update member emotional badge", getDocumentRequest(), getDocumentResponse()));
     }
 }

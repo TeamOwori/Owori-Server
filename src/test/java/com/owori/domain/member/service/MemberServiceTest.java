@@ -1,9 +1,11 @@
 package com.owori.domain.member.service;
 
 import com.owori.domain.family.entity.Family;
+import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.entity.Color;
+import com.owori.domain.member.entity.EmotionalBadge;
 import com.owori.domain.member.entity.Member;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.support.database.DatabaseTest;
@@ -116,5 +118,21 @@ class MemberServiceTest extends LoginTest {
 
         //then
         assertThrows(EntityNotFoundException.class, () -> memberService.loadEntity(id));
+    }
+
+    @Test
+    @DisplayName("감정 뱃지 업데이트가 수행되는가")
+    void updateEmotionalBadge() {
+        //given
+        EmotionalBadge before = authService.getLoginUser().getEmotionalBadge();
+
+        //when
+        EmotionalBadge soHappy = EmotionalBadge.SO_HAPPY;
+        memberService.updateEmotionalBadge(new EmotionalBadgeRequest(soHappy));
+        em.flush();
+        em.clear();
+
+        //then
+        assertThat(authService.getLoginUser().getEmotionalBadge()).isEqualTo(soHappy).isNotEqualTo(before);
     }
 }
