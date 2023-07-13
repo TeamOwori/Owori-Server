@@ -8,6 +8,7 @@ import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,5 +28,11 @@ public class ScheduleService {
 
     public List<FindScheduleByMonthResponse> findScheduleByMonth(Pageable pageable, String month) {
         return null; // todo 로직작성
+    }
+
+    @Transactional
+    public void deleteSchedule(UUID scheduleId) {
+        // Schedule schedule = loadEntity(scheduleId);
+        // schedule.delete();
     }
 }

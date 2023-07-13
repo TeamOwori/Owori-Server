@@ -28,6 +28,7 @@ import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -124,5 +125,29 @@ public class ScheduleControllerTest extends RestDocsTest {
         // docs
         perform.andDo(print())
                 .andDo(document("find schedule by month", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("DELETE / schedule 일정 삭제 API 테스트")
+    void deleteSchedule() throws Exception {
+        // given
+        UUID id = UUID.randomUUID();
+        doNothing().when(scheduleService).deleteSchedule(any());
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        delete("/schedule")
+                                .param("scheduleId", id.toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk());
+
+        // docs
+        perform.andDo(document("delete schedule", getDocumentRequest(),getDocumentResponse()));
     }
 }
