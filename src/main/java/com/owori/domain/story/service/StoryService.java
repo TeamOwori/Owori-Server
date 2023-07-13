@@ -1,5 +1,6 @@
 package com.owori.domain.story.service;
 
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -39,8 +40,8 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
-        Member member = authService.getLoginUser();
-        Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, member, lastViewed);
+        Family family = authService.getLoginUser().getFamily();
+        Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
 
         List<FindAllStoryResponse> stories = storyBySlice.getContent().stream()
                 .map(story -> storyMapper.of(story))

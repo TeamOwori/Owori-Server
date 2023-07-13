@@ -1,6 +1,6 @@
 package com.owori.domain.story.repository;
 
-import com.owori.domain.member.entity.Member;
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.story.entity.Story;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,11 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
     private final StoryOrderConverter storyOrderConverter;
 
     @Override
-    public Slice<Story> findAllStory(Pageable pageable, Member member, LocalDate date) {
+    public Slice<Story> findAllStory(Pageable pageable, Family family, LocalDate date) {
         List<Story> results = queryFactory
                 .selectFrom(story)
                 .where(
-                        story.member.eq(member)
+                        story.member.family.eq(family)
                                 .and(storyOrderConverter.createOrderExpression(pageable, date)) // no-offset 페이징 처리
                 )
                 .orderBy(storyOrderConverter.convert(pageable.getSort()))
