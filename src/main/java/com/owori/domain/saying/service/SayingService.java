@@ -8,6 +8,7 @@ import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
+import com.owori.domain.saying.exception.NoAuthorityDeleteException;
 import com.owori.domain.saying.exception.NoAuthorityUpdateException;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.saying.repository.SayingRepository;
@@ -64,6 +65,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     @Transactional
     public void deleteSaying(UUID sayingId) {
         Saying saying = loadEntity(sayingId);
+        if(!saying.getMember().equals(authService.getLoginUser())) throw new NoAuthorityDeleteException();
         saying.changeModifiable();
     }
 
