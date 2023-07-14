@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -71,14 +72,20 @@ public class StoryService implements EntityLoader<Story, UUID> {
         if(story.getMember() != authService.getLoginUser()){
             throw new InvalidUserException();
         }
-
-        Optional.ofNullable(request.getStartDate()).ifPresent(story::updateStartDate);
-        Optional.ofNullable(request.getEndDate()).ifPresent(story::updateEndDate);
-        Optional.ofNullable(request.getTitle()).ifPresent(story::updateTitle);
-        Optional.ofNullable(request.getContents()).ifPresent(story::updateContents);
-        Optional.ofNullable(request.getImagesId()).ifPresent(imagesId -> imageService.updateStory(story, imagesId));
-
+        updateStoryFields(story, request);
         return new IdResponse<>(story.getId());
+    }
+
+    public void updateStoryFields(Story story, PostStoryRequest request){
+        ifPresentAndNonNull(request.getStartDate(), story::updateStartDate);
+        ifPresentAndNonNull(request.getEndDate(), story::updateEndDate);
+        ifPresentAndNonNull(request.getTitle(), story::updateTitle);
+        ifPresentAndNonNull(request.getContents(), story::updateContents);
+        ifPresentAndNonNull(request.getImagesId(), imagesId -> imageService.updateStory(story, imagesId));
+    }
+
+    public <T> void ifPresentAndNonNull(T value, Consumer<T> consumer) {
+        Optional.ofNullable(value).ifPresent(consumer);
     }
 
     public void removeStory(UUID storyId) {
