@@ -14,5 +14,5 @@ public interface ScheduleRepository {
     Optional<Schedule> findById(UUID id);
 
     // 멤버와 웗 시작일과 종료일 받아서 일정 넘겨주기
-    List<Schedule> findByMonth(Member member, LocalDate firstDate, LocalDate lastDate);
+    List<Schedule> findAllByMonth(Member member, LocalDate startDate, LocalDate endDate);
 }

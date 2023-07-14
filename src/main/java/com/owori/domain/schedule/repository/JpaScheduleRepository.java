@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface JpaScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleRepository {
 
-    @Query("select s from Schedule s where s.member = :member and ((s.startDate >= :firstDate and s.startDate <= :lastDate) or (s.endDate >= :firstDate and s.endDate <= :lastDate))")
-    List<Schedule> findByMonth(Member member, LocalDate firstDate, LocalDate lastDate);
+    @Query("select s from Schedule s where s.member = :member and ((s.startDate between :startDate and :endDate) or (s.endDate between :startDate and :endDate))")
+    List<Schedule> findAllByMonth(Member member, LocalDate startDate, LocalDate endDate);
 }

@@ -43,6 +43,6 @@ public class ScheduleMapper {
     }
 
     public LocalDate toFirstDate(String yearMonth) {
-        return LocalDate.parse(yearMonth + "01");
+        return LocalDate.parse(yearMonth + "-01");
     }
 }

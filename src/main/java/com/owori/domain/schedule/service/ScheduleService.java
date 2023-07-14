@@ -60,7 +60,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
 
         // 가족들의 일정 시작일 기준으로 정렬해서 받기
         List<Schedule> monthSchedule = new ArrayList<>(familyMembers.stream()
-                .map(familyMember -> scheduleRepository.findByMonth(familyMember, firstDate, lastDate))
+                .map(familyMember -> scheduleRepository.findAllByMonth(familyMember, firstDate, lastDate))
                 .flatMap(List::stream)
                 .toList());
         monthSchedule.sort(Comparator.comparing(Schedule::getStartDate));
