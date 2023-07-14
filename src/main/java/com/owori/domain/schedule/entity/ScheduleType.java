@@ -1,5 +1,18 @@
 package com.owori.domain.schedule.entity;
 
+
 public enum ScheduleType {
-    가족, 개인
+
+    FAMILY("가족"),
+    INDIVIDUAL("개인");
+
+    private final String toKorean;
+
+    ScheduleType(String scheduleType) {
+        this.toKorean = scheduleType;
+    }
+
+    public String getToKorean() {
+        return toKorean;
+    }
 }

@@ -40,7 +40,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         // 로그인 중인 유저 받기
         Member member = authService.getLoginUser();
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
-        if(schedule.getScheduleType() == ScheduleType.개인 && !member.equals(schedule.getMember())) throw new NoAuthorityUpdateException();
+        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !member.equals(schedule.getMember())) throw new NoAuthorityUpdateException();
 
         schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
                 updateScheduleRequest.getEndDate(), updateScheduleRequest.getDDayOption(), updateScheduleRequest.getAlarmOptions());
