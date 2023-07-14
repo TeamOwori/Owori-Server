@@ -2,6 +2,8 @@ package com.owori.domain.story.service;
 
 import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.comment.repository.CommentRepository;
+import com.owori.domain.family.entity.Family;
+import com.owori.domain.family.repository.FamilyRepository;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.image.entity.Image;
@@ -33,6 +35,7 @@ public class StoryServiceTest extends LoginTest {
     @Autowired private CommentRepository commentRepository;
     @Autowired private HeartRepository heartRepository;
     @Autowired private ImageRepository imageRepository;
+    @Autowired private FamilyRepository familyRepository;
     @Autowired private AuthService authService;
 
 
@@ -58,8 +61,11 @@ public class StoryServiceTest extends LoginTest {
     void findAllStoryByCreatedAt() {
         //given
         Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
         String title = "기다리고 기다리던 하루";
         Story story = new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+
+        familyRepository.save(family);
         storyRepository.save(story);
         commentRepository.save(new Comment(member, story,null, "댓글"));
         heartRepository.save(new Heart(member, story));
@@ -78,9 +84,12 @@ public class StoryServiceTest extends LoginTest {
     void findAllStoryByEventAt() {
         //given
         Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
         Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
         Story story2 = new Story("제목2", "내용2", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
         Image image = new Image("a.png", 1L);
+
+        familyRepository.save(family);
         storyRepository.save(story);
         storyRepository.save(story2);
         commentRepository.save(new Comment(member, story,null, "댓글"));
