@@ -184,13 +184,12 @@ public class StoryServiceTest extends LoginTest {
     void updateStory() {
         //given
         Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser());
-        Image image = new Image("a.png", 1L);
+        Image image = new Image("https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(1).png", 1L);
         storyRepository.save(story);
         imageRepository.save(image);
         image.updateStory(story);
 
-        List<UUID> imgIds = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, imgIds);
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, null);
 
         //when
         IdResponse<UUID> response = storyService.updateStory(story.getId(), request);
@@ -198,7 +197,7 @@ public class StoryServiceTest extends LoginTest {
         //then
         Story updateStory = storyRepository.findById(response.getId()).get();
 
-        assertThat(updateStory.getImages().size()).isEqualTo(3);
+        assertThat(updateStory.getImages().size()).isEqualTo(1);
         assertThat(updateStory.getTitle()).isEqualTo("제목");
         assertThat(updateStory.getContents()).isEqualTo("내용");
     }

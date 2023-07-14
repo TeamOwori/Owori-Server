@@ -10,6 +10,7 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
+import com.owori.domain.story.exception.InvalidUserException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
@@ -67,6 +68,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     public IdResponse<UUID> updateStory(UUID storyId, PostStoryRequest request) {
         Story story = loadEntity(storyId);
+        if(story.getMember() != authService.getLoginUser()){
+            throw new InvalidUserException();
+        }
 
         Optional.ofNullable(request.getStartDate()).ifPresent(story::updateStartDate);
         Optional.ofNullable(request.getEndDate()).ifPresent(story::updateEndDate);
@@ -79,6 +83,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     public void removeStory(UUID storyId) {
         Story story = loadEntity(storyId);
+        if(story.getMember() != authService.getLoginUser()){
+            throw new InvalidUserException();
+        }
 
         // 이미지 삭제
         imageService.removeImages(story);
