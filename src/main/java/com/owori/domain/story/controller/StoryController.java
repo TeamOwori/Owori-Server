@@ -1,6 +1,6 @@
 package com.owori.domain.story.controller;
 
-import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.service.StoryService;
@@ -31,7 +31,7 @@ public class StoryController {
      * @return 생성된 이야기의 id가 반환됩니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addStory(@RequestBody AddStoryRequest request) {
+    public ResponseEntity<IdResponse<UUID>> addStory(@RequestBody PostStoryRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 
@@ -56,6 +56,17 @@ public class StoryController {
     @GetMapping("/{storyId}")
     public ResponseEntity<FindStoryResponse> findStory(@PathVariable UUID storyId){
         return ResponseEntity.ok(storyService.findStory(storyId));
+    }
+
+    /**
+     * 이야기 수정을 위한 컨트롤러입니다.
+     * @param storyId 수정할 story의 id 값 입니다.
+     * @param request 수정 사항이 담긴 dto 입니다.
+     * @return 수정한 story의 id 값이 반환됩니다.
+     */
+    @PostMapping("/{storyId}")
+    public ResponseEntity<IdResponse<UUID>> updateStory(@PathVariable UUID storyId, @RequestBody PostStoryRequest request){
+        return ResponseEntity.ok(storyService.updateStory(storyId, request));
     }
 
 }

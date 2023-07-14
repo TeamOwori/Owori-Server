@@ -67,32 +67,41 @@ public class Story implements Auditable {
         this.member = member;
     }
 
-    public void updateImage(Image image){
-        this.images.add(image);
+    public void updateStartDate(LocalDate startDate){ this.startDate = startDate; }
+
+    public void updateEndDate(LocalDate endDate){ this.endDate = endDate; }
+
+    public void updateTitle(String title){ this.title = title; }
+
+    public void updateContents(String contents){ this.contents = contents; }
+
+    /* image */
+    public void updateImage(Image image){ this.images.add(image); }
+    public void removeImage(Image image){
+        this.images.remove(image);
+        image.delete();
+    }
+    public String getMainImage(){
+        return images == null || images.isEmpty() ? null : images.get(0).getUrl();
+    }
+    public List<String> getImageUrls(){
+        return images.stream().map(img -> img.getUrl()).toList();
     }
 
-    public void addHeart(Heart heart){
-       this.hearts.add(heart);
-    }
 
-    public void removeHeart(Heart heart){
-        this.hearts.remove(heart);
-        heart.delete();
-    }
-
+    /* comment */
     public void addComment(Comment comment){ this.comments.add(comment); }
-
     public void removeComment(Comment comment){
         this.comments.remove(comment);
         comment.delete();
     }
 
-    public String getMainImage(){
-        return images == null || images.isEmpty() ? null : images.get(0).getUrl();
-    }
 
-    public List<String> getImageUrls(){
-        return images.stream().map(img -> img.getUrl()).toList();
+    /* heart */
+    public void addHeart(Heart heart){ this.hearts.add(heart); }
+    public void removeHeart(Heart heart){
+        this.hearts.remove(heart);
+        heart.delete();
     }
 
 }

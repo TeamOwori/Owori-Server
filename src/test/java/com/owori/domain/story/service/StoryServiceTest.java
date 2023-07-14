@@ -10,11 +10,12 @@ import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.repository.ImageRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
-import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
+import com.owori.global.dto.IdResponse;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
 import com.owori.utils.TimeAgoCalculator;
@@ -26,6 +27,8 @@ import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,7 +50,7 @@ public class StoryServiceTest extends LoginTest {
     void addStory() {
         //given
         String title = "기다리고 기다리던 하루";
-        AddStoryRequest request = new AddStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
 
         //when
         storyService.addStory(request);
@@ -170,5 +173,29 @@ public class StoryServiceTest extends LoginTest {
         assertThat(day).isEqualTo("6일 전");
         assertThat(month).isEqualTo("22.03.02");
 
+    }
+
+    @Test
+    @DisplayName("이야기 수정이 수행되는가")
+    void updateStory() {
+        //given
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser());
+        Image image = new Image("a.png", 1L);
+        storyRepository.save(story);
+        imageRepository.save(image);
+        image.updateStory(story);
+
+        List<UUID> imgIds = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, imgIds);
+
+        //when
+        IdResponse<UUID> response = storyService.updateStory(story.getId(), request);
+
+        //then
+        Story updateStory = storyRepository.findById(response.getId()).get();
+
+        assertThat(updateStory.getImages().size()).isEqualTo(3);
+        assertThat(updateStory.getTitle()).isEqualTo("제목");
+        assertThat(updateStory.getContents()).isEqualTo("내용");
     }
 }

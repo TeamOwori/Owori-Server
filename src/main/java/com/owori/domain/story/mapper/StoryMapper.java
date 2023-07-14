@@ -2,7 +2,7 @@ package com.owori.domain.story.mapper;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.member.entity.Member;
-import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 public class StoryMapper {
-    public Story toEntity(AddStoryRequest request, Member member){
+    public Story toEntity(PostStoryRequest request, Member member){
         return Story.builder()
                 .title(request.getTitle())
                 .contents(request.getContents())

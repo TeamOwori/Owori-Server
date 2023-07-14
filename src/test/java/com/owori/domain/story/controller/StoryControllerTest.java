@@ -1,7 +1,7 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
-import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.service.StoryService;
 import com.owori.global.dto.IdResponse;
@@ -41,7 +41,7 @@ public class StoryControllerTest extends RestDocsTest{
         given(storyService.addStory(any())).willReturn(expected);
 
         List<UUID> imgId = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        AddStoryRequest request = new AddStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ",imgId);
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ",imgId);
 
         //when
         ResultActions perform =
@@ -58,6 +58,33 @@ public class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(document("save story", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("POST /stories/{storyId} 이야기 수정 API 테스트")
+    void updateStory() throws Exception {
+        //given
+        IdResponse<UUID> expected = new IdResponse<>(UUID.randomUUID());
+        given(storyService.updateStory(any(), any())).willReturn(expected);
+
+        List<UUID> imgId = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2012-12-25"), LocalDate.parse("2012-12-25"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", imgId);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/stories/{storyId}", UUID.randomUUID())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toRequestBody(request))
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(document("update story", getDocumentRequest(), getDocumentResponse()));
     }
 
     @Test

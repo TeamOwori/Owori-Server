@@ -7,7 +7,7 @@ import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
-import com.owori.domain.story.dto.request.AddStoryRequest;
+import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.mapper.StoryMapper;
@@ -34,7 +34,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final HeartService heartService;
     private final AuthService authService;
 
-    public IdResponse<UUID> addStory(AddStoryRequest request) {
+    public IdResponse<UUID> addStory(PostStoryRequest request) {
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
         List<UUID> imagesIds = request.getImagesId();
@@ -63,6 +63,18 @@ public class StoryService implements EntityLoader<Story, UUID> {
         boolean isLiked = heartService.hasHeart(member, story);
 
         return storyMapper.toFindStoryDto(story, isLiked, comments);
+    }
+
+    public IdResponse<UUID> updateStory(UUID storyId, PostStoryRequest request) {
+        Story story = loadEntity(storyId);
+
+        Optional.ofNullable(request.getStartDate()).ifPresent(story::updateStartDate);
+        Optional.ofNullable(request.getEndDate()).ifPresent(story::updateEndDate);
+        Optional.ofNullable(request.getTitle()).ifPresent(story::updateTitle);
+        Optional.ofNullable(request.getContents()).ifPresent(story::updateContents);
+        Optional.ofNullable(request.getImagesId()).ifPresent(imagesId -> imageService.updateStory(story, imagesId));
+
+        return new IdResponse<>(story.getId());
     }
 
     @Override
