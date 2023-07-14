@@ -2,6 +2,7 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
+import com.owori.domain.schedule.dto.response.FindDdayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.IdResponse;
@@ -51,5 +52,10 @@ public class ScheduleController {
     @GetMapping("/month")
     public ResponseEntity<List<FindScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
+    }
+
+    @GetMapping("/dday")
+    public ResponseEntity<List<FindDdayByFamilyResponse>> findDdayByFamily() {
+        return ResponseEntity.ok(scheduleService.findDdayByFamily());
     }
 }

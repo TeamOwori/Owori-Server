@@ -4,6 +4,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
+import com.owori.domain.schedule.dto.response.FindDdayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -66,6 +67,10 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
                 .toList();
 
         return scheduleMapper.toResponseList(monthSchedule);
+    }
+
+    public List<FindDdayByFamilyResponse> findDdayByFamily(){
+        return null; // todo: 로직 작성
     }
 
     @Override
