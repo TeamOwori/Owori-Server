@@ -7,6 +7,7 @@ import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
+import com.owori.domain.schedule.exception.NoAuthorityDeleteException;
 import com.owori.domain.schedule.exception.NoAuthorityUpdateException;
 import com.owori.domain.schedule.mapper.ScheduleMapper;
 import com.owori.domain.schedule.repository.ScheduleRepository;
@@ -48,6 +49,14 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return new IdResponse<>(scheduleId);
     }
 
+    @Transactional
+    public void deleteSchedule(UUID scheduleId) {
+        Schedule schedule = loadEntity(scheduleId);
+        // 생성자와 동일하지 않을 경우 예외처리
+        if(!schedule.getMember().equals(authService.getLoginUser())) throw new NoAuthorityDeleteException();
+        schedule.delete();
+    }
+
     public List<FindScheduleByMonthResponse> findScheduleByMonth(String month) {
         // 넘겨받은 'yyyy'-MM' 통해 해당 달의 사작일과 마지막일 찾기
         LocalDate firstDate = scheduleMapper.toFirstDate(month);
@@ -73,9 +82,5 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return scheduleRepository.findById(uuid).orElseThrow(EntityNotFoundException::new);
     }
 
-    @Transactional
-    public void deleteSchedule(UUID scheduleId) {
-        // Schedule schedule = loadEntity(scheduleId);
-        // schedule.delete();
-    }
+
 }

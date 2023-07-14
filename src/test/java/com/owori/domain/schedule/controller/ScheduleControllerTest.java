@@ -91,6 +91,30 @@ public class ScheduleControllerTest extends RestDocsTest {
     }
 
     @Test
+    @DisplayName("DELETE / schedule 일정 삭제 API 테스트")
+    void deleteSchedule() throws Exception {
+        // given
+        UUID id = UUID.randomUUID();
+        doNothing().when(scheduleService).deleteSchedule(any());
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        delete("/schedule")
+                                .param("scheduleId", id.toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk());
+
+        // docs
+        perform.andDo(document("delete schedule", getDocumentRequest(),getDocumentResponse()));
+    }
+
+    @Test
     @DisplayName("GET / schedule 일정 월별 조회 API 테스트")
     void findScheduleByMonth() throws Exception {
         // given
@@ -120,29 +144,5 @@ public class ScheduleControllerTest extends RestDocsTest {
         // docs
         perform.andDo(print())
                 .andDo(document("find schedule by month", getDocumentRequest(), getDocumentResponse()));
-    }
-
-    @Test
-    @DisplayName("DELETE / schedule 일정 삭제 API 테스트")
-    void deleteSchedule() throws Exception {
-        // given
-        UUID id = UUID.randomUUID();
-        doNothing().when(scheduleService).deleteSchedule(any());
-
-        // when
-        ResultActions perform =
-                mockMvc.perform(
-                        delete("/schedule")
-                                .param("scheduleId", id.toString())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
-                );
-
-        // then
-        perform.andExpect(status().isOk());
-
-        // docs
-        perform.andDo(document("delete schedule", getDocumentRequest(),getDocumentResponse()));
     }
 }
