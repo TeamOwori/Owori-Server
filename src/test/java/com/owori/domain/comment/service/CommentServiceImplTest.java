@@ -24,9 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DatabaseTest
 @DisplayName("Comment 서비스의")
-public class CommentServiceTest extends LoginTest {
+public class CommentServiceImplTest extends LoginTest {
 
-    @Autowired CommentService commentService;
+    @Autowired
+    CommentService commentService;
     @Autowired CommentRepository commentRepository;
     @Autowired StoryRepository storyRepository;
     @Autowired AuthService authService;

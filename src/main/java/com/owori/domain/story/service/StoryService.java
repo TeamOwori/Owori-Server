@@ -1,6 +1,9 @@
 package com.owori.domain.story.service;
 
+import com.owori.domain.comment.dto.response.CommentResponse;
+import com.owori.domain.comment.service.CommentService;
 import com.owori.domain.family.entity.Family;
+import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -27,6 +30,8 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final StoryRepository storyRepository;
     private final StoryMapper storyMapper;
     private final ImageService imageService;
+    private final CommentService commentService;
+    private final HeartService heartService;
     private final AuthService authService;
 
     public IdResponse<UUID> addStory(AddStoryRequest request) {
@@ -44,15 +49,20 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
 
         List<FindAllStoryResponse> stories = storyBySlice.getContent().stream()
-                .map(story -> storyMapper.of(story))
+                .map(story -> storyMapper.toFindAllStoryDto(story))
                 .toList();
 
         return new FindAllStoryGroupResponse(stories, storyBySlice.hasNext());
     }
 
     public FindStoryResponse findStory(UUID storyId) {
-        // todo: 로직 작성
-        return null;
+        Member member = authService.getLoginUser();
+        Story story = loadEntity(storyId);
+
+        List<CommentResponse> comments = commentService.findComments(story, member);
+        boolean isLiked = heartService.hasHeart(member, story);
+
+        return storyMapper.toFindStoryDto(story, isLiked, comments);
     }
 
     @Override

@@ -2,20 +2,21 @@ package com.owori.domain.comment.service;
 
 import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
+import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.comment.mapper.CommentMapper;
 import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.story.service.StoryService;
+import com.owori.domain.story.service.StoryServiceCustom;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,14 +25,13 @@ import java.util.UUID;
 public class CommentService implements EntityLoader<Comment, UUID> {
 
     private final CommentRepository commentRepository;
+    private final StoryServiceCustom storyServiceCustom;
     private final CommentMapper commentMapper;
     private final AuthService authService;
-    private final StoryService storyService;
 
-    @Transactional
     public IdResponse<UUID> addComment(AddCommentRequest request) {
         Member member = authService.getLoginUser();
-        Story story = storyService.loadEntity(request.getStoryId());
+        Story story = storyServiceCustom.loadEntity(request.getStoryId());
         Optional<Comment> parentComment = Optional.ofNullable(request.getParentCommentId())
                 .map(parentId -> loadEntity(parentId));
 
@@ -41,7 +41,6 @@ public class CommentService implements EntityLoader<Comment, UUID> {
         return new IdResponse<>(comment.getId());
     }
 
-    @Transactional
     public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
         comment.getStory().removeComment(comment);
@@ -52,6 +51,11 @@ public class CommentService implements EntityLoader<Comment, UUID> {
         comment.updateContent(request.getComment());
 
         return new IdResponse<>(comment.getId());
+    }
+
+    public List<CommentResponse> findComments(Story story, Member member){
+        List<Comment> comments = commentRepository.findAllComments(story, member.getFamily());
+        return comments.stream().map(comment -> commentMapper.toDto(comment)).toList();
     }
 
     @Override

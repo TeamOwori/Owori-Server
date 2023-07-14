@@ -12,10 +12,12 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.AddStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
+import com.owori.utils.TimeAgoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -106,5 +109,66 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
         assertThat(response.getStories().get(1).getContents()).isEqualTo("내용2");
         assertThat(response.getStories().get(0).getImage()).isEqualTo("a.png");
+    }
+
+    @Test
+    @DisplayName("이야기 상세 조회가 제대로 수행되는가")
+    void findStory() {
+        //given
+        Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        Image image = new Image("a.png", 1L);
+        Image image2 = new Image("b.png", 2L);
+        Comment comment = new Comment(member, story, null, "첫번째 댓글");
+
+        familyRepository.save(family);
+        storyRepository.save(story);
+        heartRepository.save(new Heart(member, story));
+        imageRepository.save(image);
+        imageRepository.save(image2);
+        commentRepository.save(comment);
+        commentRepository.save(new Comment(member, story, comment, "두번째 댓글"));
+        image.updateStory(story);
+        image2.updateStory(story);
+
+        //when
+        FindStoryResponse response = storyService.findStory(story.getId());
+
+        //then
+        assertThat(response.getCommentCnt()).isEqualTo(2);
+        assertThat(response.getComments().get(1).getParentCommentId()).isEqualTo(comment.getId());
+        assertThat(response.getIsLiked()).isEqualTo(true);
+        assertThat(response.getComments().get(0).getTimeBeforeWriting()).isEqualTo("방금");
+
+    }
+
+    @Test
+    @DisplayName("time ago calculator가 제대로 실행되는가")
+    void findTimeAgo() {
+
+        // 50초 전
+        String second = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusSeconds(50));
+
+        // 10분 전
+        String minute = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusMinutes(10));
+
+        // 2시간 전
+        String hour = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusHours(2));
+
+        // 6일 전
+        String day = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusDays(6));
+
+        // n개월 전
+        String month = TimeAgoCalculator.timesAgo(LocalDateTime.of(2022,3,2,3,1,2,3));
+
+
+        //then
+        assertThat(second).isEqualTo("방금");
+        assertThat(minute).isEqualTo("10분 전");
+        assertThat(hour).isEqualTo("2시간 전");
+        assertThat(day).isEqualTo("6일 전");
+        assertThat(month).isEqualTo("22.03.02");
+
     }
 }
