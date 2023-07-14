@@ -1,6 +1,17 @@
 package com.owori.domain.schedule.entity;
 
 
+import lombok.Getter;
+
+@Getter
 public enum Alarm {
-    당일, 하루전, 일주일전
+    TODAY("당일"),
+    A_DAY_AGO("전날"),
+    A_WEEK_AGO("일주일전");
+
+    private final String toKorean;
+
+    private Alarm(String alarmType) {
+        this.toKorean = alarmType;
+    }
 }
