@@ -77,6 +77,24 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return new IdResponse<>(story.getId());
     }
 
+    public void removeStory(UUID storyId) {
+        Story story = loadEntity(storyId);
+
+        // 이미지 삭제
+        imageService.removeImages(story);
+
+        // 댓글 삭제
+        story.getComments().stream()
+                .forEach(comment -> commentService.removeComment(comment.getId()));
+
+        // 좋아요 삭제
+        story.getHearts().stream().forEach(story::removeHeart);
+
+        // 스토리 삭제
+        story.delete();
+    }
+
+
     @Override
     public Story loadEntity(UUID id) {
         return storyRepository.findById(id).orElseThrow(EntityNotFoundException::new);

@@ -16,6 +16,7 @@ import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
+import com.owori.global.exception.EntityNotFoundException;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
 import com.owori.utils.TimeAgoCalculator;
@@ -25,12 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DatabaseTest
 @DisplayName("Story 서비스의")
@@ -43,6 +46,7 @@ public class StoryServiceTest extends LoginTest {
     @Autowired private ImageRepository imageRepository;
     @Autowired private FamilyRepository familyRepository;
     @Autowired private AuthService authService;
+    @Autowired private EntityManager em;
 
 
     @Test
@@ -197,5 +201,23 @@ public class StoryServiceTest extends LoginTest {
         assertThat(updateStory.getImages().size()).isEqualTo(3);
         assertThat(updateStory.getTitle()).isEqualTo("제목");
         assertThat(updateStory.getContents()).isEqualTo("내용");
+    }
+
+    @Test
+    @DisplayName("이야기 삭제가 수행되는가")
+    void removeStory() {
+        //given
+        Member member = authService.getLoginUser();
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        storyRepository.save(story);
+
+        //when
+        storyService.removeStory(story.getId());
+        em.flush();
+        em.clear();
+
+        //then
+        assertThrows(EntityNotFoundException.class, () -> storyService.loadEntity(story.getId()));
+
     }
 }

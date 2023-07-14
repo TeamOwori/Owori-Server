@@ -43,7 +43,8 @@ public class CommentService implements EntityLoader<Comment, UUID> {
 
     public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
-        comment.getStory().removeComment(comment);
+        Story story = comment.getStory();
+        story.removeComment(comment);
     }
 
     public IdResponse<UUID> updateComment(UUID commentId, UpdateCommentRequest request) {

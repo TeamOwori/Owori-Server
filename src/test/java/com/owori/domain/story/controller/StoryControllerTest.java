@@ -21,6 +21,7 @@ import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -183,5 +184,28 @@ public class StoryControllerTest extends RestDocsTest{
         //docs
         perform.andDo(print())
                 .andDo(document("find story", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("DELETE /stories/{storyId} 이야기 삭제 조회 API 테스트")
+    void removeStory() throws Exception {
+        //given
+        doNothing().when(storyService).removeStory(any());
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        delete("/stories/{storyId}", UUID.randomUUID())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("remove story", getDocumentRequest(), getDocumentResponse()));
     }
 }

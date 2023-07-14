@@ -46,14 +46,14 @@ public class ImageService implements EntityLoader<Image, UUID> {
 
     @Transactional
     public void updateStory(Story story, List<UUID> imageIds) {
-        removeOldImages(story);
+        removeImages(story);
         imageIds.stream()
                 .map(this::loadEntity)
                 .sorted(Comparator.comparing(Image::getOrderNum))
                 .forEach(image -> { image.updateStory(story);});
     }
 
-    public void removeOldImages(Story story){
+    public void removeImages(Story story){
         List<Image> oldImages = imageRepository.findAllByStory(story);
 
         Optional.ofNullable(oldImages).ifPresent(images -> {

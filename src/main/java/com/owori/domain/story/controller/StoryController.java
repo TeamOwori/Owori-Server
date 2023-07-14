@@ -69,4 +69,14 @@ public class StoryController {
         return ResponseEntity.ok(storyService.updateStory(storyId, request));
     }
 
+    /**
+     * 이야기 삭제를 위한 컨트롤러입니다.
+     * @param storyId 수정할 story의 id 값 입니다.
+     */
+    @DeleteMapping("/{storyId}")
+    public ResponseEntity<Void> removeStory(@PathVariable UUID storyId){
+        storyService.removeStory(storyId);
+        return ResponseEntity.ok().build();
+    }
+
 }
