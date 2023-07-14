@@ -39,7 +39,7 @@ public class StoryController {
      * 이야기를 전체 조회를 위한 컨트롤러입니다.
      * @param pageable
      * @param lastViewed 조회할 게시글의 기준 (year_month) 입니다.
-     * @return 앨범형 조회 dto가 반환됩니다.
+     * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping
     public ResponseEntity<FindAllStoryGroupResponse> findAllStory(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
@@ -48,9 +48,13 @@ public class StoryController {
         return ResponseEntity.ok(storyService.findAllStory(pageable, lastViewed));
     }
 
+    /**
+     * 이야기를 상세 조회를 위한 컨트롤러입니다.
+     * @param storyId 조회할 story의 id 값 입니다.
+     * @return 상세 조회 dto가 반환됩니다.
+     */
     @GetMapping("/{storyId}")
     public ResponseEntity<FindStoryResponse> findStory(@PathVariable UUID storyId){
-
         return ResponseEntity.ok(storyService.findStory(storyId));
     }
 
