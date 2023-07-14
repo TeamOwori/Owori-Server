@@ -5,7 +5,6 @@ import com.owori.domain.story.entity.Story;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
-import com.owori.utils.TimeAgoCalculator;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
@@ -61,7 +60,8 @@ public class Comment implements Auditable {
     }
 
     public String getTimeBefore(){
-        return TimeAgoCalculator.timesAgo(this.getBaseTime().getCreatedAt());
+        return TimesAgo.of(this.getBaseTime().getCreatedAt());
+        // return TimeAgoCalculator.timesAgo(this.getBaseTime().getCreatedAt());
     }
 
     public UUID getParentId(){

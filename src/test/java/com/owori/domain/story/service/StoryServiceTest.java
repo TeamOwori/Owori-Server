@@ -14,12 +14,12 @@ import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
+import com.owori.domain.comment.entity.TimesAgo;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
-import com.owori.utils.TimeAgoCalculator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,6 @@ import org.springframework.data.domain.Sort;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -151,27 +150,27 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("time ago calculator가 제대로 실행되는가")
+    @DisplayName("time ago enum class 가 제대로 실행되는가")
     void findTimeAgo() {
 
         // 50초 전
-        String second = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusSeconds(50));
+        String second = TimesAgo.of(LocalDateTime.now().minusSeconds(50));
 
         // 10분 전
-        String minute = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusMinutes(10));
+        String minute = TimesAgo.of(LocalDateTime.now().minusMinutes(10));
 
         // 2시간 전
-        String hour = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusHours(2));
+        String hour = TimesAgo.of(LocalDateTime.now().minusHours(2));
 
         // 6일 전
-        String day = TimeAgoCalculator.timesAgo(LocalDateTime.now().minusDays(6));
+        String day = TimesAgo.of(LocalDateTime.now().minusDays(6));
 
         // n개월 전
-        String month = TimeAgoCalculator.timesAgo(LocalDateTime.of(2022,3,2,3,1,2,3));
+        String month = TimesAgo.of(LocalDateTime.of(2022,3,2,3,1,2,3));
 
 
         //then
-        assertThat(second).isEqualTo("방금");
+        assertThat(second).isEqualTo("50초 전");
         assertThat(minute).isEqualTo("10분 전");
         assertThat(hour).isEqualTo("2시간 전");
         assertThat(day).isEqualTo("6일 전");
