@@ -4,10 +4,7 @@ import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
@@ -58,4 +55,23 @@ public class Schedule implements Auditable {
     @Embedded
     @Column(nullable = false)
     private BaseTime baseTime;
+
+    @Builder
+    public Schedule(String title, LocalDate startDate, LocalDate endDate, ScheduleType scheduleType, Boolean dDayOption, List<Alarm> alarmList, Member member){
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.scheduleType = scheduleType;
+        this.dDayOption = dDayOption;
+        this.alarmList = alarmList;
+        this.member = member;
+    }
+
+    public void updateSchedule(String title, LocalDate startDate, LocalDate endDate, Boolean dDayOption, List<Alarm> alarmList){
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.dDayOption = dDayOption;
+        this.alarmList = alarmList;
+    }
 }

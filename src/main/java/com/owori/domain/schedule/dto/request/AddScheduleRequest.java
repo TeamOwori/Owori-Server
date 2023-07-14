@@ -16,7 +16,7 @@ public class AddScheduleRequest {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private ScheduleType type; // 가족 or 개인
+    private ScheduleType scheduleType;
     private Boolean dDayOption;
     private List<Alarm> alarmOptions;
 
