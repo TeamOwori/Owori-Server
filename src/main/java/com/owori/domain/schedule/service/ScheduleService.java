@@ -50,9 +50,8 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
 
     public List<FindScheduleByMonthResponse> findScheduleByMonth(String month) {
         // 넘겨받은 'yyyy'-MM' 통해 해당 달의 사작일과 마지막일 찾기
-        String date = month + "-01";
-        LocalDate fisrtDate = LocalDate.parse(date);
-        LocalDate lastDate = fisrtDate.withDayOfMonth(fisrtDate.lengthOfMonth());
+        LocalDate firstDate = scheduleMapper.toFirstDate(month);
+        LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
 
         // 현재 로그인 중인 유저 받기
         Member member = authService.getLoginUser();
@@ -61,7 +60,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
 
         // 가족들의 일정 시작일 기준으로 정렬해서 받기
         List<Schedule> monthSchedule = new ArrayList<>(familyMembers.stream()
-                .map(familyMember -> scheduleRepository.findByMonth(familyMember, fisrtDate, lastDate))
+                .map(familyMember -> scheduleRepository.findByMonth(familyMember, firstDate, lastDate))
                 .flatMap(List::stream)
                 .toList());
         monthSchedule.sort(Comparator.comparing(Schedule::getStartDate));

@@ -6,6 +6,7 @@ import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -39,5 +40,9 @@ public class ScheduleMapper {
                 .dDayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())
                 .build();
+    }
+
+    public LocalDate toFirstDate(String yearMonth) {
+        return LocalDate.parse(yearMonth + "01");
     }
 }
