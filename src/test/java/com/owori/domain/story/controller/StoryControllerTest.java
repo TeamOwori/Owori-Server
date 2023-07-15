@@ -1,8 +1,10 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
+import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.domain.story.service.StoryService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -32,7 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class StoryControllerTest extends RestDocsTest{
 
     @MockBean private StoryService storyService;
-
+    @MockBean private FacadeService facadeService;
+    @MockBean private AuthService authService;
 
     @Test
     @DisplayName("POST /stories 이야기 등록 API 테스트")
@@ -166,7 +169,7 @@ public class StoryControllerTest extends RestDocsTest{
         );
 
         FindStoryResponse response = new FindStoryResponse(UUID.randomUUID(),true, images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5, 4, comments);
-        given(storyService.findStory(any())).willReturn(response);
+        given(facadeService.findStory(any())).willReturn(response);
 
         //when
         ResultActions perform =
@@ -187,10 +190,10 @@ public class StoryControllerTest extends RestDocsTest{
     }
 
     @Test
-    @DisplayName("DELETE /stories/{storyId} 이야기 삭제 조회 API 테스트")
+    @DisplayName("DELETE /stories/{storyId} 이야기 삭제 API 테스트")
     void removeStory() throws Exception {
         //given
-        doNothing().when(storyService).removeStory(any());
+        doNothing().when(facadeService).removeStory(any());
 
         //when
         ResultActions perform =

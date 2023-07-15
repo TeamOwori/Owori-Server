@@ -3,6 +3,7 @@ package com.owori.domain.story.controller;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.domain.story.service.StoryService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class StoryController {
 
     private final StoryService storyService;
+    private final FacadeService facadeService;
 
     /**
      * 이야기를 생성합니다.
@@ -55,7 +57,7 @@ public class StoryController {
      */
     @GetMapping("/{storyId}")
     public ResponseEntity<FindStoryResponse> findStory(@PathVariable UUID storyId){
-        return ResponseEntity.ok(storyService.findStory(storyId));
+        return ResponseEntity.ok(facadeService.findStory(storyId));
     }
 
     /**
@@ -75,7 +77,7 @@ public class StoryController {
      */
     @DeleteMapping("/{storyId}")
     public ResponseEntity<Void> removeStory(@PathVariable UUID storyId){
-        storyService.removeStory(storyId);
+        facadeService.removeStory(storyId);
         return ResponseEntity.ok().build();
     }
 

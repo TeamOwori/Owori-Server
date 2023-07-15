@@ -139,13 +139,10 @@ public class StoryServiceTest extends LoginTest {
         image2.updateStory(story);
 
         //when
-        FindStoryResponse response = storyService.findStory(story.getId());
+        FindStoryResponse response = storyService.findStory(story, null, true);
 
         //then
-        assertThat(response.getCommentCnt()).isEqualTo(2);
-        assertThat(response.getComments().get(1).getParentCommentId()).isEqualTo(comment.getId());
         assertThat(response.getIsLiked()).isEqualTo(true);
-        assertThat(response.getComments().get(0).getTimeBeforeWriting()).isEqualTo("방금");
 
     }
 
@@ -210,7 +207,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(story);
 
         //when
-        storyService.removeStory(story.getId());
+        storyService.removeStory(story);
         em.flush();
         em.clear();
 

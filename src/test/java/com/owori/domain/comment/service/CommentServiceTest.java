@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DatabaseTest
 @DisplayName("Comment 서비스의")
-public class CommentServiceImplTest extends LoginTest {
+public class CommentServiceTest extends LoginTest {
 
     @Autowired
     CommentService commentService;
@@ -44,7 +44,7 @@ public class CommentServiceImplTest extends LoginTest {
         storyRepository.save(story);
 
         //when
-        commentService.addComment(new AddCommentRequest(story.getId(), null, content));
+        commentService.addComment(story, new AddCommentRequest(story.getId(), null, content));
 
         //then
         List<Comment> commentList = commentRepository.findAll();
@@ -70,7 +70,7 @@ public class CommentServiceImplTest extends LoginTest {
         commentRepository.save(parent);
 
         //when
-        commentService.addComment(new AddCommentRequest(story.getId(), parent.getId(), content));
+        commentService.addComment(story, new AddCommentRequest(story.getId(), parent.getId(), content));
 
         //then
         List<Comment> commentList = commentRepository.findAll();

@@ -1,9 +1,7 @@
 package com.owori.domain.story.service;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
-import com.owori.domain.comment.service.CommentService;
 import com.owori.domain.family.entity.Family;
-import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -32,8 +30,6 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final StoryRepository storyRepository;
     private final StoryMapper storyMapper;
     private final ImageService imageService;
-    private final CommentService commentService;
-    private final HeartService heartService;
     private final AuthService authService;
 
     public IdResponse<UUID> addStory(PostStoryRequest request) {
@@ -57,13 +53,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return new FindAllStoryGroupResponse(stories, storyBySlice.hasNext());
     }
 
-    public FindStoryResponse findStory(UUID storyId) {
-        Member member = authService.getLoginUser();
-        Story story = loadEntity(storyId);
-
-        List<CommentResponse> comments = commentService.findComments(story, member);
-        boolean isLiked = heartService.hasHeart(member, story);
-
+    public FindStoryResponse findStory(Story story, List<CommentResponse> comments, boolean isLiked) {
         return storyMapper.toFindStoryDto(story, isLiked, comments);
     }
 
@@ -88,26 +78,14 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Optional.ofNullable(value).ifPresent(consumer);
     }
 
-    public void removeStory(UUID storyId) {
-        Story story = loadEntity(storyId);
+    public void removeStory(Story story) {
         if(story.getMember() != authService.getLoginUser()){
             throw new InvalidUserException();
         }
-
-        // 이미지 삭제
-        imageService.removeImages(story);
-
-        // 댓글 삭제
-        story.getComments().stream()
-                .forEach(comment -> commentService.removeComment(comment.getId()));
-
-        // 좋아요 삭제
-        story.getHearts().stream().forEach(story::removeHeart);
-
-        // 스토리 삭제
-        story.delete();
+        imageService.removeImages(story); // 이미지 삭제
+        story.getHearts().stream().forEach(story::removeHeart); // 좋아요 삭제
+        story.delete(); // 스토리 삭제
     }
-
 
     @Override
     public Story loadEntity(UUID id) {

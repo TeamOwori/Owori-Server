@@ -3,6 +3,7 @@ package com.owori.domain.comment.controller;
 import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
 import com.owori.domain.comment.service.CommentService;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RequestMapping("/comments")
 public class CommentController {
     private final CommentService commentService;
+    private final FacadeService facadeService;
 
     /**
      * 댓글 작성 컨트롤러입니다.
@@ -25,7 +27,7 @@ public class CommentController {
      */
     @PostMapping
     public ResponseEntity<IdResponse<UUID>> addComment(@RequestBody AddCommentRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.addComment(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(facadeService.addComment(request));
     }
 
     /**

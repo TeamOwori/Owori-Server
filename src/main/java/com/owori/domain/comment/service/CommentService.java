@@ -9,7 +9,6 @@ import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.story.service.StoryServiceCustom;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -25,13 +24,11 @@ import java.util.UUID;
 public class CommentService implements EntityLoader<Comment, UUID> {
 
     private final CommentRepository commentRepository;
-    private final StoryServiceCustom storyServiceCustom;
     private final CommentMapper commentMapper;
     private final AuthService authService;
 
-    public IdResponse<UUID> addComment(AddCommentRequest request) {
+    public IdResponse<UUID> addComment(Story story, AddCommentRequest request) {
         Member member = authService.getLoginUser();
-        Story story = storyServiceCustom.loadEntity(request.getStoryId());
         Optional<Comment> parentComment = Optional.ofNullable(request.getParentCommentId())
                 .map(parentId -> loadEntity(parentId));
 
