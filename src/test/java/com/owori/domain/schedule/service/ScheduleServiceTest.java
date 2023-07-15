@@ -76,6 +76,20 @@ public class ScheduleServiceTest extends LoginTest {
         });
     }
     @Test
+    @DisplayName("일정 삭제가 수행되는가")
+    void deleteSchedule() {
+        // given
+        Schedule schedule = scheduleRepository.save(new Schedule("가족 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
+
+        // when
+        scheduleService.deleteSchedule(schedule.getId());
+        Optional<Schedule> deleteSchedule = scheduleRepository.findById(schedule.getId());
+
+        // then
+        assertThat(deleteSchedule).isEmpty();
+    }
+
+    @Test
     @DisplayName("월별 일정 날짜순 조회가 수행되는가")
     void findScheduleByMonth() {
         // given
