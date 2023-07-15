@@ -2,6 +2,7 @@ package com.owori.domain.heart.controller;
 
 import com.owori.domain.heart.dto.HeartStatusResponse;
 import com.owori.domain.heart.service.HeartService;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ public class HeartControllerTest extends RestDocsTest {
 
     @MockBean
     private HeartService heartService;
+    @MockBean private FacadeService facadeService;
 
 
     @Test
@@ -34,7 +36,7 @@ public class HeartControllerTest extends RestDocsTest {
     void toggleHeart() throws Exception {
         //given
         HeartStatusResponse expected = new HeartStatusResponse(true);
-        given(heartService.toggleHeart(any())).willReturn(expected);
+        given(facadeService.toggleHeart(any())).willReturn(expected);
 
         //when
         ResultActions perform =

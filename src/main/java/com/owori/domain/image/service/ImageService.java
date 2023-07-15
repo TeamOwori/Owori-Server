@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -34,7 +32,6 @@ public class ImageService implements EntityLoader<Image, UUID> {
 
         List<UUID> response = new ArrayList<>();
         Long order = 1L;
-
         for (MultipartFile image : images) {
             if(image != null) {
                 String imgUrl = s3ImageComponent.uploadImage("story", image);
@@ -48,8 +45,23 @@ public class ImageService implements EntityLoader<Image, UUID> {
     }
 
     @Transactional
-    public void updateStory(Story newStory, List<UUID> images) {
-        images.forEach(imageId -> loadEntity(imageId).updateStory(newStory));
+    public void updateStory(Story story, List<UUID> imageIds) {
+        removeImages(story);
+        imageIds.stream()
+                .map(this::loadEntity)
+                .sorted(Comparator.comparing(Image::getOrderNum))
+                .forEach(image -> { image.updateStory(story);});
+    }
+
+    public void removeImages(Story story){
+        List<Image> oldImages = imageRepository.findAllByStory(story);
+
+        Optional.ofNullable(oldImages).ifPresent(images -> {
+            images.forEach(img -> {
+                s3ImageComponent.deleteImage(img.getUrl());
+                story.removeImage(img);
+            });
+        });
     }
 
     @Override
