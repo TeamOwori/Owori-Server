@@ -15,4 +15,7 @@ operation::update schedule[snippets='http-request,http-response']
 operation::delete schedule[snippets='http-request,http-response']
 
 === 일정 월별 조회
-operation::find schedule by month[snippets='http-request,http-response']
+operation::find schedules by month[snippets='http-request,http-response']
+
+=== 가족별 디데이 조회
+operation::find schedules by family[snippets='http-request,http-response']

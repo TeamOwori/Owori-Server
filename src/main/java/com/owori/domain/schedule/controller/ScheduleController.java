@@ -65,9 +65,13 @@ public class ScheduleController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 가족단위 디데이 조회 컨트롤러입니다.
+     * @return 디데이 옵션이 켜진 일정 반환
+     */
 
     @GetMapping("/dday")
-    public ResponseEntity<List<FindDdayByFamilyResponse>> findDdayByFamily() {
-        return ResponseEntity.ok(scheduleService.findDdayByFamily());
+    public ResponseEntity<List<FindDdayByFamilyResponse>> findDDayByFamily() {
+        return ResponseEntity.ok(scheduleService.findDDayByFamily());
     }
 }

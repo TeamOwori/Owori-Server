@@ -40,7 +40,7 @@ public class Schedule implements Auditable {
 
     // 개인이라면 색을 받아오기 위해서 생성자 저장
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn
     private Member member;
 
     private Boolean dDayOption;
