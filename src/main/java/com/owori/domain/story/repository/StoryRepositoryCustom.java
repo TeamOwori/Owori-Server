@@ -9,4 +9,5 @@ import java.time.LocalDate;
 
 public interface StoryRepositoryCustom {
     Slice<Story> findAllStory(Pageable pageable, Family family, LocalDate date);
+    Slice<Story> findStoryBySearch(Pageable pageable, String keyword, Family family, LocalDate date);
 }

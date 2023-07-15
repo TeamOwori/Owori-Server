@@ -22,3 +22,6 @@ operation::find story by eventAt[snippets='http-request,http-response']
 
 === 이야기 상세 조회
 operation::find story[snippets='http-request,http-response']
+
+=== 이야기 검색
+operation::find story by search[snippets='http-request,http-response']

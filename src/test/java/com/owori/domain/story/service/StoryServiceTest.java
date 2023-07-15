@@ -8,6 +8,7 @@ import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.repository.ImageRepository;
+import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
@@ -147,35 +148,6 @@ public class StoryServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("time ago enum class 가 제대로 실행되는가")
-    void findTimeAgo() {
-
-        // 50초 전
-        String second = TimesAgo.of(LocalDateTime.now().minusSeconds(50));
-
-        // 10분 전
-        String minute = TimesAgo.of(LocalDateTime.now().minusMinutes(10));
-
-        // 2시간 전
-        String hour = TimesAgo.of(LocalDateTime.now().minusHours(2));
-
-        // 6일 전
-        String day = TimesAgo.of(LocalDateTime.now().minusDays(6));
-
-        // n개월 전
-        String month = TimesAgo.of(LocalDateTime.of(2022,3,2,3,1,2,3));
-
-
-        //then
-        assertThat(second).isEqualTo("50초 전");
-        assertThat(minute).isEqualTo("10분 전");
-        assertThat(hour).isEqualTo("2시간 전");
-        assertThat(day).isEqualTo("6일 전");
-        assertThat(month).isEqualTo("22.03.02");
-
-    }
-
-    @Test
     @DisplayName("이야기 수정이 수행되는가")
     void updateStory() {
         //given
@@ -215,4 +187,31 @@ public class StoryServiceTest extends LoginTest {
         assertThrows(EntityNotFoundException.class, () -> storyService.loadEntity(story.getId()));
 
     }
+
+    @Test
+    @DisplayName("이야기 검색이 수행되는가")
+    void findStoryBySearch() {
+        //given
+        Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        Story story2 = new Story("제목2", "내용", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        Story story3 = new Story("제목3", "내용 기다리고", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+
+        familyRepository.save(family);
+        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.PINK);
+        storyRepository.save(story);
+        storyRepository.save(story2);
+        storyRepository.save(story3);
+
+        //when
+        FindAllStoryGroupResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("createdAt")), null);
+
+        //then
+        assertThat(response.getStories().size()).isEqualTo(2);
+        assertThat(response.getStories().get(0).getContents()).isEqualTo("내용 기다리고");
+        assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
+        assertThat(response.getStories().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
+    }
+
 }

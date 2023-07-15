@@ -1,6 +1,7 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.story.dto.request.PostStoryRequest;
+import com.owori.domain.story.dto.request.SearchStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.service.FacadeService;
@@ -48,6 +49,19 @@ public class StoryController {
                                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
 
         return ResponseEntity.ok(storyService.findAllStory(pageable, lastViewed));
+    }
+
+    /**
+     * 이야기 검색을 위한 컨트롤러입니다.
+     * @param request 검색어입니다.
+     * @param pageable
+     * @return 검색 결과 dto가 반환됩니다.
+     */
+    @GetMapping( "/search")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
+                                                                       @ModelAttribute SearchStoryRequest request){
+
+        return ResponseEntity.ok(storyService.findStoryBySearch(request.getKeyword(), pageable, request.getLastViewed()));
     }
 
     /**

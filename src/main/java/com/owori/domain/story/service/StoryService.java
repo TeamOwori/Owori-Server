@@ -87,6 +87,14 @@ public class StoryService implements EntityLoader<Story, UUID> {
         story.delete(); // 스토리 삭제
     }
 
+    public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
+        Family family = authService.getLoginUser().getFamily();
+        Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, family, lastViewed);
+        List<FindAllStoryResponse> stories = storyBySearch.getContent().stream().map(story -> storyMapper.toFindAllStoryDto(story)).toList();
+
+        return new FindAllStoryGroupResponse(stories, storyBySearch.hasNext());
+    }
+
     @Override
     public Story loadEntity(UUID id) {
         return storyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
