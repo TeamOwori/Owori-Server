@@ -38,4 +38,30 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
 
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
+    @Override
+    public Slice<Story> findStoryBySearch(Pageable pageable, String keyword, Family family, LocalDate date) {
+        List<Story> results = queryFactory
+                .selectFrom(story)
+                .where(
+                        story.member.family.eq(family)
+                                .and(storyOrderConverter.createOrderExpression(pageable, date))
+                                .and(
+                                        story.title.contains(keyword)
+                                                .or(story.contents.contains(keyword))
+                                                .or(story.member.nickname.contains(keyword))
+                                )
+                )
+                .orderBy(storyOrderConverter.convert(pageable.getSort()))
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
 }

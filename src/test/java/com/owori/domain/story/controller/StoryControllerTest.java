@@ -1,7 +1,6 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
-import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.service.FacadeService;
@@ -35,7 +34,6 @@ public class StoryControllerTest extends RestDocsTest{
 
     @MockBean private StoryService storyService;
     @MockBean private FacadeService facadeService;
-    @MockBean private AuthService authService;
 
     @Test
     @DisplayName("POST /stories 이야기 등록 API 테스트")
@@ -96,10 +94,10 @@ public class StoryControllerTest extends RestDocsTest{
     void findAllStoryByEventAt() throws Exception {
         //given
         List<FindAllStoryResponse> response = List.of(
-                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)),
-                new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
-                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
         FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
         given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
@@ -128,10 +126,10 @@ public class StoryControllerTest extends RestDocsTest{
     void findAllStoryByCreatedAt() throws Exception {
         //given
         List<FindAllStoryResponse> response = List.of(
-                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
-                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)),
                 new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
-                new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
+                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
 
         FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
         given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
@@ -210,5 +208,38 @@ public class StoryControllerTest extends RestDocsTest{
         //docs
         perform.andDo(print())
                 .andDo(document("remove story", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET /stories 검섹 API 테스트")
+    void findStoryBySearch() throws Exception {
+        //given
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"생일잔치", "못난이 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 1, 0, "허망고", LocalDate.of(2011, 02, 01), LocalDate.of(2011, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"쇼핑 데이 with 못난이", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", 2, 3, "못난이", LocalDate.of(2010, 02, 01), LocalDate.of(2022, 12, 03)));
+
+        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, false);
+        given(storyService.findStoryBySearch(any(),any(), any())).willReturn(findAllStoryGroupResponse);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/search")
+                                .param("keyword", "못난이")
+                                .param("lastViewed","2023-08-31")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                                .characterEncoding("UTF-8")
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("find story by search", getDocumentRequest(), getDocumentResponse()));
     }
 }

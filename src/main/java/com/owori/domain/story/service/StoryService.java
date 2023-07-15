@@ -9,6 +9,7 @@ import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.exception.InvalidUserException;
+import com.owori.domain.story.exception.SearchKeywordException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
@@ -85,6 +86,16 @@ public class StoryService implements EntityLoader<Story, UUID> {
         imageService.removeImages(story); // 이미지 삭제
         story.getHearts().stream().forEach(story::removeHeart); // 좋아요 삭제
         story.delete(); // 스토리 삭제
+    }
+
+    public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
+        if(keyword.length() < 2) { throw new SearchKeywordException(); }
+
+        Family family = authService.getLoginUser().getFamily();
+        Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, family, lastViewed);
+        List<FindAllStoryResponse> stories = storyBySearch.getContent().stream().map(story -> storyMapper.toFindAllStoryDto(story)).toList();
+
+        return new FindAllStoryGroupResponse(stories, storyBySearch.hasNext());
     }
 
     @Override
