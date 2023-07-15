@@ -211,7 +211,7 @@ public class StoryControllerTest extends RestDocsTest{
     }
 
     @Test
-    @DisplayName("GET /stories 검섹 API 테스트")
+    @DisplayName("GET /stories 검색 API 테스트")
     void findStoryBySearch() throws Exception {
         //given
         List<FindAllStoryResponse> response = List.of(
