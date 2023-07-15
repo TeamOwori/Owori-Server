@@ -1,6 +1,7 @@
 package com.owori.global.advice;
 
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.NoAuthorityException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +18,11 @@ public class GlobalErrorAdvice {
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> ioException(IOException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(NoAuthorityException.class)
+    public ResponseEntity<ErrorResponse> noAuthorityException(NoAuthorityException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
     }
 }
