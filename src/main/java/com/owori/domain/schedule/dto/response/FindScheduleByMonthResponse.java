@@ -22,7 +22,7 @@ public class FindScheduleByMonthResponse {
     private LocalDate startDate;
     private LocalDate endDate;
     private ScheduleType scheduleType;
-    private UUID memberId;
+    private String memberNickname;
     private Color color;
     private Boolean dDayOption;
     private List<Alarm> alarmOptions;

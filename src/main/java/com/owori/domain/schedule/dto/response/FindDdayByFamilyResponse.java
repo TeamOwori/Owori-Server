@@ -21,10 +21,11 @@ public class FindDdayByFamilyResponse {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String dDay;
     private ScheduleType scheduleType;
-    private UUID memberId;
+    private String memberNickname;
     private Color color;
     private Boolean dDayOption;
-    private List<Alarm> alarmsOptions;
+    private List<Alarm> alarmOptions;
 
 }
