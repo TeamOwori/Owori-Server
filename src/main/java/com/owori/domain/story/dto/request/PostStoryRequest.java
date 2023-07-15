@@ -11,13 +11,10 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddStoryRequest {
+public class PostStoryRequest {
     private LocalDate startDate;
-
     private LocalDate endDate;
-
     private String title;
-
     private String contents;
     private List<UUID> imagesId;
 }

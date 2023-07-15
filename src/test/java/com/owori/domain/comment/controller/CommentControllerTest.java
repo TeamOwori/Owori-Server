@@ -3,6 +3,7 @@ package com.owori.domain.comment.controller;
 import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
 import com.owori.domain.comment.service.CommentService;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
@@ -25,18 +26,19 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("Heart 컨트롤러의")
+@DisplayName("Comment 컨트롤러의")
 @WebMvcTest(CommentController.class)
 public class CommentControllerTest extends RestDocsTest {
 
     @MockBean private CommentService commentService;
+    @MockBean private FacadeService facadeService;
 
     @Test
     @DisplayName("POST /comments 댓글 작성 테스트")
     void addComment() throws Exception {
         //given
         IdResponse<UUID> expected = new IdResponse<>(UUID.randomUUID());
-        given(commentService.addComment(any())).willReturn(expected);
+        given(facadeService.addComment(any())).willReturn(expected);
 
         //when
         ResultActions perform =
