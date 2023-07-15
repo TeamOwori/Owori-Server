@@ -7,8 +7,8 @@ import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.story.service.StoryService;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,15 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class HeartService {
+public class HeartService implements EntityLoader<Heart, UUID> {
     private final HeartRepository heartRepository;
     private final HeartMapper heartMapper;
-    private final StoryService storyService;
     private final AuthService authService;
 
-    public HeartStatusResponse toggleHeart(UUID storyId){
+    public HeartStatusResponse toggleHeart(Story story){
         Member member = authService.getLoginUser();
-        Story story = storyService.loadEntity(storyId);
 
-        if(heartRepository.existsByMemberAndStory(member, story)){
+        if(hasHeart(member, story)){
             Heart heart = heartRepository.findByMemberAndStory(member, story).orElseThrow(EntityNotFoundException::new);
             story.removeHeart(heart);
 
@@ -37,5 +35,14 @@ public class HeartService {
         heartRepository.save(heart);
 
         return new HeartStatusResponse(true);
+    }
+
+    public boolean hasHeart(Member member, Story story){
+        return heartRepository.existsByMemberAndStory(member, story);
+    }
+
+    @Override
+    public Heart loadEntity(UUID id) {
+        return heartRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }
