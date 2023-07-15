@@ -13,6 +13,7 @@ import com.owori.domain.saying.service.SayingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +23,18 @@ public class HomeService {
     private final AuthService authService;
 
     public FindHomeResponse findHomeData() {
-        return null; // todo : 로직 작성
+        // 현재 로그인 유저 정보 받아오기
+        Member nowMember = authService.getLoginUser();
+        Family family = nowMember.getFamily();
+
+        // 각 유저의 프로필 정보 받기
+        List<MemberProfileResponse> membersProfileData = family.getMembers().stream()
+                .map(member -> new MemberProfileResponse(member.getId(), member.getNickname(), member.getProfileImage(), member.getEmotionalBadge()))
+                .toList();
+        // 프로필 정렬(본인 + 가족 닉네임순)
+
+        List<FindSayingByFamilyResponse> sayingsData = sayingService.findSayingByFamily();
+
+        return new FindHomeResponse(family.getFamilyGroupName(), membersProfileData, family.getImages(), sayingsData);
     }
 }
