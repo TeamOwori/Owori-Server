@@ -8,12 +8,11 @@ import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
-import com.owori.domain.saying.exception.NoAuthorityDeleteException;
-import com.owori.domain.saying.exception.NoAuthorityUpdateException;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         Saying saying = loadEntity(sayingId);
 
         // 서로에게 한마디 작성자와 현재 유저가 동일하지 않을 경우 예외처리
-        if(!member.equals(saying.getMember())) throw new NoAuthorityUpdateException();
+        if(!member.equals(saying.getMember())) throw new NoAuthorityException("수정");
 
         // tagMemberIds 를 통해 tagMembers 구하기
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
@@ -65,7 +64,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     @Transactional
     public void deleteSaying(UUID sayingId) {
         Saying saying = loadEntity(sayingId);
-        if(!saying.getMember().equals(authService.getLoginUser())) throw new NoAuthorityDeleteException();
+        if(!saying.getMember().equals(authService.getLoginUser())) throw new NoAuthorityException("삭제");
         saying.changeModifiable();
     }
 
