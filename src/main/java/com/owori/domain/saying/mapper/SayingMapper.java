@@ -27,7 +27,7 @@ public class SayingMapper {
                 .toList();
     }
 
-    private FindSayingByFamilyResponse toResponse(Saying saying) {
+    public FindSayingByFamilyResponse toResponse(Saying saying) {
         return FindSayingByFamilyResponse.builder()
                 .id(saying.getId())
                 .content(saying.getContent())

@@ -1,4 +1,4 @@
-package com.owori.domain.home.dto.response;
+package com.owori.domain.member.dto.response;
 
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import lombok.AllArgsConstructor;

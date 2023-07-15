@@ -1,9 +1,0 @@
-:doctype: book
-:icons: font
-:source-highlighter: highlightjs
-:toc: left
-:toclevels: 4
-
-== Home
-=== 홈 화면 데이터 조회
-operation::find home data[snippets='http-request,http-response']

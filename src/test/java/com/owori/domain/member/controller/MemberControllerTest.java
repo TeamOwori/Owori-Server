@@ -5,11 +5,14 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.response.FindHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.dto.response.MemberProfileResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.EmotionalBadge;
 import com.owori.domain.member.service.MemberService;
+import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +26,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
@@ -184,5 +189,44 @@ class MemberControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("update member emotional badge", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET / home 홈화면 조회 API 테스트")
+    void findHomeDate() throws Exception {
+        // given
+        UUID member1 = UUID.randomUUID();
+        UUID member2 = UUID.randomUUID();
+        List<MemberProfileResponse> membersProfile = List.of(
+                new MemberProfileResponse(member1, "아빠", "111111", EmotionalBadge.SO_HAPPY),
+                new MemberProfileResponse(member2, "엄마", "222222", EmotionalBadge.JOY),
+                new MemberProfileResponse(UUID.randomUUID(), "아들","333333",EmotionalBadge.CRY)
+        );
+
+        List<FindSayingByFamilyResponse> sayings = List.of(
+                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 회식해요", member1, List.of(UUID.randomUUID(), UUID.randomUUID()), LocalDateTime.now()),
+                new FindSayingByFamilyResponse(UUID.randomUUID(),"오늘 저녁 카레", member2, List.of(), LocalDateTime.now())
+        );
+
+        FindHomeResponse expected = new FindHomeResponse("오월이 가족", membersProfile, List.of("111111","222222"), sayings);
+
+        given(memberService.findHomeData()).willReturn(expected);
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/members/home")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.family_name").exists());
+
+        // docs
+        perform.andDo(print())
+                .andDo(document("find home data", getDocumentRequest(), getDocumentResponse()));
     }
 }

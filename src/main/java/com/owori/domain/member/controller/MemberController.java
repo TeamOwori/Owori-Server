@@ -1,5 +1,6 @@
 package com.owori.domain.member.controller;
 
+import com.owori.domain.member.dto.response.FindHomeResponse;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
@@ -90,5 +91,14 @@ public class MemberController {
     public ResponseEntity<Void> updateEmotionalBadge(@RequestBody EmotionalBadgeRequest emotionalBadgeRequest) {
         memberService.updateEmotionalBadge(emotionalBadgeRequest);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 멤버 홈화면 조회 컨트롤러입니다.
+     * @return 홈화면 정보를 반환합니다.
+     */
+    @GetMapping("/home")
+    public ResponseEntity<FindHomeResponse> findHomeData() {
+        return ResponseEntity.ok(memberService.findHomeData());
     }
 }

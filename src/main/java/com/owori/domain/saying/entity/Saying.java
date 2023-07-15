@@ -30,7 +30,7 @@ public class Saying implements Auditable {
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn
     private Member member;
 
     // 태그 기능
@@ -48,8 +48,8 @@ public class Saying implements Auditable {
     @Builder
     public Saying(String content, Member member, List<Member> tagMembers) {
         this.content = content;
-        this.member = member;
-        organize(tagMembers);
+        organizeMember(member);
+        organizeTagMembers(tagMembers);
     }
 
     public void update(String content, List<Member> tagMembers) {
@@ -57,10 +57,15 @@ public class Saying implements Auditable {
         change(tagMembers);
     }
 
-    private void organize(List<Member> tagMembers) {
+    private void organizeTagMembers(List<Member> tagMembers) {
         this.tagMembers = tagMembers.stream()
                 .map(tagMember -> new SayingTagMember(this, tagMember))
                 .toList();
+    }
+
+    private void organizeMember(Member member) {
+        this.member = member;
+        this.member.addSaying(this);
     }
 
     private void change(List<Member> tagMembers) {
