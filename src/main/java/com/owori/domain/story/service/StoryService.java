@@ -46,11 +46,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
 
-        List<FindAllStoryResponse> stories = storyBySlice.getContent().stream()
-                .map(story -> storyMapper.toFindAllStoryDto(story))
-                .toList();
-
-        return new FindAllStoryGroupResponse(stories, storyBySlice.hasNext());
+        return storyMapper.toFindAllStoryGroupDto(storyBySlice);
     }
 
     public FindStoryResponse findStory(Story story, List<CommentResponse> comments, boolean isLiked) {
@@ -90,9 +86,22 @@ public class StoryService implements EntityLoader<Story, UUID> {
     public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, family, lastViewed);
-        List<FindAllStoryResponse> stories = storyBySearch.getContent().stream().map(story -> storyMapper.toFindAllStoryDto(story)).toList();
 
-        return new FindAllStoryGroupResponse(stories, storyBySearch.hasNext());
+        return storyMapper.toFindAllStoryGroupDto(storyBySearch);
+    }
+
+    public FindAllStoryGroupResponse findStoryByWriter(Pageable pageable, LocalDate lastViewed) {
+        Member member = authService.getLoginUser();
+        Slice<Story> storyByWriter = storyRepository.findStoryByWriter(pageable, member, lastViewed);
+
+        return storyMapper.toFindAllStoryGroupDto(storyByWriter);
+    }
+
+    public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
+        Member member = authService.getLoginUser();
+        Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);
+
+        return storyMapper.toFindAllStoryGroupDto(storyByHeart);
     }
 
     @Override

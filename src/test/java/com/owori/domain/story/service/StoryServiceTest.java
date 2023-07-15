@@ -214,4 +214,49 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
     }
 
+    @Test
+    @DisplayName("유저가 작성한 이야기 조회가 수행되는가")
+    void findStoryByWriter() {
+        //given
+        Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
+        Story story3 = new Story("제목3", "정답", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+
+        familyRepository.save(family);
+        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.PINK);
+        storyRepository.save(story3);
+
+        //when
+        FindAllStoryGroupResponse response = storyService.findStoryByWriter( PageRequest.of(0, 4, Sort.by("createdAt")), null);
+
+        //then
+        assertThat(response.getStories().size()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getContents()).isEqualTo("정답");
+        assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
+    }
+
+    @Test
+    @DisplayName("유저가 좋아한 이야기 조회가 수행되는가")
+    void findStoryByHeart() {
+        //given
+        Member member = authService.getLoginUser();
+        Story story1 = new Story("제목1", "이거 아님", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        Story story2 = new Story("좋아요", "정답", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+        Story story3 = new Story("제목3", "이것도 아냐", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+
+        storyRepository.save(story1);
+        storyRepository.save(story2);
+        storyRepository.save(story3);
+
+        heartRepository.save(new Heart(member, story2));
+
+        //when
+        FindAllStoryGroupResponse response = storyService.findStoryByHeart( PageRequest.of(0, 4, Sort.by("startDate")), null);
+
+        //then
+        assertThat(response.getStories().size()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getContents()).isEqualTo("정답");
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo("좋아요");
+    }
+
 }
