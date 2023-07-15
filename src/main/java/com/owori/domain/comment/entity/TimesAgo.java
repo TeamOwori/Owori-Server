@@ -24,17 +24,15 @@ public enum TimesAgo {
     public static String of(LocalDateTime localDateTime) {
         int diffTime = (int) localDateTime.until(LocalDateTime.now(), ChronoUnit.SECONDS);
 
-        TimesAgo unit = Arrays.stream(TimesAgo.values())
+        return Arrays.stream(TimesAgo.values())
                 .filter(timesAgo -> timesAgo.timeToSecond.test(diffTime))
-                .findAny()
-                .orElse(null);
+                .map(timesAgo -> {
+                    long value = diffTime / timesAgo.getChronoUnit().getDuration().getSeconds();
+                    return value + timesAgo.getMessage();
+                })
+                .findFirst()
+                .orElseGet(() -> localDateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd")));
 
-        if (unit != null) {
-            long value = diffTime / unit.getChronoUnit().getDuration().getSeconds();
-            return value + unit.getMessage();
-        } else {
-            return localDateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd"));
-        }
     }
 }
 
