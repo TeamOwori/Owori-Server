@@ -9,7 +9,6 @@ import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.exception.InvalidUserException;
-import com.owori.domain.story.exception.SearchKeywordException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
@@ -89,8 +88,6 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
-        if(keyword.length() < 2) { throw new SearchKeywordException(); }
-
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, family, lastViewed);
         List<FindAllStoryResponse> stories = storyBySearch.getContent().stream().map(story -> storyMapper.toFindAllStoryDto(story)).toList();
