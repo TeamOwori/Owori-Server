@@ -12,4 +12,5 @@ public interface StoryRepositoryCustom {
     Slice<Story> findAllStory(Pageable pageable, Family family, LocalDate date);
     Slice<Story> findStoryBySearch(Pageable pageable, String keyword, Family family, LocalDate date);
     Slice<Story> findStoryByWriter(Pageable pageable, Member member, LocalDate date);
+    Slice<Story> findStoryByHeart(Pageable pageable, Member member, LocalDate date);
 }

@@ -100,6 +100,13 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindAllStoryGroupDto(storyByWriter);
     }
 
+    public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
+        Member member = authService.getLoginUser();
+        Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);
+
+        return storyMapper.toFindAllStoryGroupDto(storyByHeart);
+    }
+
     @Override
     public Story loadEntity(UUID id) {
         return storyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
