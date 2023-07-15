@@ -10,6 +10,7 @@ import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
+import com.owori.domain.schedule.dto.response.FindDdayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -125,6 +126,42 @@ public class ScheduleServiceTest extends LoginTest {
 
         // then
         assertThat(responses.stream().map(FindScheduleByMonthResponse::getId).toList()).isEqualTo(List.of(schedule2.getId(), schedule4.getId(), schedule5.getId()));
+    }
+
+    @Test
+    @DisplayName("가족별 디데이 일정 조회가 수행되는가")
+    void findDDayByFamily() {
+        // given
+        // 가족 생성
+        String familyName = "오월이 가족";
+        String code = familyService.saveFamily(new FamilyRequest(familyName)).getInviteCode();
+
+        // 가족 구성원 생성
+        Member member1 = Member.builder().oAuth2Info(new OAuth2Info("123123", AuthProvider.APPLE)).build();
+        Member member2 = Member.builder().oAuth2Info(new OAuth2Info("123126", AuthProvider.APPLE)).build();
+        Member saveMember1 = memberRepository.save(member1);
+        Member saveMember2 = memberRepository.save(member2);
+
+        // 가족에 멤버 추가
+        Optional<Family> family = familyRepository.findByInviteCode(code);
+        if(family.isPresent()) {
+            family.get().addMember(saveMember1);
+            family.get().addMember(authService.getLoginUser());
+        }
+
+        // 일정 생성
+        Schedule schedule5 = scheduleRepository.save(new Schedule("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(A_DAY_AGO, A_WEEK_AGO), authService.getLoginUser()));
+        Schedule schedule1 = scheduleRepository.save(new Schedule("코딩 테스트", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
+        Schedule schedule3 = scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL,true, List.of(TODAY), saveMember2));
+        Schedule schedule4 = scheduleRepository.save(new Schedule("카카오 면접", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-24"), ScheduleType.INDIVIDUAL,false, List.of(), saveMember1));
+        Schedule schedule6 = scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-08-01"), LocalDate.parse("2023-08-10"), ScheduleType.INDIVIDUAL,true, List.of(A_WEEK_AGO), authService.getLoginUser()));
+        Schedule schedule2 = scheduleRepository.save(new Schedule("기말고사", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), saveMember1));
+
+        // when
+        List<FindDdayByFamilyResponse> responses = scheduleService.findDDayByFamily();
+
+        // then
+        assertThat(responses.stream().map(FindDdayByFamilyResponse::getId).toList()).isEqualTo(List.of(schedule5.getId(), schedule6.getId()));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.owori.domain.schedule.service;
 
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
@@ -68,17 +69,29 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         Set<Member> familyMembers = member.getFamily().getMembers();
 
         // 가족들의 일정 시작일 기준으로 정렬해서 받기
-        List<Schedule> monthSchedule = familyMembers.stream()
+        List<Schedule> monthSchedules = familyMembers.stream()
                 .map(familyMember -> scheduleRepository.findAllByMonth(familyMember, firstDate, lastDate))
                 .flatMap(List::stream)
                 .sorted(Comparator.comparing(Schedule::getStartDate))
                 .toList();
 
-        return scheduleMapper.toResponseList(monthSchedule);
+        return scheduleMapper.toMonthResponseList(monthSchedules);
     }
 
-    public List<FindDdayByFamilyResponse> findDdayByFamily(){
-        return null; // todo: 로직 작성
+    public List<FindDdayByFamilyResponse> findDDayByFamily(){
+        // 현재 로그인 중인 유저 받기
+        Member member = authService.getLoginUser();
+        // 현재 유저 가족에 포함된 회원 정보 받기
+        Set<Member> familyMembers = member.getFamily().getMembers();
+
+        // 가족들의 일정 중 dDay 옵션이 켜진 일정을 시작일 기준으로 정렬해서 받기
+        List<Schedule> dDaySchedules = familyMembers.stream()
+                .map(familyMember -> scheduleRepository.findAllByMember(familyMember, Boolean.TRUE, LocalDate.now()))
+                .flatMap(List::stream)
+                .sorted(Comparator.comparing(Schedule::getStartDate))
+                .toList();
+
+        return scheduleMapper.toDDayResponseList(dDaySchedules);
     }
 
     @Override
