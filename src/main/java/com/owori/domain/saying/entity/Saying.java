@@ -74,6 +74,7 @@ public class Saying implements Auditable {
 
     public void changeModifiable() {
         this.modifiable = Boolean.FALSE;
+        this.tagMembers.forEach(SayingTagMember::delete);
         this.delete();
     }
 }

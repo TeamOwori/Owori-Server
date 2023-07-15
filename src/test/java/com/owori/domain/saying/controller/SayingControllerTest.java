@@ -93,7 +93,6 @@ public class SayingControllerTest extends RestDocsTest {
     void deleteSaying() throws Exception {
         // given
         UUID id = UUID.randomUUID();
-        IdResponse<UUID> expected = new IdResponse<>(id);
         doNothing().when(sayingService).deleteSaying(any());
 
         // when
