@@ -65,6 +65,18 @@ public class StoryController {
     }
 
     /**
+     * 유저가 작성한 이야기 조회를 위한 컨트롤러입니다.
+     * @param pageable
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping( "/member")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
+                                                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
+
+        return ResponseEntity.ok(storyService.findStoryByWriter(pageable, lastViewed));
+    }
+
+    /**
      * 이야기를 상세 조회를 위한 컨트롤러입니다.
      * @param storyId 조회할 story의 id 값 입니다.
      * @return 상세 조회 dto가 반환됩니다.

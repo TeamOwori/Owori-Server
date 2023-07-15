@@ -243,4 +243,25 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
     }
 
+    @Test
+    @DisplayName("유저가 작성한 이야기 조회가 수행되는가")
+    void findStoryByWriter() {
+        //given
+        Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
+        Story story3 = new Story("제목3", "정답", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
+
+        familyRepository.save(family);
+        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.PINK);
+        storyRepository.save(story3);
+
+        //when
+        FindAllStoryGroupResponse response = storyService.findStoryByWriter( PageRequest.of(0, 4, Sort.by("createdAt")), null);
+
+        //then
+        assertThat(response.getStories().size()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getContents()).isEqualTo("정답");
+        assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
+    }
+
 }
