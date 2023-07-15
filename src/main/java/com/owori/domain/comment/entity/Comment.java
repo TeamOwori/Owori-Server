@@ -59,4 +59,12 @@ public class Comment implements Auditable {
         this.content = content;
     }
 
+    public String getTimeBefore(){
+        return TimesAgo.of(this.getBaseTime().getCreatedAt());
+        // return TimeAgoCalculator.timesAgo(this.getBaseTime().getCreatedAt());
+    }
+
+    public UUID getParentId(){
+        return this.parent == null ? null : this.parent.getId();
+    }
 }

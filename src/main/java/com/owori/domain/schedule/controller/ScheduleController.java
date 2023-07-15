@@ -54,6 +54,18 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
 
+    /**
+     * 일정 삭제 컨트롤러입니다.
+     * @param scheduleId 삭제할 일정 id 입니다.
+     * @return Void 반환
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> deleteSchedule(@RequestParam UUID scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping("/dday")
     public ResponseEntity<List<FindDdayByFamilyResponse>> findDdayByFamily() {
         return ResponseEntity.ok(scheduleService.findDdayByFamily());

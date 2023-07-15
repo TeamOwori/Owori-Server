@@ -1,7 +1,7 @@
 package com.owori.domain.heart.controller;
 
 import com.owori.domain.heart.dto.HeartStatusResponse;
-import com.owori.domain.heart.service.HeartService;
+import com.owori.domain.story.service.FacadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/hearts")
 public class HeartController {
-    private final HeartService heartService;
+    private final FacadeService facadeService;
 
     /**
      * 이야기에 대한 좋아요를 추가 / 삭제하는 컨트롤러입니다.
@@ -24,7 +24,7 @@ public class HeartController {
      */
     @PostMapping("/{storyId}")
     public ResponseEntity<HeartStatusResponse> toggleHeart(@PathVariable UUID storyId){
-        return ResponseEntity.ok(heartService.toggleHeart(storyId));
+        return ResponseEntity.ok(facadeService.toggleHeart(storyId));
     }
 
 }

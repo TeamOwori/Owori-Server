@@ -11,5 +11,8 @@ operation::save schedule[snippets='http-request,http-response']
 === 일정 수정
 operation::update schedule[snippets='http-request,http-response']
 
+=== 일정 삭제
+operation::delete schedule[snippets='http-request,http-response']
+
 === 일정 월별 조회
 operation::find schedule by month[snippets='http-request,http-response']

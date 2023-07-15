@@ -37,7 +37,7 @@ public class HeartServiceTest extends LoginTest {
         storyRepository.save(story);
 
         //when
-        HeartStatusResponse response = heartService.toggleHeart(story.getId());
+        HeartStatusResponse response = heartService.toggleHeart(story);
 
         //then
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
@@ -59,7 +59,7 @@ public class HeartServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story));
 
         //when
-        HeartStatusResponse response = heartService.toggleHeart(story.getId());
+        HeartStatusResponse response = heartService.toggleHeart(story);
 
         //then
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
