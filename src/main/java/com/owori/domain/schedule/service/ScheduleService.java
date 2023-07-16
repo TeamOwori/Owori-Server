@@ -38,10 +38,8 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     public IdResponse<UUID> updateSchedule(UUID scheduleId, UpdateScheduleRequest updateScheduleRequest) {
         // id 값으로 일정 찾기
         Schedule schedule = loadEntity(scheduleId);
-        // 로그인 중인 유저 받기
-        Member member = authService.getLoginUser();
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
-        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !member.equals(schedule.getMember())) throw new NoAuthorityException();
+        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().equals(schedule.getMember())) throw new NoAuthorityException();
 
         schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
                 updateScheduleRequest.getEndDate(), updateScheduleRequest.getDDayOption(), updateScheduleRequest.getAlarmOptions());
@@ -62,10 +60,8 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         LocalDate firstDate = scheduleMapper.toFirstDate(month);
         LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
 
-        // 현재 로그인 중인 유저 받기
-        Member member = authService.getLoginUser();
         // 현재 유저 가족에 포함된 회원 정보 받기
-        Set<Member> familyMembers = member.getFamily().getMembers();
+        Set<Member> familyMembers = authService.getLoginUser().getFamily().getMembers();
 
         // 가족들의 일정 시작일 기준으로 정렬해서 받기
         List<Schedule> monthSchedules = familyMembers.stream()
@@ -78,10 +74,9 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     }
 
     public List<FindDDayByFamilyResponse> findDDayByFamily(){
-        // 현재 로그인 중인 유저 받기
-        Member member = authService.getLoginUser();
+
         // 현재 유저 가족에 포함된 회원 정보 받기
-        Set<Member> familyMembers = member.getFamily().getMembers();
+        Set<Member> familyMembers = authService.getLoginUser().getFamily().getMembers();
 
         // 가족들의 일정 중 dDay 옵션이 켜진 일정을 시작일 기준으로 정렬해서 받기
         List<Schedule> dDaySchedules = familyMembers.stream()
