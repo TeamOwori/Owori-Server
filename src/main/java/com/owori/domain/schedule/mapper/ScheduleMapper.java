@@ -2,11 +2,9 @@ package com.owori.domain.schedule.mapper;
 
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
-import com.owori.domain.schedule.dto.response.FindDdayByFamilyResponse;
+import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
-import com.owori.domain.schedule.entity.ScheduleType;
-import org.joda.time.Days;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -33,7 +31,7 @@ public class ScheduleMapper {
                 .toList();
     }
 
-    public List<FindDdayByFamilyResponse> toDDayResponseList(List<Schedule> schedules) {
+    public List<FindDDayByFamilyResponse> toDDayResponseList(List<Schedule> schedules) {
         return schedules.stream()
                 .map(schedule -> toDDayResponse(schedule, toDDay(schedule.getStartDate())))
                 .toList();
@@ -53,8 +51,8 @@ public class ScheduleMapper {
                 .build();
     }
 
-    private FindDdayByFamilyResponse toDDayResponse(Schedule schedule, String dDay) {
-        return FindDdayByFamilyResponse.builder()
+    private FindDDayByFamilyResponse toDDayResponse(Schedule schedule, String dDay) {
+        return FindDDayByFamilyResponse.builder()
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
@@ -70,11 +68,8 @@ public class ScheduleMapper {
 
     private String toDDay(LocalDate toDate) {
         int days = Period.between(LocalDate.now(), toDate).getDays();
-        String dDay;
-        if(days == 0) dDay = "D-DAY";
-        else dDay = "D-" + days;
-
-        return dDay;
+        if(days == 0) return "D-DAY";
+        return "D-" + days;
     }
     public LocalDate toFirstDate(String yearMonth) {
         return LocalDate.parse(yearMonth + "-01");
