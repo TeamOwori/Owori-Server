@@ -1,11 +1,10 @@
 package com.owori.domain.schedule.service;
 
-import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.FindDdayByFamilyResponse;
+import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -78,7 +77,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return scheduleMapper.toMonthResponseList(monthSchedules);
     }
 
-    public List<FindDdayByFamilyResponse> findDDayByFamily(){
+    public List<FindDDayByFamilyResponse> findDDayByFamily(){
         // 현재 로그인 중인 유저 받기
         Member member = authService.getLoginUser();
         // 현재 유저 가족에 포함된 회원 정보 받기

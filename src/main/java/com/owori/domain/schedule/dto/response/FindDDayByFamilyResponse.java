@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindDdayByFamilyResponse {
+public class FindDDayByFamilyResponse {
     private UUID id;
     private String title;
     private LocalDate startDate;
