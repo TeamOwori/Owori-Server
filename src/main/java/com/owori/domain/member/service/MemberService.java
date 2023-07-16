@@ -18,6 +18,8 @@ import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
 import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
 import com.owori.domain.saying.mapper.SayingMapper;
+import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
+import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -38,6 +40,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberMapper memberMapper;
     private final AuthService authService;
     private final SayingMapper sayingMapper;
+    private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
 
@@ -144,6 +147,9 @@ public class MemberService implements EntityLoader<Member, UUID> {
         List<MemberProfileResponse> memberProfileResponses = familyMembers.stream().map(member -> new MemberProfileResponse(member.getId(), member.getNickname(), member.getProfileImage(), member.getEmotionalBadge())).collect(Collectors.toList());
         memberProfileResponses.add(0, membersProfileData);
 
-        return new FindHomeResponse(family.getFamilyGroupName(),memberProfileResponses, family.getImages(), sayingsData);
+        List<FindDDayByFamilyResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
+
+
+        return new FindHomeResponse(family.getFamilyGroupName(),memberProfileResponses,dDayByFamilyResponses , family.getImages(), sayingsData);
     }
 }
