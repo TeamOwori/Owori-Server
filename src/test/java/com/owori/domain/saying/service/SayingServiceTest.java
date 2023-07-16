@@ -111,7 +111,7 @@ public class SayingServiceTest extends LoginTest {
         // 서로에게 한마디 생성
         Saying saying1 = sayingRepository.save(new Saying("오늘 집 안 감", authService.getLoginUser(), List.of()));
         Saying saying2 = sayingRepository.save(new Saying("오늘 집 감", saveMember1, List.of()));
-        Saying saying3 = sayingRepository.save(new Saying("배고파", saveMember2, List.of()));
+        sayingRepository.save(new Saying("배고파", saveMember2, List.of()));
 
         // when
         entityManager.flush();
