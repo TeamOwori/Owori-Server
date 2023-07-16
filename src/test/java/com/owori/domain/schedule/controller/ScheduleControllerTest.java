@@ -3,6 +3,7 @@ package com.owori.domain.schedule.controller;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
+import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -119,9 +120,9 @@ public class ScheduleControllerTest extends RestDocsTest {
     void findScheduleByMonth() throws Exception {
         // given
         List<FindScheduleByMonthResponse> expected = List.of(
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL, UUID.randomUUID(), Color.BLUE, true, List.of(Alarm.TODAY)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), ScheduleType.INDIVIDUAL , UUID.randomUUID(), Color.BLUE, true, List.of(Alarm.A_DAY_AGO)),
-                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, UUID.randomUUID(), Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO))
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO)),
+                new FindScheduleByMonthResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, "가족", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO))
         );
 
         given(scheduleService.findScheduleByMonth(any())).willReturn(expected);
@@ -143,6 +144,37 @@ public class ScheduleControllerTest extends RestDocsTest {
 
         // docs
         perform.andDo(print())
-                .andDo(document("find schedule by month", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find schedules by month", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET / schedule 가족별 디데이 일정 조회 API 테스트")
+    void findDDayByFamily() throws Exception {
+        // given
+        List<FindDDayByFamilyResponse> expected = List.of(
+                new FindDDayByFamilyResponse(UUID.randomUUID(),"친구랑 여행", LocalDate.parse("2023-07-16"), LocalDate.parse("2023-07-09"),"D-DAY", ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY)),
+                new FindDDayByFamilyResponse(UUID.randomUUID(),"코딩 테스트", LocalDate.parse("2023-07-17"), LocalDate.parse("2023-07-15"), "D-1", ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO)),
+                new FindDDayByFamilyResponse(UUID.randomUUID(),"가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"),"D-15", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO))
+        );
+
+        given(scheduleService.findDDayByFamily()).willReturn(expected);
+
+        // when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/schedule/dday")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString())
+                );
+
+        // then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").exists())
+                .andExpect(jsonPath("$[0].start_date").exists());
+
+        // docs
+        perform.andDo(print())
+                .andDo(document("find schedules by family", getDocumentRequest(), getDocumentResponse()));
     }
 }

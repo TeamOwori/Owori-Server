@@ -39,8 +39,8 @@ public class Schedule implements Auditable {
     private ScheduleType scheduleType;
 
     // 개인이라면 색을 받아오기 위해서 생성자 저장
-    @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Member member;
 
     private Boolean dDayOption;

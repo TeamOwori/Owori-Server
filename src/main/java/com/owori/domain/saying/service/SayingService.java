@@ -46,11 +46,10 @@ public class SayingService implements EntityLoader<Saying, UUID> {
 
     @Transactional
     public IdResponse<UUID> updateSaying(UUID sayingId, UpdateSayingRequest request) {
-        Member member = authService.getLoginUser();
         Saying saying = loadEntity(sayingId);
 
         // 서로에게 한마디 작성자와 현재 유저가 동일하지 않을 경우 예외처리
-        if(!member.equals(saying.getMember())) throw new NoAuthorityException();
+        if(!authService.getLoginUser().equals(saying.getMember())) throw new NoAuthorityException();
 
         // tagMemberIds 를 통해 tagMembers 구하기
         List<Member> tagMembers = memberService.findMembersByIds(request.getTagMembersId());
@@ -69,8 +68,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
     }
 
     public List<FindSayingByFamilyResponse> findSayingByFamily() {
-        Member nowMember = authService.getLoginUser();
-        Family family = nowMember.getFamily();
+        Family family = authService.getLoginUser().getFamily();
 
         List<Saying> sayingList = family.getMembers().stream()
                 .map(member -> sayingRepository.findByMemberAndModifiable(member, true))

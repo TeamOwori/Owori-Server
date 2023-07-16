@@ -30,7 +30,7 @@ public class Saying implements Auditable {
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn
     private Member member;
 
     // 태그 기능

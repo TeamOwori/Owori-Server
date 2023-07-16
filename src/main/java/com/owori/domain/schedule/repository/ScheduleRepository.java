@@ -15,4 +15,8 @@ public interface ScheduleRepository {
 
     // 멤버와 웗 시작일과 종료일 받아서 일정 넘겨주기
     List<Schedule> findAllByMonth(Member member, LocalDate startDate, LocalDate endDate);
+
+    // 멤버와 디데이옵션을 통해서 오늘 이후 일정 넘겨주기
+    List<Schedule> findAllByMember(Member member, Boolean dDayOption, LocalDate nowDate);
+
 }
