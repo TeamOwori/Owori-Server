@@ -25,12 +25,12 @@ public class SayingTagMember implements Auditable {
 
     // Saying
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SAYING_ID")
+    @JoinColumn
     private Saying saying;
 
     // Tag 된 Member
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn
     private Member member;
 
     @Setter

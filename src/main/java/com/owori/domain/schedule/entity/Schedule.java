@@ -39,7 +39,7 @@ public class Schedule implements Auditable {
     private ScheduleType scheduleType;
 
     // 개인이라면 색을 받아오기 위해서 생성자 저장
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Member member;
 
