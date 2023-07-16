@@ -15,5 +15,5 @@ public class MemberDetailsRequest {
     @Size(min = 1, max = 7)
     private String nickname;
     @NotNull
-    private LocalDate birthDay;
+    private LocalDate birthday;
 }

@@ -3,6 +3,7 @@ package com.owori.domain.comment.service;
 import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
 import com.owori.domain.comment.entity.Comment;
+import com.owori.domain.comment.entity.TimesAgo;
 import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -123,6 +125,36 @@ public class CommentServiceTest extends LoginTest {
         //then
         Comment updateComment = commentRepository.findById(comment.getId()).get();
         assertThat(updateComment.getContent()).isEqualTo(content);
+
+    }
+
+
+    @Test
+    @DisplayName("time ago enum class 가 제대로 실행되는가")
+    void findTimeAgo() {
+
+        // 50초 전
+        String second = TimesAgo.of(LocalDateTime.now().minusSeconds(50));
+
+        // 10분 전
+        String minute = TimesAgo.of(LocalDateTime.now().minusMinutes(10));
+
+        // 2시간 전
+        String hour = TimesAgo.of(LocalDateTime.now().minusHours(2));
+
+        // 6일 전
+        String day = TimesAgo.of(LocalDateTime.now().minusDays(6));
+
+        // n개월 전
+        String month = TimesAgo.of(LocalDateTime.of(2022,3,2,3,1,2,3));
+
+
+        //then
+        assertThat(second).isEqualTo("50초 전");
+        assertThat(minute).isEqualTo("10분 전");
+        assertThat(hour).isEqualTo("2시간 전");
+        assertThat(day).isEqualTo("6일 전");
+        assertThat(month).isEqualTo("22.03.02");
 
     }
 

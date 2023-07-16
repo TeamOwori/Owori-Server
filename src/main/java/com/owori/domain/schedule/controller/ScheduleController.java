@@ -2,6 +2,7 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
+import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
 import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.IdResponse;
@@ -51,5 +52,26 @@ public class ScheduleController {
     @GetMapping("/month")
     public ResponseEntity<List<FindScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
+    }
+
+    /**
+     * 일정 삭제 컨트롤러입니다.
+     * @param scheduleId 삭제할 일정 id 입니다.
+     * @return Void 반환
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> deleteSchedule(@RequestParam UUID scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 가족단위 디데이 조회 컨트롤러입니다.
+     * @return 디데이 옵션이 켜진 일정 반환
+     */
+
+    @GetMapping("/dday")
+    public ResponseEntity<List<FindDDayByFamilyResponse>> findDDayByFamily() {
+        return ResponseEntity.ok(scheduleService.findDDayByFamily());
     }
 }

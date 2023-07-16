@@ -11,7 +11,7 @@ public enum Alarm {
 
     private final String toKorean;
 
-    private Alarm(String alarmType) {
+    Alarm(String alarmType) {
         this.toKorean = alarmType;
     }
 }

@@ -76,7 +76,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     public void updateMemberDetails(final MemberDetailsRequest memberDetailsRequest) {
         authService.getLoginUser().update(
                 memberDetailsRequest.getNickname(),
-                memberDetailsRequest.getBirthDay());
+                memberDetailsRequest.getBirthday());
     }
 
     @Transactional

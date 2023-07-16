@@ -16,14 +16,16 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindScheduleByMonthResponse {
+public class FindDDayByFamilyResponse {
     private UUID id;
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String dDay;
     private ScheduleType scheduleType;
     private String memberNickname;
     private Color color;
     private Boolean dDayOption;
     private List<Alarm> alarmOptions;
+
 }

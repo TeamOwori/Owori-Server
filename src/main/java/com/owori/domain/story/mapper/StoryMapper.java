@@ -3,9 +3,11 @@ package com.owori.domain.story.mapper;
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.story.dto.request.PostStoryRequest;
+import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindAllStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -49,5 +51,13 @@ public class StoryMapper {
                 .CommentCnt(story.getComments().size())
                 .comments(comments)
                 .build();
+    }
+
+    public FindAllStoryGroupResponse toFindAllStoryGroupDto(Slice<Story> stories) {
+        List<FindAllStoryResponse> responses = stories.getContent().stream()
+                .map(story -> toFindAllStoryDto(story))
+                .toList();
+
+        return new FindAllStoryGroupResponse(responses, stories.hasNext());
     }
 }
