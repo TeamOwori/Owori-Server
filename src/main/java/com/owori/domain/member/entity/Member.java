@@ -1,6 +1,7 @@
 package com.owori.domain.member.entity;
 
 import com.owori.domain.family.entity.Family;
+import com.owori.domain.saying.entity.Saying;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;
@@ -50,6 +51,9 @@ public class Member implements Auditable {
 
     @Enumerated(EnumType.STRING)
     private EmotionalBadge emotionalBadge = EmotionalBadge.NONE;
+
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    private Saying saying;
 
     @Setter
     @Embedded
@@ -123,4 +127,6 @@ public class Member implements Auditable {
     public void updateEmotionalBadge(EmotionalBadge emotionalBadge) {
         this.emotionalBadge = emotionalBadge;
     }
+
+    public void addSaying(Saying saying) { this.saying = saying; }
 }

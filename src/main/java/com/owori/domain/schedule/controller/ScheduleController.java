@@ -2,8 +2,8 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
-import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class ScheduleController {
      * @return List<FindScheduleByMonthResponse> 해당 달에 대한 일정 리스트 정보입니다.
      */
     @GetMapping("/month")
-    public ResponseEntity<List<FindScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
+    public ResponseEntity<List<ScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
 
@@ -71,7 +71,7 @@ public class ScheduleController {
      */
 
     @GetMapping("/dday")
-    public ResponseEntity<List<FindDDayByFamilyResponse>> findDDayByFamily() {
+    public ResponseEntity<List<ScheduleDDayResponse>> findDDayByFamily() {
         return ResponseEntity.ok(scheduleService.findDDayByFamily());
     }
 }

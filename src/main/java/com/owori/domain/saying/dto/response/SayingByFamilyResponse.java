@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Builder
 @AllArgsConstructor
-public class FindSayingByFamilyResponse {
+public class SayingByFamilyResponse {
     private UUID id;
     private String content;
     private UUID memberId;

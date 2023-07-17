@@ -7,12 +7,17 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
 import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
+import com.owori.domain.saying.mapper.SayingMapper;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -23,8 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +36,8 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final AuthService authService;
+    private final SayingMapper sayingMapper;
+    private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
 
@@ -113,5 +119,13 @@ public class MemberService implements EntityLoader<Member, UUID> {
     @Transactional
     public void updateEmotionalBadge(final EmotionalBadgeRequest emotionalBadgeRequest) {
         authService.getLoginUser().updateEmotionalBadge(emotionalBadgeRequest.getEmotionalBadge());
+    }
+
+    public MemberHomeResponse findHomeData() {
+        Member nowMember = authService.getLoginUser();
+        List<ScheduleDDayResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
+        List<SayingByFamilyResponse> sayingResponses = nowMember.getFamily().getMembers().stream()
+                .map(Member::getSaying).map(sayingMapper::toResponse).toList();
+        return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);
     }
 }

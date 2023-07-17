@@ -2,8 +2,8 @@ package com.owori.domain.schedule.mapper;
 
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
-import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
-import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import org.springframework.stereotype.Component;
 
@@ -25,20 +25,20 @@ public class ScheduleMapper {
                 .build();
     }
 
-    public List<FindScheduleByMonthResponse> toMonthResponseList(List<Schedule> schedules) {
+    public List<ScheduleByMonthResponse> toMonthResponseList(List<Schedule> schedules) {
         return schedules.stream()
                 .map(this::toMonthResponse)
                 .toList();
     }
 
-    public List<FindDDayByFamilyResponse> toDDayResponseList(List<Schedule> schedules) {
+    public List<ScheduleDDayResponse> toDDayResponseList(List<Schedule> schedules) {
         return schedules.stream()
                 .map(schedule -> toDDayResponse(schedule, toDDay(schedule.getStartDate())))
                 .toList();
     }
 
-    private FindScheduleByMonthResponse toMonthResponse(Schedule schedule) {
-        return FindScheduleByMonthResponse.builder()
+    private ScheduleByMonthResponse toMonthResponse(Schedule schedule) {
+        return ScheduleByMonthResponse.builder()
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
@@ -51,8 +51,8 @@ public class ScheduleMapper {
                 .build();
     }
 
-    private FindDDayByFamilyResponse toDDayResponse(Schedule schedule, String dDay) {
-        return FindDDayByFamilyResponse.builder()
+    private ScheduleDDayResponse toDDayResponse(Schedule schedule, String dDay) {
+        return ScheduleDDayResponse.builder()
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())

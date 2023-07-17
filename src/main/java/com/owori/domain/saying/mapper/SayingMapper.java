@@ -1,7 +1,7 @@
 package com.owori.domain.saying.mapper;
 
 import com.owori.domain.member.entity.Member;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.entity.SayingTagMember;
 import org.springframework.stereotype.Component;
@@ -21,14 +21,14 @@ public class SayingMapper {
                 .build();
     }
 
-    public List<FindSayingByFamilyResponse> toResponseList(List<Saying> sayingList) {
+    public List<SayingByFamilyResponse> toResponseList(List<Saying> sayingList) {
         return sayingList.stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    private FindSayingByFamilyResponse toResponse(Saying saying) {
-        return FindSayingByFamilyResponse.builder()
+    public SayingByFamilyResponse toResponse(Saying saying) {
+        return SayingByFamilyResponse.builder()
                 .id(saying.getId())
                 .content(saying.getContent())
                 .memberId(saying.getMember().getId())

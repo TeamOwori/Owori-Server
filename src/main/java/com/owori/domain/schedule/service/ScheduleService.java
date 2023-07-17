@@ -4,8 +4,8 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
-import com.owori.domain.schedule.dto.response.FindScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.domain.schedule.mapper.ScheduleMapper;
@@ -55,7 +55,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         schedule.delete();
     }
 
-    public List<FindScheduleByMonthResponse> findScheduleByMonth(String month) {
+    public List<ScheduleByMonthResponse> findScheduleByMonth(String month) {
         // 넘겨받은 'yyyy'-MM' 통해 해당 달의 사작일과 마지막일 찾기
         LocalDate firstDate = scheduleMapper.toFirstDate(month);
         LocalDate lastDate = firstDate.withDayOfMonth(firstDate.lengthOfMonth());
@@ -73,7 +73,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return scheduleMapper.toMonthResponseList(monthSchedules);
     }
 
-    public List<FindDDayByFamilyResponse> findDDayByFamily(){
+    public List<ScheduleDDayResponse> findDDayByFamily(){
 
         // 현재 유저 가족에 포함된 회원 정보 받기
         Set<Member> familyMembers = authService.getLoginUser().getFamily().getMembers();

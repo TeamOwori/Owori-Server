@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindScheduleByMonthResponse {
+public class ScheduleByMonthResponse {
     private UUID id;
     private String title;
     private LocalDate startDate;

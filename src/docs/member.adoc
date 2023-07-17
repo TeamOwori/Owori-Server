@@ -22,3 +22,6 @@ operation::delete member[snippets='http-request,http-response']
 
 === 멤버 감정 뱃지 업데이트
 operation::update member emotional badge[snippets='http-request,http-response']
+
+=== 멤버 홈화면 조회
+operation::find home data[snippets='http-request,http-response']

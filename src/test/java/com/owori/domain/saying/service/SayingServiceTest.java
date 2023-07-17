@@ -10,7 +10,7 @@ import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.global.dto.IdResponse;
@@ -116,10 +116,10 @@ public class SayingServiceTest extends LoginTest {
         // when
         entityManager.flush();
         entityManager.clear();
-        List<FindSayingByFamilyResponse> responses = sayingService.findSayingByFamily();
+        List<SayingByFamilyResponse> responses = sayingService.findSayingByFamily();
 
         // then
-        assertThat(responses.stream().map(FindSayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
+        assertThat(responses.stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -116,9 +116,9 @@ public class SayingControllerTest extends RestDocsTest {
     @DisplayName("GET / saying 서로에게 한마디 가족 단위 조회 API 테스트")
     void findSayingByFamily() throws Exception {
         // given
-        List<FindSayingByFamilyResponse> expected = List.of(
-                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of(), LocalDateTime.now()),
-                new FindSayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()), LocalDateTime.now())
+        List<SayingByFamilyResponse> expected = List.of(
+                new SayingByFamilyResponse(UUID.randomUUID(), "오늘 집 안들어가요", UUID.randomUUID(), List.of(), LocalDateTime.now()),
+                new SayingByFamilyResponse(UUID.randomUUID(), "밥 먹고 들어갈게요",UUID.randomUUID(),List.of(UUID.randomUUID()), LocalDateTime.now())
         );
         given(sayingService.findSayingByFamily()).willReturn(expected);
 
