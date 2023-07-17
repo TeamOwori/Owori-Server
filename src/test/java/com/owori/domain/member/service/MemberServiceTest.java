@@ -7,10 +7,10 @@ import com.owori.domain.family.service.FamilyService;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
-import com.owori.domain.member.dto.response.FindHomeResponse;
+import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
 import com.owori.domain.member.entity.*;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.global.exception.EntityNotFoundException;
@@ -174,10 +174,10 @@ class MemberServiceTest extends LoginTest {
         sayingRepository.save(new Saying("배고파", saveMember2, List.of()));
 
         // when
-        FindHomeResponse responses = memberService.findHomeData();
+        MemberHomeResponse responses = memberService.findHomeData();
 
         assertThat(familyName).isEqualTo(responses.getFamilyName());
         assertThat(responses.getMemberProfiles().stream().map(MemberProfileResponse::getId).toList()).isEqualTo(List.of(authService.getLoginUser().getId(), saveMember1.getId()));
-        assertThat(responses.getSayings().stream().map(FindSayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
+        assertThat(responses.getFamilySayings().stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
     }
 }

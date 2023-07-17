@@ -1,6 +1,6 @@
 package com.owori.domain.member.controller;
 
-import com.owori.domain.member.dto.response.FindHomeResponse;
+import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
@@ -98,7 +98,7 @@ public class MemberController {
      * @return 홈화면 정보를 반환합니다.
      */
     @GetMapping("/home")
-    public ResponseEntity<FindHomeResponse> findHomeData() {
+    public ResponseEntity<MemberHomeResponse> findHomeData() {
         return ResponseEntity.ok(memberService.findHomeData());
     }
 }

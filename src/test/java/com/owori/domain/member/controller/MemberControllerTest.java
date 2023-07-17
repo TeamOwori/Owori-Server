@@ -5,15 +5,15 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
-import com.owori.domain.member.dto.response.FindHomeResponse;
+import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.EmotionalBadge;
 import com.owori.domain.member.service.MemberService;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
-import com.owori.domain.schedule.dto.response.FindDDayByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -205,17 +205,17 @@ class MemberControllerTest extends RestDocsTest {
                 new MemberProfileResponse(UUID.randomUUID(), "아들","333333",EmotionalBadge.CRY)
         );
 
-        List<FindSayingByFamilyResponse> sayings = List.of(
-                new FindSayingByFamilyResponse(UUID.randomUUID(), "오늘 회식해요", member1, List.of(UUID.randomUUID(), UUID.randomUUID()), LocalDateTime.now()),
-                new FindSayingByFamilyResponse(UUID.randomUUID(),"오늘 저녁 카레", member2, List.of(), LocalDateTime.now())
+        List<SayingByFamilyResponse> sayings = List.of(
+                new SayingByFamilyResponse(UUID.randomUUID(), "오늘 회식해요", member1, List.of(UUID.randomUUID(), UUID.randomUUID()), LocalDateTime.now()),
+                new SayingByFamilyResponse(UUID.randomUUID(),"오늘 저녁 카레", member2, List.of(), LocalDateTime.now())
         );
-        List<FindDDayByFamilyResponse> dDaySchedules = List.of(
-                new FindDDayByFamilyResponse(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of()),
-                new FindDDayByFamilyResponse(UUID.randomUUID(), "휴가", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.SKYBLUE, true, List.of()),
-                new FindDDayByFamilyResponse(UUID.randomUUID(), "친구 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.GREEN, true, List.of())
+        List<ScheduleDDayResponse> dDaySchedules = List.of(
+                new ScheduleDDayResponse(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of()),
+                new ScheduleDDayResponse(UUID.randomUUID(), "휴가", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.SKYBLUE, true, List.of()),
+                new ScheduleDDayResponse(UUID.randomUUID(), "친구 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.GREEN, true, List.of())
                 );
 
-        FindHomeResponse expected = new FindHomeResponse("오월이 가족",membersProfile,dDaySchedules ,List.of("111111","222222"), sayings);
+        MemberHomeResponse expected = new MemberHomeResponse("오월이 가족",membersProfile,dDaySchedules ,List.of("111111","222222"), sayings);
 
         given(memberService.findHomeData()).willReturn(expected);
 
