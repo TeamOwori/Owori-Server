@@ -6,7 +6,7 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.member.service.MemberService;
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.saying.repository.SayingRepository;
@@ -67,7 +67,7 @@ public class SayingService implements EntityLoader<Saying, UUID> {
         saying.changeModifiable();
     }
 
-    public List<FindSayingByFamilyResponse> findSayingByFamily() {
+    public List<SayingByFamilyResponse> findSayingByFamily() {
         Family family = authService.getLoginUser().getFamily();
 
         List<Saying> sayingList = family.getMembers().stream()

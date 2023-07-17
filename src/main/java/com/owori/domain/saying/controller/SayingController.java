@@ -2,7 +2,7 @@ package com.owori.domain.saying.controller;
 
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
-import com.owori.domain.saying.dto.response.FindSayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.service.SayingService;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class SayingController {
      * @return 가족의 서로에게 한마디를 정보를 반환합니다.
      */
     @GetMapping
-    public ResponseEntity<List<FindSayingByFamilyResponse>> findSayingByFamily(){
+    public ResponseEntity<List<SayingByFamilyResponse>> findSayingByFamily(){
         return ResponseEntity.ok(sayingService.findSayingByFamily());
     }
 }
