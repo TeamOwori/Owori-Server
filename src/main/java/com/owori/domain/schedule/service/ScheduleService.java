@@ -39,10 +39,10 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         // id 값으로 일정 찾기
         Schedule schedule = loadEntity(scheduleId);
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
-        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().equals(schedule.getMember())) throw new NoAuthorityException();
+        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
 
         schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
-                updateScheduleRequest.getEndDate(), updateScheduleRequest.getDDayOption(), updateScheduleRequest.getAlarmOptions());
+                updateScheduleRequest.getEndDate(), updateScheduleRequest.getDdayOption(), updateScheduleRequest.getAlarmOptions());
 
         return new IdResponse<>(scheduleId);
     }
@@ -51,7 +51,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     public void deleteSchedule(UUID scheduleId) {
         Schedule schedule = loadEntity(scheduleId);
         // 생성자와 동일하지 않을 경우 예외처리
-        if(!schedule.getMember().equals(authService.getLoginUser())) throw new NoAuthorityException();
+        if(!authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
         schedule.delete();
     }
 
