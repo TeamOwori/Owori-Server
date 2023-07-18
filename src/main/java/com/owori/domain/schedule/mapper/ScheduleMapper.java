@@ -19,7 +19,7 @@ public class ScheduleMapper {
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .scheduleType(request.getScheduleType())
-                .dDayOption(request.getDDayOption())
+                .dDayOption(request.getDdayOption())
                 .alarmList(request.getAlarmOptions())
                 .member(member)
                 .build();
@@ -46,7 +46,7 @@ public class ScheduleMapper {
                 .scheduleType(schedule.getScheduleType())
                 .memberNickname( schedule.getMember().getNickname())
                 .color(schedule.getMember().getColor())
-                .dDayOption(schedule.getDDayOption())
+                .ddayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())
                 .build();
     }
@@ -61,7 +61,7 @@ public class ScheduleMapper {
                 .scheduleType(schedule.getScheduleType())
                 .memberNickname(schedule.getMember().getNickname())
                 .color(schedule.getMember().getColor())
-                .dDayOption(schedule.getDDayOption())
+                .ddayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())
                 .build();
     }

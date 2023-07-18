@@ -15,7 +15,7 @@ public class UpdateScheduleRequest {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Boolean dDayOption;
+    private Boolean ddayOption;
     private List<Alarm> alarmOptions;
 }
 
