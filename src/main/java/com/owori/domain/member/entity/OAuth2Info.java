@@ -16,7 +16,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuth2Info {
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String clientId;
 
     @Enumerated(EnumType.STRING)
