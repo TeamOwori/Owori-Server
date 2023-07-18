@@ -2,8 +2,10 @@ package com.owori.domain.schedule.entity;
 
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum ScheduleType {
 
     FAMILY("가족"),
@@ -11,7 +13,4 @@ public enum ScheduleType {
 
     private final String toKorean;
 
-    ScheduleType(String scheduleType) {
-        this.toKorean = scheduleType;
-    }
 }
