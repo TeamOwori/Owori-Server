@@ -14,6 +14,7 @@ import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +39,14 @@ public class CommentService implements EntityLoader<Comment, UUID> {
         return new IdResponse<>(comment.getId());
     }
 
+    @Transactional
     public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
         Story story = comment.getStory();
         story.removeComment(comment);
     }
 
+    @Transactional
     public IdResponse<UUID> updateComment(UUID commentId, UpdateCommentRequest request) {
         Comment comment = loadEntity(commentId);
         comment.updateContent(request.getComment());

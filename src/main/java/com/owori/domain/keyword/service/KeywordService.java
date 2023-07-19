@@ -9,6 +9,7 @@ import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,10 +41,12 @@ public class KeywordService implements EntityLoader<Keyword, UUID> {
                 .orElse(new ArrayList<>());
     }
 
+    @Transactional
     public void deleteSearchWords() {
         keywordRepository.deleteAll();
     }
 
+    @Transactional
     public void deleteSearchWord(UUID keywordId) {
         Keyword keyword = loadEntity(keywordId);
         keywordRepository.delete(keyword);

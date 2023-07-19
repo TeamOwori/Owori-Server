@@ -24,7 +24,6 @@ public class ImageService implements EntityLoader<Image, UUID> {
     private final ImageMapper imageMapper;
     private final S3ImageComponent s3ImageComponent;
 
-    @Transactional
     public List<UUID> addStoryImage(List<MultipartFile> images) throws IOException {
         if (images.size() > 10) {
             throw new ImageLimitExceededException();
@@ -53,6 +52,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
                 .forEach(image -> { image.updateStory(story);});
     }
 
+    @Transactional
     public void removeImages(Story story){
         List<Image> oldImages = imageRepository.findAllByStory(story);
 
