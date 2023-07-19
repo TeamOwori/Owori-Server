@@ -12,6 +12,7 @@ import com.owori.domain.story.entity.Story;
 import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class FacadeService {
         return heartService.hasHeart(member, story);
     }
 
+    @Transactional
     public void removeComment(UUID id) {
         commentService.removeComment(id);
     }
@@ -51,6 +53,7 @@ public class FacadeService {
         return storyService.findStory(story, comments, isLiked);
     }
 
+    @Transactional
     public void removeStory(UUID storyId){
         Story story = loadStoryEntity(storyId);
         story.getComments().stream()
@@ -58,6 +61,7 @@ public class FacadeService {
         storyService.removeStory(story);
     }
 
+    @Transactional
     public HeartStatusResponse toggleHeart(UUID storyId) {
         Story story = loadStoryEntity(storyId);
         return heartService.toggleHeart(story);

@@ -11,6 +11,7 @@ import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class HeartService implements EntityLoader<Heart, UUID> {
     private final HeartMapper heartMapper;
     private final AuthService authService;
 
+    @Transactional
     public HeartStatusResponse toggleHeart(Story story){
         Member member = authService.getLoginUser();
 

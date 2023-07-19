@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -55,6 +56,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindStoryDto(story, isLiked, comments);
     }
 
+    @Transactional
     public IdResponse<UUID> updateStory(UUID storyId, PostStoryRequest request) {
         Story story = loadEntity(storyId);
         if(story.getMember() != authService.getLoginUser()){
@@ -64,6 +66,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return new IdResponse<>(story.getId());
     }
 
+    @Transactional
     public void updateStoryFields(Story story, PostStoryRequest request){
         ifPresentAndNonNull(request.getStartDate(), story::updateStartDate);
         ifPresentAndNonNull(request.getEndDate(), story::updateEndDate);
@@ -76,6 +79,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Optional.ofNullable(value).ifPresent(consumer);
     }
 
+    @Transactional
     public void removeStory(Story story) {
         if(story.getMember() != authService.getLoginUser()){
             throw new InvalidUserException();
