@@ -36,7 +36,7 @@ public class MemberMapper {
     public MemberHomeResponse toHomeResponse(Member nowMember, List<ScheduleDDayResponse> dDayByFamilyResponses, List<SayingByFamilyResponse> sayingResponses) {
         Family family = nowMember.getFamily();
         return MemberHomeResponse.builder()
-                .familyName(family.getFamilyGroupName())
+                .familyGroupName(family.getFamilyGroupName())
                 .memberProfiles(toProfileResponseList(nowMember, family.getMembers()))
                 .dDaySchedules(dDayByFamilyResponses)
                 .familyImages(family.getImages())

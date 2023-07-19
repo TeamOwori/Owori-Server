@@ -17,7 +17,7 @@ public class AddScheduleRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private ScheduleType scheduleType;
-    private Boolean dDayOption;
+    private Boolean ddayOption;
     private List<Alarm> alarmOptions;
 
 }
