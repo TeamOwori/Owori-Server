@@ -3,6 +3,7 @@ package com.owori.domain.story.service;
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.image.service.ImageService;
+import com.owori.domain.keyword.service.KeywordService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
@@ -31,6 +32,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final StoryMapper storyMapper;
     private final ImageService imageService;
     private final AuthService authService;
+    private final KeywordService keywordService;
 
     public IdResponse<UUID> addStory(PostStoryRequest request) {
         Member loginUser = authService.getLoginUser();
@@ -84,8 +86,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
-        Family family = authService.getLoginUser().getFamily();
-        Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, family, lastViewed);
+        Member loginUser = authService.getLoginUser();
+        Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily(), lastViewed);
+        keywordService.addKeyword(keyword, loginUser);
 
         return storyMapper.toFindAllStoryGroupDto(storyBySearch);
     }
