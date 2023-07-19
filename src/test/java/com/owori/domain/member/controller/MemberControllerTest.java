@@ -230,7 +230,7 @@ class MemberControllerTest extends RestDocsTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.family_name").exists());
+                .andExpect(jsonPath("$.family_group_name").exists());
 
         // docs
         perform.andDo(print())

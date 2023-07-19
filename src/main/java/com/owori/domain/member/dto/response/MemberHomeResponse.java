@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberHomeResponse {
-    private String familyName;
+    private String familyGroupName;
     private List<MemberProfileResponse> memberProfiles;
     private List<ScheduleDDayResponse> dDaySchedules;
     private List<String> familyImages;

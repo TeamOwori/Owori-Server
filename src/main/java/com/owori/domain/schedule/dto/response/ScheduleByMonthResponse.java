@@ -24,6 +24,6 @@ public class ScheduleByMonthResponse {
     private ScheduleType scheduleType;
     private String memberNickname;
     private Color color;
-    private Boolean dDayOption;
+    private Boolean ddayOption;
     private List<Alarm> alarmOptions;
 }
