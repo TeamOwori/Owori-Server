@@ -53,7 +53,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
         Member member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider())
                 .orElseGet(() -> memberRepository.save(memberMapper.toEntity(clientId, memberRequest)));
 
-        JwtToken jwtToken = createMemberJwtToken(member, member.getOAuth2Info().getClientId());
+        JwtToken jwtToken = createMemberJwtToken(member);
         return memberMapper.toJwtResponse(jwtToken, member.getId());
     }
 
@@ -64,8 +64,8 @@ public class MemberService implements EntityLoader<Member, UUID> {
         return memberRequest.getToken();
     }
 
-    private JwtToken createMemberJwtToken(final Member member, final String token) {
-        return authService.createAndUpdateToken(member, token);
+    private JwtToken createMemberJwtToken(final Member member) {
+        return authService.createAndUpdateToken(member);
     }
 
     private KakaoMemberResponse requestToKakao(final String token) {
