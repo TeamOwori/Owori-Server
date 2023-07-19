@@ -18,8 +18,8 @@ public class JwtTokenProvider {
     private static final Long ACCESS_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 1000; // 1 Day
     private static final Long REFRESH_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 14 * 1000; // 14 Days
 
-    public JwtToken createToken(Member loginUser, String clientId) {
-        Claims claims = getClaims(loginUser, clientId);
+    public JwtToken createToken(Member loginUser) {
+        Claims claims = getClaims(loginUser);
 
         String accessToken = getToken(loginUser, claims, ACCESS_TOKEN_EXPIRE_LENGTH);
         String refreshToken = getToken(loginUser, claims, REFRESH_TOKEN_EXPIRE_LENGTH);
@@ -46,10 +46,9 @@ public class JwtTokenProvider {
         memberRepository.updateRefreshToken(id, refreshToken);
     }
 
-    private Claims getClaims(Member loginUser, String token) {
+    private Claims getClaims(Member loginUser) {
         Claims claims = Jwts.claims();
         claims.put("id", loginUser.getId().toString());
-        claims.put("clientId", token);
         return claims;
     }
 

@@ -28,11 +28,11 @@ public class AuthService {
 
         validateSavedRefreshTokenIfExpired(oldRefreshToken, user.getId());
 
-        return createAndUpdateToken(user, user.getOAuth2Info().getClientId());
+        return createAndUpdateToken(user);
     }
 
-    public JwtToken createAndUpdateToken(final Member user, final String clientId) {
-        JwtToken jwtToken = jwtTokenProvider.createToken(user, clientId);
+    public JwtToken createAndUpdateToken(final Member user) {
+        JwtToken jwtToken = jwtTokenProvider.createToken(user);
 
         memberRepository.updateRefreshToken(user.getId(), jwtToken.getRefreshToken());
         return jwtToken;

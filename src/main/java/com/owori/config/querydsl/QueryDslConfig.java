@@ -1,4 +1,4 @@
-package com.owori.config.security.querydsl;
+package com.owori.config.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
