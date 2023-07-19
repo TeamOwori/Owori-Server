@@ -15,7 +15,6 @@ import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.comment.entity.TimesAgo;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
@@ -29,7 +28,6 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
