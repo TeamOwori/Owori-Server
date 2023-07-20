@@ -64,5 +64,5 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
       - name: Deploy to AWS
         run: |
-          ssh -o "StrictHostKeyChecking no" ubuntu@${{ secrets.AWS_IP }} \
+          ssh -i ssh_key ubuntu@${{ secrets.AWS_IP }} \
           'cd ~/Owori-Server && docker-compose -f docker-compose.prod.yml up --build -d'
