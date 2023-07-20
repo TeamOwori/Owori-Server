@@ -50,25 +50,11 @@ jobs:
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
-      - uses: shimataro/ssh-key-action@v2
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
         with:
+          host: ${{ secrets.AWS_IP }}
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          name: id_rsa
-          known_hosts: ${{ secrets.KNOWN_HOST }}
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
-          ssh-keyscan ${{ secrets.AWS_IP }} >> ~/.ssh/known_hosts
-      - name: Deploy to AWS
-        run: |
-          ssh -i ssh_key ubuntu@${{ secrets.AWS_IP }} \
-          'cd ~/Owori-Server && docker-compose -f docker-compose.prod.yml up --build -d'
+          script: |
+            docker-compose -f docker-compose.prod.yml up --build -d
