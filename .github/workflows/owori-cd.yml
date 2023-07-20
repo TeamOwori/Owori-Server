@@ -48,6 +48,7 @@ jobs:
       DATABASE_SCHEMA: ${{ secrets.DATABASE_SCHEMA }}
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -58,8 +59,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Set up SSH key
-        run: echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
+          ssh-keyscan ubuntu@${{ secrets.AWS_IP }} >> ~/.ssh/known_hosts
       - name: Deploy to AWS
         run: |
-          ssh ubuntu@${{ secrets.AWS_IP }} \
-          'cd ./Owori-Server && docker-compose -f docker-compose.prod.yml up --build -d'
+          ssh -o "StrictHostKeyChecking no" ubuntu@${{ secrets.AWS_IP }} \
+          'cd ~/Owori-Server && docker-compose -f docker-compose.prod.yml up --build -d'
