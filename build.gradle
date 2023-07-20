@@ -15,7 +15,7 @@ plugins {
 
 jib {
 	from {
-		image = "openjdk:17-jre-slim"
+		image = "openjdk:17-alpine"
 	}
 	to {
 		image = "ohksj77/owori"
