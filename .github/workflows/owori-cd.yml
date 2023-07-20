@@ -58,8 +58,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       - name: Set up SSH key
-        run: echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
+        run: echo "$SSH_PRIVATE_KEY" > ssh_key.pem && chmod 400 ssh_key.pem
       - name: Deploy to AWS
         run: |
-          ssh -o "StrictHostKeyChecking no" -i ssh_key ubuntu@${{ secrets.AWS_IP }} \
+          ssh -i ssh_key.pem ubuntu@${{ secrets.AWS_IP }} \
           'cd ./Owori-Server && docker-compose -f docker-compose.prod.yml up --build -d'
