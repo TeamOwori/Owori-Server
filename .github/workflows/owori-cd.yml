@@ -62,7 +62,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ssh_key && chmod 600 ssh_key
-          ssh-keyscan ubuntu@${{ secrets.AWS_IP }} >> ~/.ssh/known_hosts
       - name: Deploy to AWS
         run: |
           ssh -o "StrictHostKeyChecking no" ubuntu@${{ secrets.AWS_IP }} \
