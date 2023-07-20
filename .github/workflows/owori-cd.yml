@@ -49,10 +49,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker-compose -f ~/Owori-Server/docker-compose.prod.yml up --build -d \
-            -e DATABASE_TIMEZONE=${{ secrets.DATABASE_TIMEZONE }} \
-            -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
-            -e DATABASE_ROOT_PASSWORD=${{ secrets.DATABASE_ROOT_PASSWORD }} \
-            -e DATABASE_SCHEMA=${{ secrets.DATABASE_SCHEMA }} \
-            -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-            -e DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+            docker-compose -f ~/Owori-Server/docker-compose.prod.yml up --build -d
