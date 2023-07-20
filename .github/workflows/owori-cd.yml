@@ -57,4 +57,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker-compose -f docker-compose.prod.yml up --build -d
+            docker-compose -f ~/Owori-Server/docker-compose.prod.yml up --build -d
