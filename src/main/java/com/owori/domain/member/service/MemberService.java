@@ -125,7 +125,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
         Member nowMember = authService.getLoginUser();
         List<ScheduleDDayResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
         List<SayingByFamilyResponse> sayingResponses = nowMember.getFamily().getMembers().stream()
-                .map(Member::getSaying).map(sayingMapper::toResponse).toList();
+                .map(Member::getSaying).filter(Objects::nonNull).map(sayingMapper::toResponse).toList();
         return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);
     }
 }
