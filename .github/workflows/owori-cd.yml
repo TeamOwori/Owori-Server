@@ -41,14 +41,6 @@ jobs:
     needs:
       - build-docker-image
     runs-on: ubuntu-latest
-    env:
-      DATABASE_TIMEZONE: ${{ secrets.DATABASE_TIMEZONE }}
-      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
-      DATABASE_ROOT_PASSWORD: ${{ secrets.DATABASE_ROOT_PASSWORD }}
-      DATABASE_SCHEMA: ${{ secrets.DATABASE_SCHEMA }}
-      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-      DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
@@ -57,4 +49,11 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker-compose -f ~/Owori-Server/docker-compose.prod.yml up --build -d
+            docker-compose -f ~/Owori-Server/docker-compose.prod.yml up --build -d \
+            -e DATABASE_TIMEZONE=${{ secrets.DATABASE_TIMEZONE }} \
+            -e DATABASE_PORT=${{ secrets.DATABASE_PORT }} \
+            -e DATABASE_ROOT_PASSWORD=${{ secrets.DATABASE_ROOT_PASSWORD }} \
+            -e DATABASE_SCHEMA=${{ secrets.DATABASE_SCHEMA }} \
+            -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+            -e DATABASE_HOST=${{ secrets.DATABASE_HOST }} \
+            -e SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }} \
