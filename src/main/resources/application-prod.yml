@@ -5,12 +5,12 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DATABASE_URL}/${DATABASE_SCHEMA}?serverTimezone=Asia/Seoul
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+  config:
+    import: classpath:env.yml
 
   jpa:
     show-sql: false
@@ -27,19 +27,3 @@ spring:
 
   main:
     allow-bean-definition-overriding: true
-
-jwt:
-  access-header: Authorization
-  secret-key: ${JWT_SECRET}
-cloud:
-  aws:
-    s3:
-      bucket: ${S3_BUCKET}
-    stack:
-      auto: false
-    credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
-    region:
-      static: ${S3_REGION_STATIC}
-      auto: false

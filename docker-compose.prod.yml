@@ -1,8 +1,9 @@
-version: "3.9"
+version: "3"
 
 services:
   backend:
     image: ohksj77/owori
+    platform: linux/amd64
     container_name: owori-backend
     ports:
       - 8080:8080
@@ -18,6 +19,7 @@ services:
   db:
     image: mysql
     container_name: owori-db
+    platform: linux/amd64
     ports:
       - 3306:3306
     networks:
@@ -30,7 +32,8 @@ services:
     tty: true
 
   nginx:
-    image: ohksj77/owori-nginx
+    build: ./nginx
+    platform: linux/amd64
     container_name: owori-nginx
     ports:
       - 80:80

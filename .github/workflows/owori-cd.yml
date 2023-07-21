@@ -24,16 +24,6 @@ jobs:
           distribution: 'temurin'
           architecture: x64
       - name: Jib Build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DATABASE_SCHEMA: ${{ secrets.DATABASE_SCHEMA }}
-          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
-          S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-          S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-          S3_REGION_STATIC: ${{ secrets.S3_REGION_STATIC }}
         run: |
           ./gradlew clean jib
 
