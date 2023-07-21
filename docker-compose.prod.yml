@@ -2,7 +2,8 @@ version: "3"
 
 services:
   backend:
-    image: ohksj77/owori
+    build:
+      context: .
     platform: linux/amd64
     container_name: owori-backend
     ports:
