@@ -9,11 +9,11 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.entity.Story;
-import com.owori.domain.story.exception.InvalidUserException;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -59,10 +59,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional
     public IdResponse<UUID> updateStory(UUID storyId, PostStoryRequest request) {
         Story story = loadEntity(storyId);
-        if(story.getMember() != authService.getLoginUser()){
-            throw new InvalidUserException();
-        }
+        if(story.getMember() != authService.getLoginUser()){ throw new NoAuthorityException();}
         updateStoryFields(story, request);
+
         return new IdResponse<>(story.getId());
     }
 
@@ -81,9 +80,8 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     @Transactional
     public void removeStory(Story story) {
-        if(story.getMember() != authService.getLoginUser()){
-            throw new InvalidUserException();
-        }
+        if(story.getMember() != authService.getLoginUser()){ throw new NoAuthorityException();}
+
         imageService.removeImages(story); // 이미지 삭제
         story.getHearts().stream().forEach(story::removeHeart); // 좋아요 삭제
         story.delete(); // 스토리 삭제
