@@ -6,6 +6,7 @@ import com.owori.domain.keyword.repository.KeywordRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class KeywordService implements EntityLoader<Keyword, UUID> {
     private final KeywordRepository keywordRepository;
     private final AuthService authService;
 
+    @Transactional
     public void addKeyword(String keyword, Member member) {
         Optional<Keyword> findKeyword = keywordRepository.findByContents(keyword);
         findKeyword.ifPresent(word -> word.getBaseTime().setCreatedAt(LocalDateTime.now())); // 같은 검색어가 이미 존재하면 createdAt만 update
@@ -42,13 +44,12 @@ public class KeywordService implements EntityLoader<Keyword, UUID> {
     }
 
     @Transactional
-    public void deleteSearchWords() {
-        keywordRepository.deleteAll();
-    }
+    public void deleteSearchWords() { keywordRepository.deleteAll(); }
 
     @Transactional
     public void deleteSearchWord(UUID keywordId) {
         Keyword keyword = loadEntity(keywordId);
+        if(!keyword.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
         keywordRepository.delete(keyword);
     }
 
