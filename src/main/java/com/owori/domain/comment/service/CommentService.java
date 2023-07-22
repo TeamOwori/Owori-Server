@@ -11,6 +11,7 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
 import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     @Transactional
     public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
+        if(!comment.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
+
         Story story = comment.getStory();
         story.removeComment(comment);
     }
@@ -49,6 +52,7 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     @Transactional
     public IdResponse<UUID> updateComment(UUID commentId, UpdateCommentRequest request) {
         Comment comment = loadEntity(commentId);
+        if(!comment.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
         comment.updateContent(request.getComment());
 
         return new IdResponse<>(comment.getId());

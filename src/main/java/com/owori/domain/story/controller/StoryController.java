@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class StoryController {
      * @return 생성된 이야기의 id가 반환됩니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addStory(@RequestBody PostStoryRequest request) {
+    public ResponseEntity<IdResponse<UUID>> addStory(@RequestBody @Valid PostStoryRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.addStory(request));
     }
 
@@ -59,7 +60,7 @@ public class StoryController {
      */
     @GetMapping( "/search")
     public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch(@PageableDefault(sort = "createdAt", direction = DESC) Pageable pageable,
-                                                                       @ModelAttribute SearchStoryRequest request){
+                                                                       @ModelAttribute @Valid SearchStoryRequest request){
 
         return ResponseEntity.ok(storyService.findStoryBySearch(request.getKeyword(), pageable, request.getLastViewed()));
     }
@@ -105,7 +106,7 @@ public class StoryController {
      * @return 수정한 story의 id 값이 반환됩니다.
      */
     @PostMapping("/{storyId}")
-    public ResponseEntity<IdResponse<UUID>> updateStory(@PathVariable UUID storyId, @RequestBody PostStoryRequest request){
+    public ResponseEntity<IdResponse<UUID>> updateStory(@PathVariable UUID storyId, @RequestBody @Valid PostStoryRequest request){
         return ResponseEntity.ok(storyService.updateStory(storyId, request));
     }
 
