@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class ScheduleController {
      * @return AddScheduleResponse는 추가된 일정의 id값입니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> addSchedule(@Valid @RequestBody AddScheduleRequest addScheduleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.addSchedule(addScheduleRequest));
     }
 
@@ -39,7 +40,7 @@ public class ScheduleController {
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId,@Valid @RequestBody UpdateScheduleRequest updateScheduleRequest) {
         return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
     }
 

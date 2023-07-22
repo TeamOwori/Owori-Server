@@ -57,7 +57,7 @@ public class ScheduleMapper {
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
                 .endDate(schedule.getEndDate())
-                .dDay(dDay)
+                .dday(dDay)
                 .scheduleType(schedule.getScheduleType())
                 .memberNickname(schedule.getMember().getNickname())
                 .color(schedule.getMember().getColor())
