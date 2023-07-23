@@ -11,7 +11,6 @@ import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.repository.ImageRepository;
 import com.owori.domain.member.entity.*;
 import com.owori.domain.member.repository.MemberRepository;
-import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -26,35 +25,21 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class TestService {
-    private MemberRepository memberRepository;
-    private FamilyRepository familyRepository;
-    private ScheduleRepository scheduleRepository;
-    private StoryRepository storyRepository;
-    private SayingRepository sayingRepository;
-    private CommentRepository commentRepository;
-    private ImageRepository imageRepository;
-    private FamilyService familyService;
+    private final MemberRepository memberRepository;
+    private final FamilyRepository familyRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final StoryRepository storyRepository;
+    private final SayingRepository sayingRepository;
+    private final CommentRepository commentRepository;
+    private final ImageRepository imageRepository;
+    private final FamilyService familyService;
 
     public String addTestData(){
         // member
         Member member1 = new Member(new OAuth2Info("1347891913847", AuthProvider.KAKAO));
-        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000,04,22), Color.PINK);
-        member1.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/32lkrj.png");
-        member1.updateEmotionalBadge(EmotionalBadge.JOY);
-
         Member member2 = new Member(new OAuth2Info("1347891913847", AuthProvider.APPLE));
-        member2.updateProfile("고삼이", LocalDate.of(1962,11,30), Color.GREEN);
-        member2.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2023-07-22+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+5.04.20.png");
-
         Member member3 = new Member(new OAuth2Info("1347891913847", AuthProvider.KAKAO));
-        member3.updateProfile("지롱", LocalDate.of(2012,05,10), Color.PURPLE);
-        member3.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/lal.png");
-        member3.updateEmotionalBadge(EmotionalBadge.ANGRY);
-
         Member member4 = new Member(new OAuth2Info("1347891913847", AuthProvider.APPLE));
-        member4.updateProfile("푸학학학", LocalDate.of(1975,12,8), Color.YELLOW);
-        member4.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/ghQkd23.png");
-        member4.updateEmotionalBadge(EmotionalBadge.CRY);
 
         memberRepository.save(member1);
         memberRepository.save(member2);
@@ -69,8 +54,23 @@ public class TestService {
         family.addMember(member3);
         family.addMember(member4);
 
+        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000,04,22), Color.PINK);
+        member1.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/32lkrj.png");
+        member1.updateEmotionalBadge(EmotionalBadge.JOY);
+
+        member2.updateProfile("고삼이", LocalDate.of(1962,11,30), Color.GREEN);
+        member2.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2023-07-22+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+5.04.20.png");
+
+        member3.updateProfile("지롱", LocalDate.of(2012,05,10), Color.PURPLE);
+        member3.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/lal.png");
+        member3.updateEmotionalBadge(EmotionalBadge.ANGRY);
+
+        member4.updateProfile("푸학학학", LocalDate.of(1975,12,8), Color.YELLOW);
+        member4.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/ghQkd23.png");
+        member4.updateEmotionalBadge(EmotionalBadge.CRY);
+
         // story
-        Story member1Story = new Story("여기에만 댓글이 있음", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2023, 03, 12), LocalDate.of(2023, 03, 12), member1);
+        Story member1Story = new Story("여기에만 사진과 댓글이 있음", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2023, 03, 12), LocalDate.of(2023, 03, 12), member1);
         Story member1Story2 = new Story("경주로 떠난 가족 여행!", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!! 오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2022, 01, 02), LocalDate.of(2022, 01, 05), member1);
         Story member1Story3 = new Story("생일은 즐거워", "푸학", LocalDate.of(2013, 03, 12), LocalDate.of(2013, 03, 12), member1);
         Story member1Story4 = new Story("야호", "야야야호 호 호 호 호 호 ", LocalDate.of(2009, 05, 02), LocalDate.of(2009, 05, 05), member1);
@@ -116,61 +116,30 @@ public class TestService {
         imageRepository.save(image8);
         imageRepository.save(image9);
 
-        member1Story.updateImage(image);
-        member1Story.updateImage(image1);
-        member1Story.updateImage(image2);
-        member1Story.updateImage(image3);
-        member1Story.updateImage(image4);
-        member1Story.updateImage(image5);
-        member1Story.updateImage(image6);
-        member1Story.updateImage(image7);
-        member1Story.updateImage(image8);
-        member1Story.updateImage(image9);
+        image.updateStory(member1Story);
+        image1.updateStory(member1Story);
+        image2.updateStory(member1Story);
+        image3.updateStory(member1Story);
+        image4.updateStory(member1Story);
+        image5.updateStory(member1Story);
+        image6.updateStory(member1Story);
+        image7.updateStory(member1Story);
+        image8.updateStory(member1Story);
+        image9.updateStory(member1Story);
 
-        member1Story2.updateImage(image1);
-        member1Story2.updateImage(image2);
-        member1Story2.updateImage(image3);
-
-        member1Story4.updateImage(image2);
-        member1Story4.updateImage(image3);
-        member1Story4.updateImage(image4);
-        member1Story4.updateImage(image9);
-
-        member2Story2.updateImage(image3);
-        member2Story2.updateImage(image9);
-        member2Story2.updateImage(image5);
-
-        member3Story.updateImage(image4);
-        member3Story.updateImage(image8);
-        member3Story.updateImage(image6);
-        member3Story.updateImage(image7);
-        member3Story.updateImage(image1);
-        member3Story.updateImage(image2);
-        member3Story.updateImage(image5);
-
-        member3Story2.updateImage(image6);
-        member3Story2.updateImage(image7);
-        member3Story2.updateImage(image8);
-        member3Story2.updateImage(image9);
 
         // comment
         Comment story1comment = new Comment(member1, member1Story, null, "참 재밌었지");
         Comment story1comment2 = new Comment(member1, member1Story, story1comment, "맞아 완전 재밌었음 !");
         Comment story1comment3 = new Comment(member1, member1Story, null, "댓글 테스트 중 중");
         Comment story1comment4 = new Comment(member1, member1Story, null, "재밌도");
-        Comment story1comment5 = new Comment(member1, member1Story4, story1comment4, "야 호 야 호 야야호 ~");
+        Comment story1comment5 = new Comment(member1, member1Story, story1comment4, "야 호 야 호 야야호 ~");
 
         commentRepository.save(story1comment);
         commentRepository.save(story1comment2);
         commentRepository.save(story1comment3);
         commentRepository.save(story1comment4);
         commentRepository.save(story1comment5);
-
-        // saying
-        sayingRepository.save(new Saying("야 ~~~~ 호", member1, null));
-        sayingRepository.save(new Saying("서로에게 한마디 입니다", member2, null));
-        sayingRepository.save(new Saying("서 로 에 게", member3, null));
-        sayingRepository.save(new Saying("한 마 디", member4, null));
 
         // schedule
         scheduleRepository.save(new Schedule("가족 사진 찍는 날", LocalDate.of(2022, 01, 18), LocalDate.of(2022,01,19), ScheduleType.FAMILY, true, null, member1));
