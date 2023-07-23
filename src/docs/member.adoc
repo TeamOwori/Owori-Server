@@ -30,6 +30,7 @@ operation::find home data[snippets='http-request,http-response']
 operation::get mypage profile[snippets='http-request,http-response']
 
 === 멤버 수정불가한 색상 조회
-===== true인 색상에 수정 불가 표시하기
+true인 색상에 수정 불가 표시하기
+
 operation::get member enable color[snippets='http-request,http-response']
 

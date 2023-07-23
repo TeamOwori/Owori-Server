@@ -16,3 +16,6 @@ operation::update family group name[snippets='http-request,http-response']
 
 === 가족 이미지 저장
 operation::save family image[snippets='http-request,http-response']
+
+=== 가족 초대 코드 재생성
+operation::generate family invite code[snippets='http-request,http-response']

@@ -43,8 +43,12 @@ public class Family implements Auditable {
     @Builder
     public Family(String familyGroupName, Member member, String code) {
         this.familyGroupName = familyGroupName;
-        this.invite = new Invite(code, this);
+        organizeInvite(code);
         addMember(member);
+    }
+
+    public void organizeInvite(String code) {
+        this.invite = new Invite(code, this);
     }
 
     public void addMember(Member member) {
