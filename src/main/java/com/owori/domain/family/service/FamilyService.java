@@ -56,7 +56,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         familyRepository.findByInviteCode(addMemberRequest.getInviteCode().strip())
                 .ifPresent(family -> {
                     Invite invite = family.getInvite();
-                    if (isInValidCode(invite)) {
+                    if (!isValidCode(invite)) {
                         invite.delete();
                         return;
                     }
@@ -64,8 +64,8 @@ public class FamilyService implements EntityLoader<Family, UUID> {
                 });
     }
 
-    private boolean isInValidCode(final Invite invite) {
-        return invite.getBaseTime().getCreatedAt().plusMinutes(30L).isBefore(LocalDateTime.now());
+    private boolean isValidCode(final Invite invite) {
+        return invite.getBaseTime().getCreatedAt().plusMinutes(30L).isAfter(LocalDateTime.now());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     }
 
     private void hasInviteCode(final Invite invite) {
-        if (!isInValidCode(invite)) {
+        if (isValidCode(invite)) {
             throw new InviteCodeExistException();
         }
         invite.delete();
