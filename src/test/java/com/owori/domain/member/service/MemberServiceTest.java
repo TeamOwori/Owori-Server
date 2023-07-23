@@ -222,7 +222,7 @@ class MemberServiceTest extends LoginTest {
         //then
         assertThat(response.getBirthday()).isEqualTo(birthday);
         assertThat(response.getNickname()).isEqualTo("지렁이");
-        assertThat(response.getColor()).isEqualTo("PINK");
+        assertThat(response.getColor()).isEqualTo(Color.PINK);
     }
 
 }
