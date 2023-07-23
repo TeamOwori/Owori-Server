@@ -266,7 +266,7 @@ class MemberControllerTest extends RestDocsTest {
     @DisplayName("마이페이지 유저 조회가 제대로 수행되는가")
     void findMyPageProfile() throws Exception {
         //given
-        MyPageProfileResponse expected = new MyPageProfileResponse("꼼지락", LocalDate.of(2000, 04, 22), "red");
+        MyPageProfileResponse expected = new MyPageProfileResponse("꼼지락", LocalDate.of(2000, 04, 22), "RED");
         given(memberService.getMyPageProfile()).willReturn(expected);
 
         //when

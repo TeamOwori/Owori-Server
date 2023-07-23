@@ -136,7 +136,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     public MyPageProfileResponse getMyPageProfile() {
         Member loginUser = authService.getLoginUser();
-        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthDay(), loginUser.getColor().name().toLowerCase());
+        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthDay(), loginUser.getColor().name());
     }
 
 

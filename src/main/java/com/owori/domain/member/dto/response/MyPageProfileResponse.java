@@ -12,5 +12,5 @@ import java.time.LocalDate;
 public class MyPageProfileResponse {
     private String nickname;
     private LocalDate birthday;
-    private String myColor;
+    private String color;
 }
