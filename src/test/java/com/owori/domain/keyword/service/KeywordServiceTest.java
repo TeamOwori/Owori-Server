@@ -3,7 +3,7 @@ package com.owori.domain.keyword.service;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.family.repository.FamilyRepository;
 import com.owori.domain.keyword.entity.Keyword;
-import com.owori.domain.keyword.entity.dto.response.FindKeywordsResponse;
+import com.owori.domain.keyword.dto.response.FindKeywordsResponse;
 import com.owori.domain.keyword.repository.KeywordRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -23,7 +23,6 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

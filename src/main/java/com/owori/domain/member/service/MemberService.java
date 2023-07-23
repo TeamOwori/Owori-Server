@@ -10,6 +10,7 @@ import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
@@ -132,6 +133,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
                 .map(Member::getSaying).filter(Objects::nonNull).map(sayingMapper::toResponse).toList();
         return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);
     }
+
+    public MyPageProfileResponse getMyPageProfile() {
+        Member loginUser = authService.getLoginUser();
+        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthDay(), loginUser.getColor());
+    }
+
 
     public MemberColorResponse getEnableColor() {
         Member loginUser = authService.getLoginUser();

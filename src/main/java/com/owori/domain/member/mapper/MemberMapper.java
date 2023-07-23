@@ -60,7 +60,7 @@ public class MemberMapper {
     private MemberProfileResponse toProfileResponse(Member member) {
         return MemberProfileResponse.builder()
                 .id(member.getId())
-                .nickName(member.getNickname())
+                .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .emotionalBadge(member.getEmotionalBadge())
                 .build();

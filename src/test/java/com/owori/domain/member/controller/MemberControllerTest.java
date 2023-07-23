@@ -9,6 +9,7 @@ import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.EmotionalBadge;
@@ -237,7 +238,7 @@ class MemberControllerTest extends RestDocsTest {
         perform.andDo(print())
                 .andDo(document("find home data", getDocumentRequest(), getDocumentResponse()));
     }
-
+  
     @Test
     @DisplayName("멤버의 수정가능한 색상 조회가 수행되는가")
     void getEnableColor() throws Exception {
@@ -259,5 +260,28 @@ class MemberControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("get member enable color", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("마이페이지 유저 조회가 제대로 수행되는가")
+    void findMyPageProfile() throws Exception {
+        //given
+        MyPageProfileResponse expected = new MyPageProfileResponse("꼼지락", LocalDate.of(2000, 04, 22), Color.BLUE);
+        given(memberService.getMyPageProfile()).willReturn(expected);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/members/profile")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("get mypage profile", getDocumentRequest(), getDocumentResponse()));
     }
 }

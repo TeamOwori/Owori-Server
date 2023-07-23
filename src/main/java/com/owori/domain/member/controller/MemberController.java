@@ -7,6 +7,7 @@ import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.service.MemberService;
 import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +103,16 @@ public class MemberController {
     public ResponseEntity<MemberHomeResponse> findHomeData() {
         return ResponseEntity.ok(memberService.findHomeData());
     }
+
+    /**
+     * 마이페이지 유저 조회 컨트롤러입니다.
+     * @return 로그인 유저 정보를 반환합니다.
+     */
+    @GetMapping("/profile")
+    public ResponseEntity<MyPageProfileResponse> getMyPageProfile() {
+        return ResponseEntity.ok(memberService.getMyPageProfile());
+    }
+
 
     /**
      * 멤버의 수정가능한 색상 조회 컨트롤러입니다.
