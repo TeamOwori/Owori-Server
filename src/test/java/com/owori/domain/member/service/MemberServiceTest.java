@@ -9,6 +9,7 @@ import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.entity.*;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
@@ -179,5 +180,22 @@ class MemberServiceTest extends LoginTest {
         assertThat(familyName).isEqualTo(responses.getFamilyGroupName());
         assertThat(responses.getMemberProfiles().stream().map(MemberProfileResponse::getId).toList()).isEqualTo(List.of(authService.getLoginUser().getId(), saveMember1.getId()));
         assertThat(responses.getFamilySayings().stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
+    }
+
+    @Test
+    @DisplayName("유저 정보 조회가 제대로 이루어지는가")
+    void findMyPageProfile() {
+        //given
+        new Family("우리가족", loginUser, "1231231234");
+        LocalDate birthday = LocalDate.of(2000, 04, 22);
+        loginUser.updateProfile("지렁이", birthday, Color.PINK);
+
+        //when
+        MyPageProfileResponse response = memberService.getMyPageProfile();
+
+        //then
+        assertThat(response.getBirthday()).isEqualTo(birthday);
+        assertThat(response.getNickname()).isEqualTo("지렁이");
+        assertThat(response.getMyColor()).isEqualTo("pink");
     }
 }
