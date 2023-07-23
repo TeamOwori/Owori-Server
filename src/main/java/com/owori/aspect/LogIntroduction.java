@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Slf4j
 @Aspect
@@ -26,15 +26,15 @@ public class LogIntroduction {
 
     @Before("allController()")
     public void controllerLog(JoinPoint joinPoint) {
-        logging(joinPoint, (signature, args) -> log.info(FORMAT, signature, args));
+        logging(joinPoint, jp -> log.info(FORMAT, jp.getSignature().toShortString(), jp.getArgs()));
     }
 
     @Before("allService() || allRepository()")
     public void serviceAndRepositoryLog(JoinPoint joinPoint) {
-        logging(joinPoint, (signature, args) -> log.debug(FORMAT, signature, args));
+        logging(joinPoint, jp -> log.info(FORMAT, jp.getSignature().toShortString(), jp.getArgs()));
     }
 
-    private void logging(JoinPoint joinPoint, BiConsumer<String, Object[]> consumer) {
-        consumer.accept(joinPoint.getSignature().toShortString(), joinPoint.getArgs());
+    private void logging(JoinPoint joinPoint, Consumer<JoinPoint> consumer) {
+        consumer.accept(joinPoint);
     }
 }
