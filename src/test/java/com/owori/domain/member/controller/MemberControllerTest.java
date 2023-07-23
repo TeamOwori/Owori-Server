@@ -238,7 +238,7 @@ class MemberControllerTest extends RestDocsTest {
         perform.andDo(print())
                 .andDo(document("find home data", getDocumentRequest(), getDocumentResponse()));
     }
-
+  
     @Test
     @DisplayName("멤버의 수정가능한 색상 조회가 수행되는가")
     void getEnableColor() throws Exception {

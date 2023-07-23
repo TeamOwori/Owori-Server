@@ -113,6 +113,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMyPageProfile());
     }
 
+
     /**
      * 멤버의 수정가능한 색상 조회 컨트롤러입니다.
      * 멤버가 수정할 수 없게 표시할 색상을 true, 수정 불가 표시를 안해도 되는 색상에는 false를 response합니다.
