@@ -1,5 +1,6 @@
 package com.owori.domain.member.controller;
 
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
@@ -110,5 +111,15 @@ public class MemberController {
     @GetMapping("/profile")
     public ResponseEntity<MyPageProfileResponse> getMyPageProfile() {
         return ResponseEntity.ok(memberService.getMyPageProfile());
+    }
+
+    /**
+     * 멤버의 수정가능한 색상 조회 컨트롤러입니다.
+     * 멤버가 수정할 수 없게 표시할 색상을 true, 수정 불가 표시를 안해도 되는 색상에는 false를 response합니다.
+     * @return 색상별로 true/false 값을 가지는 dto입니다.
+     */
+    @GetMapping("/colors")
+    public ResponseEntity<MemberColorResponse> getEnableColor() {
+        return ResponseEntity.ok(memberService.getEnableColor());
     }
 }

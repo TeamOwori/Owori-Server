@@ -5,6 +5,7 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
@@ -236,6 +237,29 @@ class MemberControllerTest extends RestDocsTest {
         // docs
         perform.andDo(print())
                 .andDo(document("find home data", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("멤버의 수정가능한 색상 조회가 수행되는가")
+    void getEnableColor() throws Exception {
+        //given
+        MemberColorResponse expected = new MemberColorResponse(false, true, false, false, false, false, false);
+        when(memberService.getEnableColor()).thenReturn(expected);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/members/colors")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("get member enable color", getDocumentRequest(), getDocumentResponse()));
     }
 
     @Test
