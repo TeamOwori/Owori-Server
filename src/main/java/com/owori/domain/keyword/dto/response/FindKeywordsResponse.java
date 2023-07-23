@@ -1,4 +1,4 @@
-package com.owori.domain.keyword.entity.dto.response;
+package com.owori.domain.keyword.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

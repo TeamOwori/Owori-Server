@@ -1,6 +1,6 @@
 package com.owori.domain.keyword.controller;
 
-import com.owori.domain.keyword.entity.dto.response.FindKeywordsResponse;
+import com.owori.domain.keyword.dto.response.FindKeywordsResponse;
 import com.owori.domain.keyword.service.KeywordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
