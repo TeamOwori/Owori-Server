@@ -8,10 +8,7 @@ import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -67,5 +64,15 @@ public class FamilyController {
     @PostMapping("/images")
     public ResponseEntity<ImageResponse> saveFamilyImage(MultipartFile familyImage) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamilyImage(familyImage));
+    }
+
+    /**
+     * 가족 초대 코드 재생성 컨트롤러입니다.
+     * 가족 초대 코드가 유효하지 않을 때 재생성합니다.
+     * @return 가족 초대 코드를 response 합니다.
+     */
+    @GetMapping("/code")
+    public ResponseEntity<InviteCodeResponse> generateInviteCode() {
+        return ResponseEntity.ok(familyService.generateInviteCode());
     }
 }

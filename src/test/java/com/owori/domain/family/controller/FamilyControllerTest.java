@@ -26,6 +26,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -132,5 +133,28 @@ class FamilyControllerTest extends RestDocsTest {
         //docs
         perform.andDo(print())
                 .andDo(document("save family image", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("가족 초대 코드 재생성이 수행되는가")
+    void generateInviteCode() throws Exception {
+        //given
+        InviteCodeResponse expected = new InviteCodeResponse("qeroiuh12y");
+        given(familyService.generateInviteCode()).willReturn(expected);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/families/code")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("memberId", UUID.randomUUID().toString()));
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("generate family invite code", getDocumentRequest(), getDocumentResponse()));
     }
 }

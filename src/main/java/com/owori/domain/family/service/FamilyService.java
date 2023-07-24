@@ -6,6 +6,7 @@ import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.family.entity.Invite;
 import com.owori.domain.family.exception.InviteCodeDuplicateException;
+import com.owori.domain.family.exception.InviteCodeExistException;
 import com.owori.domain.family.mapper.FamilyMapper;
 import com.owori.domain.family.repository.FamilyRepository;
 import com.owori.domain.member.entity.Member;
@@ -55,7 +56,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         familyRepository.findByInviteCode(addMemberRequest.getInviteCode().strip())
                 .ifPresent(family -> {
                     Invite invite = family.getInvite();
-                    if (isInValidCode(invite)) {
+                    if (!isValidCode(invite)) {
                         invite.delete();
                         return;
                     }
@@ -63,8 +64,8 @@ public class FamilyService implements EntityLoader<Family, UUID> {
                 });
     }
 
-    private boolean isInValidCode(final Invite invite) {
-        return invite.getBaseTime().getCreatedAt().plusMinutes(30L).isBefore(LocalDateTime.now());
+    private boolean isValidCode(final Invite invite) {
+        return invite.getBaseTime().getCreatedAt().plusMinutes(30L).isAfter(LocalDateTime.now());
     }
 
     @Override
@@ -79,14 +80,31 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         family.updateGroupName(groupNameRequest.getFamilyGroupName());
     }
 
-    public ImageResponse saveFamilyImage(MultipartFile multipartFile) throws IOException {
+    public ImageResponse saveFamilyImage(final MultipartFile multipartFile) throws IOException {
         Family family = authService.getLoginUser().getFamily();
         String imageUrl = uploadImage(multipartFile);
         family.addImage(imageUrl);
         return new ImageResponse(imageUrl);
     }
 
-    private String uploadImage(MultipartFile multipartFile) throws IOException {
+    private String uploadImage(final MultipartFile multipartFile) throws IOException {
         return s3ImageComponent.uploadImage("family-image", multipartFile);
+    }
+
+    @Transactional
+    public InviteCodeResponse generateInviteCode() {
+        Family family = authService.getLoginUser().getFamily();
+        hasInviteCode(family.getInvite());
+
+        String code = generateRandomInviteCode();
+        family.organizeInvite(code);
+        return new InviteCodeResponse(code);
+    }
+
+    private void hasInviteCode(final Invite invite) {
+        if (isValidCode(invite)) {
+            throw new InviteCodeExistException();
+        }
+        invite.delete();
     }
 }
