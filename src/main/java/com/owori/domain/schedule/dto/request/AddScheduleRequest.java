@@ -20,9 +20,9 @@ public class AddScheduleRequest {
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
     @NotNull(message = "startDate는 필수 입력값입니다.")
-    @FutureOrPresent(message = "startDate에 과거 날짜를 입력할 수 없습니다.")
     private LocalDate startDate;
     @NotNull(message = "endDate는 필수 입력값입니다.")
+    @FutureOrPresent(message = "endDate에 과거 날짜를 입력할 수 없습니다.")
     private LocalDate endDate;
     @NotNull(message = "scheduleType은 필수 입력값입니다.")
     private ScheduleType scheduleType;

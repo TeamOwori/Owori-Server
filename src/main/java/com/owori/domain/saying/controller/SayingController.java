@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class SayingController {
      * @return 생성된 서로에게 한마디의 id가 반환됩니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addSaying(@RequestBody AddSayingRequest request) {
+    public ResponseEntity<IdResponse<UUID>> addSaying(@RequestBody @Valid AddSayingRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(sayingService.addSaying(request));
     }
 
@@ -36,7 +37,7 @@ public class SayingController {
      * @return 수정된 서로에게 한마디의 id가 반환됩니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<IdResponse<UUID>> updateSaying(@RequestParam UUID sayingId, @RequestBody UpdateSayingRequest request) {
+    public ResponseEntity<IdResponse<UUID>> updateSaying(@RequestParam UUID sayingId, @RequestBody @Valid UpdateSayingRequest request) {
         return ResponseEntity.ok(sayingService.updateSaying(sayingId, request));
     }
 
