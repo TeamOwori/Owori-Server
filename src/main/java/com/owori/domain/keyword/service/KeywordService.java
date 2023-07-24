@@ -1,7 +1,7 @@
 package com.owori.domain.keyword.service;
 
 import com.owori.domain.keyword.entity.Keyword;
-import com.owori.domain.keyword.entity.dto.response.FindKeywordsResponse;
+import com.owori.domain.keyword.dto.response.FindKeywordsResponse;
 import com.owori.domain.keyword.repository.KeywordRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;

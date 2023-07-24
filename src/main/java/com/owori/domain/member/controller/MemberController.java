@@ -1,11 +1,13 @@
 package com.owori.domain.member.controller;
 
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.service.MemberService;
 import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
@@ -100,5 +102,25 @@ public class MemberController {
     @GetMapping("/home")
     public ResponseEntity<MemberHomeResponse> findHomeData() {
         return ResponseEntity.ok(memberService.findHomeData());
+    }
+
+    /**
+     * 마이페이지 유저 조회 컨트롤러입니다.
+     * @return 로그인 유저 정보를 반환합니다.
+     */
+    @GetMapping("/profile")
+    public ResponseEntity<MyPageProfileResponse> getMyPageProfile() {
+        return ResponseEntity.ok(memberService.getMyPageProfile());
+    }
+
+
+    /**
+     * 멤버의 수정가능한 색상 조회 컨트롤러입니다.
+     * 멤버가 수정할 수 없게 표시할 색상을 true, 수정 불가 표시를 안해도 되는 색상에는 false를 response합니다.
+     * @return 색상별로 true/false 값을 가지는 dto입니다.
+     */
+    @GetMapping("/colors")
+    public ResponseEntity<MemberColorResponse> getEnableColor() {
+        return ResponseEntity.ok(memberService.getEnableColor());
     }
 }

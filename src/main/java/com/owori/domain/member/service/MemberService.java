@@ -7,8 +7,10 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
@@ -28,7 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -127,5 +132,18 @@ public class MemberService implements EntityLoader<Member, UUID> {
         List<SayingByFamilyResponse> sayingResponses = nowMember.getFamily().getMembers().stream()
                 .map(Member::getSaying).filter(Objects::nonNull).map(sayingMapper::toResponse).toList();
         return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);
+    }
+
+    public MyPageProfileResponse getMyPageProfile() {
+        Member loginUser = authService.getLoginUser();
+        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthDay(), loginUser.getColor());
+    }
+
+
+    public MemberColorResponse getEnableColor() {
+        Member loginUser = authService.getLoginUser();
+        Set<Member> familyMembers = loginUser.getFamily().getMembers();
+        familyMembers.removeIf(loginUser::equals);
+        return memberMapper.toColorResponse(familyMembers);
     }
 }

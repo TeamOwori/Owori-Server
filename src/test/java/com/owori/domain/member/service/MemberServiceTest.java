@@ -1,5 +1,6 @@
 package com.owori.domain.member.service;
 
+import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.family.repository.FamilyRepository;
@@ -7,8 +8,10 @@ import com.owori.domain.family.service.FamilyService;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
+import com.owori.domain.member.dto.response.MyPageProfileResponse;
 import com.owori.domain.member.entity.*;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.entity.Saying;
@@ -28,6 +31,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 
 @DatabaseTest
@@ -180,4 +184,45 @@ class MemberServiceTest extends LoginTest {
         assertThat(responses.getMemberProfiles().stream().map(MemberProfileResponse::getId).toList()).isEqualTo(List.of(authService.getLoginUser().getId(), saveMember1.getId()));
         assertThat(responses.getFamilySayings().stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
     }
+    @DisplayName("수정 가능한 색상 조회가 수행되는가")
+    void getEnableColor() {
+        //given
+        String inviteCode = familyService.saveFamily(new FamilyRequest("우리 가족")).getInviteCode();
+        Member member = memberRepository.save(Member.builder().oAuth2Info(new OAuth2Info("1243", AuthProvider.KAKAO)).build());
+        when(authService.getLoginUser()).thenReturn(member);
+        familyService.addMember(new AddMemberRequest(inviteCode));
+
+        em.flush();
+        em.clear();
+
+        //when
+        MemberColorResponse result = memberService.getEnableColor();
+
+        //then
+        assertThat(result.isRed()).isTrue();
+        assertThat(result.isYellow()).isFalse();
+        assertThat(result.isGreen()).isFalse();
+        assertThat(result.isBlue()).isFalse();
+        assertThat(result.isSkyblue()).isFalse();
+        assertThat(result.isPink()).isFalse();
+        assertThat(result.isPurple()).isFalse();
+    }
+
+    @Test
+    @DisplayName("유저 정보 조회가 제대로 이루어지는가")
+    void findMyPageProfile() {
+        //given
+        new Family("우리가족", loginUser, "1231231234");
+        LocalDate birthday = LocalDate.of(2000, 04, 22);
+        loginUser.updateProfile("지렁이", birthday, Color.PINK);
+
+        //when
+        MyPageProfileResponse response = memberService.getMyPageProfile();
+
+        //then
+        assertThat(response.getBirthday()).isEqualTo(birthday);
+        assertThat(response.getNickname()).isEqualTo("지렁이");
+        assertThat(response.getColor()).isEqualTo(Color.PINK);
+    }
+
 }

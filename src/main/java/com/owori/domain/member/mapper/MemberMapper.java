@@ -3,9 +3,11 @@ package com.owori.domain.member.mapper;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.response.MemberColorResponse;
 import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.response.MemberJwtResponse;
 import com.owori.domain.member.dto.response.MemberProfileResponse;
+import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
@@ -58,10 +60,32 @@ public class MemberMapper {
     private MemberProfileResponse toProfileResponse(Member member) {
         return MemberProfileResponse.builder()
                 .id(member.getId())
-                .nickName(member.getNickname())
+                .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .emotionalBadge(member.getEmotionalBadge())
                 .build();
     }
 
+    public MemberColorResponse toColorResponse(Set<Member> familyMembers) {
+        if (familyMembers.size() >= 7) {
+            return defaultColorResponse();
+        }
+        return toColorResponseWithFamilyColors(familyMembers.stream().map(Member::getColor).toList());
+    }
+
+    private MemberColorResponse toColorResponseWithFamilyColors(List<Color> familyColors) {
+        return MemberColorResponse.builder()
+                .red(familyColors.contains(Color.RED))
+                .yellow(familyColors.contains(Color.YELLOW))
+                .green(familyColors.contains(Color.GREEN))
+                .pink(familyColors.contains(Color.PINK))
+                .skyblue(familyColors.contains(Color.SKYBLUE))
+                .blue(familyColors.contains(Color.BLUE))
+                .purple(familyColors.contains(Color.PURPLE))
+                .build();
+    }
+
+    private MemberColorResponse defaultColorResponse() {
+        return MemberColorResponse.builder().build();
+    }
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MemberProfileResponse {
     private UUID id;
-    private String nickName;
+    private String nickname;
     private String profileImage;
     private EmotionalBadge emotionalBadge;
 }
