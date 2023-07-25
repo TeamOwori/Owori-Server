@@ -4,6 +4,7 @@ import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.entity.Family;
+import com.owori.domain.family.exception.InviteCodeExistException;
 import com.owori.domain.family.repository.FamilyRepository;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @DatabaseTest
@@ -85,5 +87,18 @@ class FamilyServiceTest extends LoginTest {
         //then
         Family result = familyService.loadEntity(family.getId());
         assertThat(result.getFamilyGroupName()).isEqualTo(resultName);
+    }
+
+    @Test
+    @DisplayName("가족 그룹명 업데이트가 수행되는가")
+    void generateInviteCode() {
+        //given
+        Family family = familyRepository.save(Family.builder().code("12341234").familyGroupName("오월이가족").member(loginUser).build());
+
+        //when
+        assertThrows(InviteCodeExistException.class, familyService::generateInviteCode);
+
+        //then
+
     }
 }
