@@ -21,7 +21,7 @@ public class ScheduleDDayResponse {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String dDay;
+    private String dday;
     private ScheduleType scheduleType;
     private String memberNickname;
     private Color color;

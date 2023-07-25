@@ -9,12 +9,17 @@ import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -27,7 +32,7 @@ public class ScheduleController {
      * @return AddScheduleResponse는 추가된 일정의 id값입니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addSchedule(@RequestBody AddScheduleRequest addScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> addSchedule(@Valid @RequestBody AddScheduleRequest addScheduleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.addSchedule(addScheduleRequest));
     }
 
@@ -39,7 +44,7 @@ public class ScheduleController {
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId, @RequestBody UpdateScheduleRequest updateScheduleRequest) {
+    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId,@Valid @RequestBody UpdateScheduleRequest updateScheduleRequest) {
         return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
     }
 
@@ -50,7 +55,8 @@ public class ScheduleController {
      * @return List<FindScheduleByMonthResponse> 해당 달에 대한 일정 리스트 정보입니다.
      */
     @GetMapping("/month")
-    public ResponseEntity<List<ScheduleByMonthResponse>> findScheduleByMonth(@RequestParam String yearMonth) {
+    public ResponseEntity<List<ScheduleByMonthResponse>> findScheduleByMonth(
+            @RequestParam @Pattern(regexp = "\\d{4}-(0[1-9]|1[012])", message = "\"yyyy-MM\"형태로 입력하세요") String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
 
@@ -73,5 +79,11 @@ public class ScheduleController {
     @GetMapping("/dday")
     public ResponseEntity<List<ScheduleDDayResponse>> findDDayByFamily() {
         return ResponseEntity.ok(scheduleService.findDDayByFamily());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Object exception(Exception e) {
+        return e.getMessage();
     }
 }
