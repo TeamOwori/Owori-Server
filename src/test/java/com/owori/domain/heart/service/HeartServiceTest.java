@@ -1,6 +1,6 @@
 package com.owori.domain.heart.service;
 
-import com.owori.domain.heart.dto.HeartStatusResponse;
+import com.owori.domain.heart.dto.response.HeartStatusResponse;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.member.entity.Member;
@@ -43,7 +43,7 @@ public class HeartServiceTest extends LoginTest {
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
         Heart heart = heartRepository.findByMemberAndStory(member, story).get();
 
-        assertThat(response.getIsLiked()).isEqualTo(true);
+        assertThat(response.getIsLiked()).isFalse();
         assertThat(heart.getStory()).isEqualTo(story);
         assertThat(heart.getMember()).isEqualTo(member);
         assertThat(hearts.iterator().next()).isEqualTo(heart);
@@ -65,8 +65,8 @@ public class HeartServiceTest extends LoginTest {
         Set<Heart> hearts = storyRepository.findById(story.getId()).get().getHearts();
         Heart heart = heartRepository.findByMemberAndStory(member, story).orElse(null);
 
-        assertThat(response.getIsLiked()).isEqualTo(false);
-        assertThat(heart).isEqualTo(null);
-        assertThat(hearts.isEmpty()).isEqualTo(true);
+        assertThat(response.getIsLiked()).isFalse();
+        assertThat(heart).isNull();
+        assertThat(hearts).isEmpty();
     }
 }

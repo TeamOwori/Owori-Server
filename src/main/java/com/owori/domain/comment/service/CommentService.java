@@ -2,6 +2,7 @@ package com.owori.domain.comment.service;
 
 import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
+import com.owori.domain.comment.dto.response.CommentIdResponse;
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.comment.mapper.CommentMapper;
@@ -9,7 +10,6 @@ import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.entity.Story;
-import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
@@ -29,15 +29,15 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     private final CommentMapper commentMapper;
     private final AuthService authService;
 
-    public IdResponse<UUID> addComment(Story story, AddCommentRequest request) {
+    public CommentIdResponse addComment(Story story, AddCommentRequest request) {
         Member member = authService.getLoginUser();
-        Optional<Comment> parentComment = Optional.ofNullable(request.getParentCommentId())
-                .map(parentId -> loadEntity(parentId));
+        Comment parentComment = Optional.ofNullable(request.getParentCommentId())
+                .map(this::loadEntity).orElse(null);
 
-        Comment comment = commentMapper.toEntity(member, story, parentComment.orElse(null), request.getContent());
+        Comment comment = commentMapper.toEntity(member, story, parentComment, request.getContent());
         commentRepository.save(comment);
 
-        return new IdResponse<>(comment.getId());
+        return new CommentIdResponse(comment.getId());
     }
 
     @Transactional
@@ -50,22 +50,21 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     }
 
     @Transactional
-    public IdResponse<UUID> updateComment(UUID commentId, UpdateCommentRequest request) {
-        Comment comment = loadEntity(commentId);
+    public CommentIdResponse updateComment(UpdateCommentRequest request) {
+        Comment comment = loadEntity(request.getCommentId());
         if(!comment.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
         comment.updateContent(request.getComment());
 
-        return new IdResponse<>(comment.getId());
+        return new CommentIdResponse(comment.getId());
     }
 
     public List<CommentResponse> findComments(Story story, Member member){
         List<Comment> comments = commentRepository.findAllComments(story, member.getFamily());
-        return comments.stream().map(comment -> commentMapper.toDto(comment)).toList();
+        return comments.stream().map(commentMapper::toResponse).toList();
     }
 
     @Override
     public Comment loadEntity(UUID id) {
         return commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
 }

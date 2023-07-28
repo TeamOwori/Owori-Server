@@ -14,13 +14,13 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 public class FindStoryResponse {
-    private UUID id;
+    private UUID storyId;
     private Boolean isLiked;
     private List<String> images;
     private String title;
     private String writer;
-    private String contents;
-    private Integer HeartCnt;
-    private Integer CommentCnt;
+    private String content;
+    private Integer heartCnt;
+    private Integer commentCnt;
     private List<CommentResponse> comments;
 }

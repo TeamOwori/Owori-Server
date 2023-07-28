@@ -12,5 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MemberJwtResponse {
     private UUID memberId;
+    private Boolean isServiceMember;
     private JwtToken jwtToken;
 }

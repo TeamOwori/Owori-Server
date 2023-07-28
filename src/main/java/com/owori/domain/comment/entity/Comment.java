@@ -61,7 +61,6 @@ public class Comment implements Auditable {
 
     public String getTimeBefore(){
         return TimesAgo.of(this.getBaseTime().getCreatedAt());
-        // return TimeAgoCalculator.timesAgo(this.getBaseTime().getCreatedAt());
     }
 
     public UUID getParentId(){

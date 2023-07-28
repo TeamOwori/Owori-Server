@@ -17,7 +17,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public CommentResponse toDto(Comment comment){
+    public CommentResponse toResponse(Comment comment){
         return CommentResponse.builder()
                 .parentCommentId(comment.getParentId())
                 .commentId(comment.getId())

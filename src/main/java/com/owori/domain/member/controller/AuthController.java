@@ -24,8 +24,8 @@ public class AuthController {
      */
     @GetMapping("/refresh")
     public ResponseEntity<JwtToken> authorize(
-            @RequestHeader String refreshToken,
-            @RequestHeader String accessToken) {
+            @RequestHeader("refresh_token") String refreshToken,
+            @RequestHeader("access_token") String accessToken) {
         return ResponseEntity.ok(authService.refreshToken(refreshToken, accessToken));
     }
 }

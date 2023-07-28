@@ -51,7 +51,7 @@ public class ImageControllerTest extends RestDocsTest{
                                         .file(image1).file(image2)
                                         .accept(MediaType.APPLICATION_JSON)
                                         .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                        .header("memberId", UUID.randomUUID().toString())
+                                        .header("member_id", UUID.randomUUID().toString())
                 );
 
         //then

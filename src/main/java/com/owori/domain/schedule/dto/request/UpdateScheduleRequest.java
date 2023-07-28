@@ -11,11 +11,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateScheduleRequest {
+    @NotNull
+    private UUID scheduleId;
     @NotBlank(message = "제목을 입력해주세요")
     private String title;
     @NotNull(message = "startDate는 필수 입력값입니다.")

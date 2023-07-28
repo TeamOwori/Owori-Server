@@ -39,12 +39,12 @@ public class ScheduleMapper {
 
     private ScheduleByMonthResponse toMonthResponse(Schedule schedule) {
         return ScheduleByMonthResponse.builder()
-                .id(schedule.getId())
+                .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
                 .endDate(schedule.getEndDate())
                 .scheduleType(schedule.getScheduleType())
-                .memberNickname( schedule.getMember().getNickname())
+                .nickname( schedule.getMember().getNickname())
                 .color(schedule.getMember().getColor())
                 .ddayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())
@@ -53,13 +53,13 @@ public class ScheduleMapper {
 
     private ScheduleDDayResponse toDDayResponse(Schedule schedule, String dDay) {
         return ScheduleDDayResponse.builder()
-                .id(schedule.getId())
+                .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
                 .endDate(schedule.getEndDate())
                 .dday(dDay)
                 .scheduleType(schedule.getScheduleType())
-                .memberNickname(schedule.getMember().getNickname())
+                .nickname(schedule.getMember().getNickname())
                 .color(schedule.getMember().getColor())
                 .ddayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())

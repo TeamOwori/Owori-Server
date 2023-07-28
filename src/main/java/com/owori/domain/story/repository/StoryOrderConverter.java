@@ -24,8 +24,8 @@ public class StoryOrderConverter implements OrderConverter {
     }
 
     private void initializeMap() {
-        keywordMap.put("createdAt", story.baseTime.createdAt);
-        keywordMap.put("startDate", story.startDate);
+        keywordMap.put("created_at", story.baseTime.createdAt);
+        keywordMap.put("start_date", story.startDate);
     }
 
     @Override
@@ -43,11 +43,9 @@ public class StoryOrderConverter implements OrderConverter {
         if (date == null) { return null; }
         String sortProperty = pageable.getSort().toList().get(0).getProperty();
 
-        if (sortProperty.equals("startDate")){
+        if (sortProperty.equals("start_date")){
             return story.startDate.lt(date);
         }
         return story.baseTime.createdAt.lt(date.atStartOfDay());
     }
-
 }
-

@@ -28,10 +28,11 @@ public class MemberMapper {
                 .build();
     }
 
-    public MemberJwtResponse toJwtResponse(JwtToken jwtToken, UUID memberId) {
+    public MemberJwtResponse toJwtResponse(JwtToken jwtToken, UUID memberId, Boolean isServiceMember) {
         return MemberJwtResponse.builder()
                 .jwtToken(jwtToken)
                 .memberId(memberId)
+                .isServiceMember(isServiceMember)
                 .build();
     }
 
@@ -40,7 +41,7 @@ public class MemberMapper {
         return MemberHomeResponse.builder()
                 .familyGroupName(family.getFamilyGroupName())
                 .memberProfiles(toProfileResponseList(nowMember, family.getMembers()))
-                .dDaySchedules(dDayByFamilyResponses)
+                .ddaySchedules(dDayByFamilyResponses)
                 .familyImages(family.getImages())
                 .familySayings(sayingResponses)
                 .build();

@@ -120,7 +120,7 @@ public class CommentServiceTest extends LoginTest {
         commentRepository.save(comment);
 
         //when
-        commentService.updateComment(comment.getId(),new UpdateCommentRequest(content));
+        commentService.updateComment(new UpdateCommentRequest(comment.getId(), content));
 
         //then
         Comment updateComment = commentRepository.findById(comment.getId()).get();

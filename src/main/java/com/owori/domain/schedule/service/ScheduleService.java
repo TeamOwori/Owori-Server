@@ -4,13 +4,13 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.domain.schedule.mapper.ScheduleMapper;
 import com.owori.domain.schedule.repository.ScheduleRepository;
-import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
@@ -19,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,23 +31,28 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     private final ScheduleMapper scheduleMapper;
     private final AuthService authService;
 
-    public IdResponse<UUID> addSchedule(AddScheduleRequest addScheduleRequest) {
+    public ScheduleIdResponse addSchedule(AddScheduleRequest addScheduleRequest) {
         Member member = authService.getLoginUser();
         Schedule newSchedule = scheduleRepository.save(scheduleMapper.toEntity(addScheduleRequest, member));
-        return new IdResponse<>(newSchedule.getId());
+        return new ScheduleIdResponse(newSchedule.getId());
     }
 
     @Transactional
-    public IdResponse<UUID> updateSchedule(UUID scheduleId, UpdateScheduleRequest updateScheduleRequest) {
+    public ScheduleIdResponse updateSchedule(UpdateScheduleRequest updateScheduleRequest) {
         // id 값으로 일정 찾기
+        UUID scheduleId = updateScheduleRequest.getScheduleId();
         Schedule schedule = loadEntity(scheduleId);
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
-        if(schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
+        if(isValidMember(schedule)) throw new NoAuthorityException();
 
         schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
                 updateScheduleRequest.getEndDate(), updateScheduleRequest.getDdayOption(), updateScheduleRequest.getAlarmOptions());
 
-        return new IdResponse<>(scheduleId);
+        return new ScheduleIdResponse(scheduleId);
+    }
+
+    private boolean isValidMember(Schedule schedule) {
+        return schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId());
     }
 
     @Transactional
@@ -92,6 +100,4 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     public Schedule loadEntity(UUID uuid) {
         return scheduleRepository.findById(uuid).orElseThrow(EntityNotFoundException::new);
     }
-
-
 }

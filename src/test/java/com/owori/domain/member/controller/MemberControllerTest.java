@@ -56,7 +56,7 @@ class MemberControllerTest extends RestDocsTest {
     void saveMember() throws Exception {
         //given
         JwtToken jwt = new JwtToken("accesasdfagfwaerg.tokenasfd13sad.isthisahtfgwiueoh", "refreshriuqwhfoieu.tokenqiweurhu.isthiswheoituhw");
-        MemberJwtResponse expected = new MemberJwtResponse(UUID.randomUUID(), jwt);
+        MemberJwtResponse expected = new MemberJwtResponse(UUID.randomUUID(), Boolean.TRUE, jwt);
         when(memberService.saveIfNone(any())).thenReturn(expected);
 
         //when
@@ -92,7 +92,7 @@ class MemberControllerTest extends RestDocsTest {
                                 .content(
                                         toRequestBody(new MemberDetailsRequest("owori", LocalDate.now())))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());
@@ -116,7 +116,7 @@ class MemberControllerTest extends RestDocsTest {
                         multipart("/members/profile-image", HttpMethod.POST)
                                 .file(image1)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.MULTIPART_FORM_DATA));
 
         //then
@@ -140,7 +140,7 @@ class MemberControllerTest extends RestDocsTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(toRequestBody(new MemberProfileRequest("오월이", LocalDate.now(), Color.GREEN)))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());
@@ -162,7 +162,7 @@ class MemberControllerTest extends RestDocsTest {
                         delete("/members")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());
@@ -185,7 +185,7 @@ class MemberControllerTest extends RestDocsTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(toRequestBody(new EmotionalBadgeRequest(EmotionalBadge.HAPPY)))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());
@@ -227,7 +227,7 @@ class MemberControllerTest extends RestDocsTest {
                         get("/members/home")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then
@@ -252,7 +252,7 @@ class MemberControllerTest extends RestDocsTest {
                         get("/members/colors")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());
@@ -275,7 +275,7 @@ class MemberControllerTest extends RestDocsTest {
                         get("/members/profile")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());

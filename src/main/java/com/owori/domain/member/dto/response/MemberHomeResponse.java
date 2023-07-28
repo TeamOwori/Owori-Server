@@ -16,8 +16,7 @@ import java.util.List;
 public class MemberHomeResponse {
     private String familyGroupName;
     private List<MemberProfileResponse> memberProfiles;
-    private List<ScheduleDDayResponse> dDaySchedules;
+    private List<ScheduleDDayResponse> ddaySchedules;
     private List<String> familyImages;
     private List<SayingByFamilyResponse> familySayings;
-
 }

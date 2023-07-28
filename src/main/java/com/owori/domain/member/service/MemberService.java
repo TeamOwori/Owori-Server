@@ -30,10 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -55,11 +52,24 @@ public class MemberService implements EntityLoader<Member, UUID> {
     public MemberJwtResponse saveIfNone(final MemberRequest memberRequest) {
         String clientId = getClientId(memberRequest);
 
-        Member member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider())
-                .orElseGet(() -> memberRepository.save(memberMapper.toEntity(clientId, memberRequest)));
+        Optional<Member> member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider());
+        if (member.isPresent()) {
+            return getServiceMemberJwtResponse(member.get());
+        }
 
+        return getNewMemberJwtResponse(memberRequest, clientId);
+    }
+
+    private MemberJwtResponse getNewMemberJwtResponse(final MemberRequest memberRequest, final String clientId) {
+        Member member = memberRepository.save(memberMapper.toEntity(clientId, memberRequest));
         JwtToken jwtToken = createMemberJwtToken(member);
-        return memberMapper.toJwtResponse(jwtToken, member.getId());
+        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
+    }
+
+    private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
+        JwtToken jwtToken = createMemberJwtToken(member);
+
+        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
     }
 
     private String getClientId(final MemberRequest memberRequest) {

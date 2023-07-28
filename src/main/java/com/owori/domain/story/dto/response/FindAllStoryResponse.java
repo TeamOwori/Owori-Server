@@ -13,12 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FindAllStoryResponse {
-    private UUID id;
+    private UUID storyId;
     private String title;
-    private String contents;
+    private String content;
     private String image;
-    private Integer heartCnt;
-    private Integer commentCnt;
+    private Integer heartCount;
+    private Integer commentCount;
     private String writer;
     private LocalDate startDate;
     private LocalDate endDate;
