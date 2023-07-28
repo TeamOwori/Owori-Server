@@ -91,7 +91,7 @@ public class KeywordControllerTest extends RestDocsTest {
                         delete("/keywords/{keywordId}", UUID.randomUUID())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("member-id", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         //then
