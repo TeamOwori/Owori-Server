@@ -49,7 +49,7 @@ class FamilyControllerTest extends RestDocsTest {
                         post("/families")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(
                                         toRequestBody(new FamilyRequest("우리가족"))));
 
@@ -74,7 +74,7 @@ class FamilyControllerTest extends RestDocsTest {
                         post("/families/members")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(
                                         toRequestBody(new AddMemberRequest("길이가10인문자열!"))));
 
@@ -98,7 +98,7 @@ class FamilyControllerTest extends RestDocsTest {
                         post("/families/group-name")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(
                                         toRequestBody(new FamilyRequest("우리가족"))));
 
@@ -124,7 +124,7 @@ class FamilyControllerTest extends RestDocsTest {
                         multipart("/families/images", HttpMethod.POST)
                                 .file(image1)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.MULTIPART_FORM_DATA));
 
         //then
@@ -148,7 +148,7 @@ class FamilyControllerTest extends RestDocsTest {
                         get("/families/code")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString()));
+                                .header("member_id", UUID.randomUUID().toString()));
 
         //then
         perform.andExpect(status().isOk());

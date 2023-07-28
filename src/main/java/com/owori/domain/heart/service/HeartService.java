@@ -1,6 +1,6 @@
 package com.owori.domain.heart.service;
 
-import com.owori.domain.heart.dto.HeartStatusResponse;
+import com.owori.domain.heart.dto.response.HeartStatusResponse;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.mapper.HeartMapper;
 import com.owori.domain.heart.repository.HeartRepository;
@@ -30,13 +30,13 @@ public class HeartService implements EntityLoader<Heart, UUID> {
             Heart heart = heartRepository.findByMemberAndStory(member, story).orElseThrow(EntityNotFoundException::new);
             story.removeHeart(heart);
 
-            return new HeartStatusResponse(false);
+            return new HeartStatusResponse(Boolean.FALSE);
         }
 
         Heart heart = heartMapper.toEntity(member, story);
         heartRepository.save(heart);
 
-        return new HeartStatusResponse(true);
+        return new HeartStatusResponse(Boolean.FALSE);
     }
 
     public boolean hasHeart(Member member, Story story){

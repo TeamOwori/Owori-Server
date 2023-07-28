@@ -1,4 +1,4 @@
-package com.owori.domain.heart.dto;
+package com.owori.domain.heart.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -182,7 +182,7 @@ class MemberServiceTest extends LoginTest {
 
         assertThat(familyName).isEqualTo(responses.getFamilyGroupName());
         assertThat(responses.getMemberProfiles().stream().map(MemberProfileResponse::getId).toList()).isEqualTo(List.of(authService.getLoginUser().getId(), saveMember1.getId()));
-        assertThat(responses.getFamilySayings().stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
+        assertThat(responses.getFamilySayings().stream().map(SayingByFamilyResponse::getSayingId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
     }
     @DisplayName("수정 가능한 색상 조회가 수행되는가")
     void getEnableColor() {

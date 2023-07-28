@@ -10,12 +10,12 @@ import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.domain.schedule.repository.ScheduleRepository;
-import com.owori.global.dto.IdResponse;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,7 @@ public class ScheduleServiceTest extends LoginTest {
         AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(TODAY, A_DAY_AGO));
 
         // when
-        UUID uuid = scheduleService.addSchedule(request).getId();
+        UUID uuid = scheduleService.addSchedule(request).getScheduleId();
 
         // then
         Schedule schedule = scheduleRepository.findById(uuid).orElseThrow();
@@ -63,12 +63,12 @@ public class ScheduleServiceTest extends LoginTest {
     void updateSchedule() {
         // given
         String title = "가족 여행";
-        UpdateScheduleRequest request = new UpdateScheduleRequest(title, LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), true, List.of(TODAY, A_DAY_AGO));
         Schedule oldSchedule = scheduleRepository.save(new Schedule("가족 여", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
+        UpdateScheduleRequest request = new UpdateScheduleRequest(oldSchedule.getId(), title, LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), true, List.of(TODAY, A_DAY_AGO));
 
         // when
-        IdResponse<UUID> response = scheduleService.updateSchedule(oldSchedule.getId(), request);
-        Optional<Schedule> newSchedule = scheduleRepository.findById(response.getId());
+        ScheduleIdResponse response = scheduleService.updateSchedule(request);
+        Optional<Schedule> newSchedule = scheduleRepository.findById(response.getScheduleId());
 
         // then
         newSchedule.ifPresent(schedule -> {assertThat(schedule.getTitle()).isEqualTo(title);
@@ -126,7 +126,7 @@ public class ScheduleServiceTest extends LoginTest {
         List<ScheduleByMonthResponse> responses = scheduleService.findScheduleByMonth(month);
 
         // then
-        assertThat(responses.stream().map(ScheduleByMonthResponse::getId).toList()).isEqualTo(List.of(schedule2.getId(), schedule4.getId(), schedule5.getId()));
+        assertThat(responses.stream().map(ScheduleByMonthResponse::getScheduleId).toList()).isEqualTo(List.of(schedule2.getId(), schedule4.getId(), schedule5.getId()));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ScheduleServiceTest extends LoginTest {
         List<ScheduleDDayResponse> responses = scheduleService.findDDayByFamily();
 
         // then
-        assertThat(responses.stream().map(ScheduleDDayResponse::getId).toList()).isEqualTo(List.of(schedule5.getId(), schedule6.getId()));
+        assertThat(responses.stream().map(ScheduleDDayResponse::getScheduleId).toList()).isEqualTo(List.of(schedule5.getId(), schedule6.getId()));
     }
 
     @Test

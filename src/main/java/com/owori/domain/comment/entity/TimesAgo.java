@@ -22,7 +22,7 @@ public enum TimesAgo {
     private final ChronoUnit chronoUnit;
 
     public static String of(LocalDateTime localDateTime) {
-        int diffTime = (int) localDateTime.until(LocalDateTime.now(), ChronoUnit.SECONDS);
+        int diffTime = Long.valueOf(localDateTime.until(LocalDateTime.now(), ChronoUnit.SECONDS)).intValue();
 
         return Arrays.stream(TimesAgo.values())
                 .filter(timesAgo -> timesAgo.timeToSecond.test(diffTime))
@@ -32,10 +32,5 @@ public enum TimesAgo {
                 })
                 .findFirst()
                 .orElseGet(() -> localDateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd")));
-
     }
 }
-
-
-
-

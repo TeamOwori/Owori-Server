@@ -14,5 +14,4 @@ public interface MemberRepository {
     void updateRefreshToken(UUID id, String refreshToken);
     String findRefreshTokenById(UUID id);
     List<Member> findAllByIdIn(List<UUID> memberIds);
-
 }

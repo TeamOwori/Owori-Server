@@ -14,9 +14,9 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
+import com.owori.domain.story.dto.response.StoryIdResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
-import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
@@ -28,6 +28,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,7 +53,7 @@ public class StoryServiceTest extends LoginTest {
     void addStory() {
         //given
         String title = "기다리고 기다리던 하루";
-        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
+        PostStoryRequest request = new PostStoryRequest(UUID.randomUUID(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
 
         //when
         storyService.addStory(request);
@@ -79,12 +80,12 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story));
 
         //when
-        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("createdAt")), null);
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("created_at")), null);
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
-        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
-        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getCommentCount()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCount()).isEqualTo(1);
     }
 
     @Test
@@ -106,13 +107,13 @@ public class StoryServiceTest extends LoginTest {
         image.updateStory(story);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("startDate")), null);
+        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("start_date")), null);
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
-        assertThat(response.getStories().get(0).getCommentCnt()).isEqualTo(1);
-        assertThat(response.getStories().get(0).getHeartCnt()).isEqualTo(1);
-        assertThat(response.getStories().get(1).getContents()).isEqualTo("내용2");
+        assertThat(response.getStories().get(0).getCommentCount()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCount()).isEqualTo(1);
+        assertThat(response.getStories().get(1).getContent()).isEqualTo("내용2");
         assertThat(response.getStories().get(0).getImage()).isEqualTo("a.png");
     }
 
@@ -155,17 +156,17 @@ public class StoryServiceTest extends LoginTest {
         imageRepository.save(image);
         image.updateStory(story);
 
-        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, null);
+        PostStoryRequest request = new PostStoryRequest(story.getId(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, List.of());
 
         //when
-        IdResponse<UUID> response = storyService.updateStory(story.getId(), request);
+        StoryIdResponse response = storyService.updateStory(request);
 
         //then
-        Story updateStory = storyRepository.findById(response.getId()).get();
+        Story updateStory = storyRepository.findById(response.getStoryId()).get();
 
-        assertThat(updateStory.getImages().size()).isEqualTo(1);
+        assertThat(updateStory.getImages()).hasSize(1);
         assertThat(updateStory.getTitle()).isEqualTo("제목");
-        assertThat(updateStory.getContents()).isEqualTo("내용");
+        assertThat(updateStory.getContent()).isEqualTo("내용");
     }
 
     @Test
@@ -203,11 +204,11 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(story3);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("createdAt")), null);
+        FindAllStoryGroupResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")), null);
 
         //then
-        assertThat(response.getStories().size()).isEqualTo(2);
-        assertThat(response.getStories().get(0).getContents()).isEqualTo("내용 기다리고");
+        assertThat(response.getStories()).hasSize(2);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("내용 기다리고");
         assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
         assertThat(response.getStories().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
     }
@@ -225,11 +226,11 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(story3);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryByWriter( PageRequest.of(0, 4, Sort.by("createdAt")), null);
+        FindAllStoryGroupResponse response = storyService.findStoryByWriter( PageRequest.of(0, 4, Sort.by("created_at")), null);
 
         //then
-        assertThat(response.getStories().size()).isEqualTo(1);
-        assertThat(response.getStories().get(0).getContents()).isEqualTo("정답");
+        assertThat(response.getStories()).hasSize(1);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("정답");
         assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
     }
 
@@ -249,12 +250,11 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story2));
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryByHeart( PageRequest.of(0, 4, Sort.by("startDate")), null);
+        FindAllStoryGroupResponse response = storyService.findStoryByHeart( PageRequest.of(0, 4, Sort.by("start_date")), null);
 
         //then
-        assertThat(response.getStories().size()).isEqualTo(1);
-        assertThat(response.getStories().get(0).getContents()).isEqualTo("정답");
+        assertThat(response.getStories()).hasSize(1);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("정답");
         assertThat(response.getStories().get(0).getTitle()).isEqualTo("좋아요");
     }
-
 }

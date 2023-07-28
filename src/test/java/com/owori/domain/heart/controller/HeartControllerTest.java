@@ -1,6 +1,7 @@
 package com.owori.domain.heart.controller;
 
-import com.owori.domain.heart.dto.HeartStatusResponse;
+import com.owori.domain.heart.dto.request.ToggleHeartRequest;
+import com.owori.domain.heart.dto.response.HeartStatusResponse;
 import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.story.service.FacadeService;
 import com.owori.support.docs.RestDocsTest;
@@ -41,10 +42,11 @@ public class HeartControllerTest extends RestDocsTest {
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        post("/hearts/{storyId}",UUID.randomUUID())
+                        post("/hearts")
+                                .content(toRequestBody(new ToggleHeartRequest(UUID.randomUUID())))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         //then

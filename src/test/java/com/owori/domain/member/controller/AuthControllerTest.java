@@ -38,8 +38,8 @@ class AuthControllerTest extends RestDocsTest {
                 mockMvc.perform(
                         get("/auth/refresh")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header("refreshToken", "ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("accessToken", "asdfiuer3oidwf12.asdfoihoihn23vs.grwoi6ghrweiog5h"));
+                                .header("refresh_token", "ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("access_token", "asdfiuer3oidwf12.asdfoihoihn23vs.grwoi6ghrweiog5h"));
 
         //then
         perform.andExpect(status().isOk())

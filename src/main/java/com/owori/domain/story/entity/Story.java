@@ -32,7 +32,7 @@ public class Story implements Auditable {
 
     @Lob
     @Column(nullable = false)
-    private String contents;
+    private String content;
 
     @Column(nullable = false)
     private LocalDate startDate;
@@ -59,9 +59,9 @@ public class Story implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Story(String title, String contents, LocalDate startDate, LocalDate endDate, Member member){
+    public Story(String title, String content, LocalDate startDate, LocalDate endDate, Member member){
         this.title = title;
-        this.contents = contents;
+        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
@@ -73,7 +73,7 @@ public class Story implements Auditable {
 
     public void updateTitle(String title){ this.title = title; }
 
-    public void updateContents(String contents){ this.contents = contents; }
+    public void updateContents(String content){ this.content = content; }
 
     /* image */
     public void updateImage(Image image){ this.images.add(image); }
@@ -85,7 +85,7 @@ public class Story implements Auditable {
         return images == null || images.isEmpty() ? null : images.get(0).getUrl();
     }
     public List<String> getImageUrls(){
-        return images.stream().map(img -> img.getUrl()).toList();
+        return images.stream().map(Image::getUrl).toList();
     }
 
 
@@ -104,4 +104,10 @@ public class Story implements Auditable {
         heart.delete();
     }
 
+    public void update(String content, String title, LocalDate startDate, LocalDate endDate) {
+        this.content = content;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }

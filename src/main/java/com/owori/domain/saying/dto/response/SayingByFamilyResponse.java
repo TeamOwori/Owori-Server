@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class SayingByFamilyResponse {
-    private UUID id;
+    private UUID sayingId;
     private String content;
     private UUID memberId;
     private List<UUID> tagMembersId;

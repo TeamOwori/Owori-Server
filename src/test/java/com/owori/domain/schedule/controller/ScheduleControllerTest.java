@@ -3,12 +3,12 @@ package com.owori.domain.schedule.controller;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.domain.schedule.service.ScheduleService;
-import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("POST / schedule 일정 등록 API 테스트")
         void addSchedule() throws Exception {
         // given
-        IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
+        ScheduleIdResponse expected = new ScheduleIdResponse(UUID.randomUUID());
         given(scheduleService.addSchedule(any())).willReturn(expected);
 
         AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(Alarm.TODAY, Alarm.A_DAY_AGO));
@@ -53,7 +53,7 @@ public class ScheduleControllerTest extends RestDocsTest {
                         post("/schedule")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(toRequestBody(request))
                 );
 
@@ -68,19 +68,19 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("POST / schedule 일정 수정 API 테스트")
     void updateSchedule() throws Exception {
         // given
-        IdResponse<UUID> expected = new IdResponse<UUID>(UUID.randomUUID());
-        given(scheduleService.updateSchedule(any(), any())).willReturn(expected);
+        ScheduleIdResponse expected = new ScheduleIdResponse(UUID.randomUUID());
+        given(scheduleService.updateSchedule(any())).willReturn(expected);
 
-        UpdateScheduleRequest request = new UpdateScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), true, List.of());
+        UpdateScheduleRequest request = new UpdateScheduleRequest(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), true, List.of());
 
         // when
         ResultActions perform =
                 mockMvc.perform(
                         post("/schedule/update")
-                                .param("scheduleId", UUID.randomUUID().toString())
+                                .param("schedule_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(toRequestBody(request))
                 );
 
@@ -101,11 +101,10 @@ public class ScheduleControllerTest extends RestDocsTest {
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        delete("/schedule")
-                                .param("scheduleId", id.toString())
+                        delete("/schedule/" + id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then
@@ -131,10 +130,10 @@ public class ScheduleControllerTest extends RestDocsTest {
         ResultActions perform =
                 mockMvc.perform(
                         get("/schedule/month")
-                                .param("yearMonth","2023-07")
+                                .param("year_month","2023-07")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then
@@ -165,7 +164,7 @@ public class ScheduleControllerTest extends RestDocsTest {
                         get("/schedule/dday")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then

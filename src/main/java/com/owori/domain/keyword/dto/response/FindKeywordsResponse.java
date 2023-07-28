@@ -9,5 +9,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FindKeywordsResponse {
     private UUID keywordId;
-    private String contents;
+    private String content;
 }

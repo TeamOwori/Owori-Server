@@ -13,6 +13,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateSayingRequest {
+    @NotNull
+    private UUID sayingId;
     @NotBlank(message = "내용을 입력해주세요")
     private String content;
     @NotNull(message = "빈 리스트 형태로 보내주세요")

@@ -7,11 +7,12 @@ import com.owori.domain.keyword.service.KeywordService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
-import com.owori.domain.story.dto.response.*;
+import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
+import com.owori.domain.story.dto.response.FindStoryResponse;
+import com.owori.domain.story.dto.response.StoryIdResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
-import com.owori.global.dto.IdResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
@@ -22,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,47 +36,35 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final AuthService authService;
     private final KeywordService keywordService;
 
-    public IdResponse<UUID> addStory(PostStoryRequest request) {
+    public StoryIdResponse addStory(PostStoryRequest request) {
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
         List<UUID> imagesIds = request.getImagesId();
         if(imagesIds != null){
             imageService.updateStory(newStory, imagesIds);
         }
-        return new IdResponse<>(newStory.getId());
+        return new StoryIdResponse(newStory.getId());
     }
 
     public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
 
-        return storyMapper.toFindAllStoryGroupDto(storyBySlice);
+        return storyMapper.toFindAllStoryGroupResponse(storyBySlice);
     }
 
     public FindStoryResponse findStory(Story story, List<CommentResponse> comments, boolean isLiked) {
-        return storyMapper.toFindStoryDto(story, isLiked, comments);
+        return storyMapper.toFindStoryResponse(story, isLiked, comments);
     }
 
     @Transactional
-    public IdResponse<UUID> updateStory(UUID storyId, PostStoryRequest request) {
-        Story story = loadEntity(storyId);
+    public StoryIdResponse updateStory(PostStoryRequest request) {
+        Story story = loadEntity(request.getStoryId());
         if(!story.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
-        updateStoryFields(story, request);
+        story.update(request.getContent(), request.getTitle(), request.getStartDate(), request.getEndDate());
+        imageService.updateStory(story, request.getImagesId());
 
-        return new IdResponse<>(story.getId());
-    }
-
-    @Transactional
-    public void updateStoryFields(Story story, PostStoryRequest request){
-        ifPresentAndNonNull(request.getStartDate(), story::updateStartDate);
-        ifPresentAndNonNull(request.getEndDate(), story::updateEndDate);
-        ifPresentAndNonNull(request.getTitle(), story::updateTitle);
-        ifPresentAndNonNull(request.getContents(), story::updateContents);
-        ifPresentAndNonNull(request.getImagesId(), imagesId -> imageService.updateStory(story, imagesId));
-    }
-
-    public <T> void ifPresentAndNonNull(T value, Consumer<T> consumer) {
-        Optional.ofNullable(value).ifPresent(consumer);
+        return new StoryIdResponse(story.getId());
     }
 
     @Transactional
@@ -83,7 +72,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         if(!story.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
 
         imageService.removeImages(story); // 이미지 삭제
-        story.getHearts().stream().forEach(story::removeHeart); // 좋아요 삭제
+        story.getHearts().forEach(story::removeHeart); // 좋아요 삭제
         story.delete(); // 스토리 삭제
     }
 
@@ -92,21 +81,21 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily(), lastViewed);
         keywordService.addKeyword(keyword, loginUser);
 
-        return storyMapper.toFindAllStoryGroupDto(storyBySearch);
+        return storyMapper.toFindAllStoryGroupResponse(storyBySearch);
     }
 
     public FindAllStoryGroupResponse findStoryByWriter(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
         Slice<Story> storyByWriter = storyRepository.findStoryByWriter(pageable, member, lastViewed);
 
-        return storyMapper.toFindAllStoryGroupDto(storyByWriter);
+        return storyMapper.toFindAllStoryGroupResponse(storyByWriter);
     }
 
     public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
         Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);
 
-        return storyMapper.toFindAllStoryGroupDto(storyByHeart);
+        return storyMapper.toFindAllStoryGroupResponse(storyByHeart);
     }
 
     @Override

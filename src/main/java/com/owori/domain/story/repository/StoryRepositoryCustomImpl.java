@@ -44,12 +44,12 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
                                 .and(storyOrderConverter.createOrderExpression(pageable, date))
                                 .and(
                                         story.title.contains(keyword)
-                                                .or(story.contents.contains(keyword))
+                                                .or(story.content.contains(keyword))
                                                 .or(story.member.nickname.contains(keyword))
                                 )
                 )
                 .orderBy(storyOrderConverter.convert(pageable.getSort()))
-                .limit(pageable.getPageSize() + 1)
+                .limit(pageable.getPageSize() + 1L)
                 .fetch();
 
         return checkLastPage(pageable, results);

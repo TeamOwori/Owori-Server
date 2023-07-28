@@ -16,6 +16,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostStoryRequest {
+    @NotNull
+    private UUID storyId;
+
     @NotNull(message = "startDate는 필수 입력 값입니다.")
     @PastOrPresent(message = "startDate에 미래의 날짜를 입력할 수 없습니다.")
     private LocalDate startDate;
@@ -27,7 +30,7 @@ public class PostStoryRequest {
     private String title;
 
     @Size(min = 1, max = 500)
-    private String contents;
+    private String content;
 
     private List<UUID> imagesId;
 }

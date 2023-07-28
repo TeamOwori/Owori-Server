@@ -49,7 +49,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
         imageIds.stream()
                 .map(this::loadEntity)
                 .sorted(Comparator.comparing(Image::getOrderNum))
-                .forEach(image -> { image.updateStory(story);});
+                .forEach(image -> image.updateStory(story));
     }
 
     @Transactional

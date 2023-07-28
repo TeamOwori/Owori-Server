@@ -29,7 +29,7 @@ public class SayingMapper {
 
     public SayingByFamilyResponse toResponse(Saying saying) {
         return SayingByFamilyResponse.builder()
-                .id(saying.getId())
+                .sayingId(saying.getId())
                 .content(saying.getContent())
                 .memberId(saying.getMember().getId())
                 .tagMembersId(getTagMembersId(saying))

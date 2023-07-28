@@ -18,44 +18,44 @@ public class StoryMapper {
     public Story toEntity(PostStoryRequest request, Member member){
         return Story.builder()
                 .title(request.getTitle())
-                .contents(request.getContents())
+                .content(request.getContent())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .member(member)
                 .build();
     }
 
-    public FindAllStoryResponse toFindAllStoryDto(Story story){
+    public FindAllStoryResponse toFindAllStoryResponse(Story story){
         return FindAllStoryResponse.builder()
-                .id(story.getId())
+                .storyId(story.getId())
                 .title(story.getTitle())
-                .contents(story.getContents())
+                .content(story.getContent())
                 .image(story.getMainImage())
-                .heartCnt(story.getHearts().size())
-                .commentCnt(story.getComments().size())
+                .heartCount(story.getHearts().size())
+                .commentCount(story.getComments().size())
                 .writer(story.getMember().getNickname())
                 .startDate(story.getStartDate())
                 .endDate(story.getEndDate())
                 .build();
     }
 
-    public FindStoryResponse toFindStoryDto(Story story, boolean isLiked, List<CommentResponse> comments){
+    public FindStoryResponse toFindStoryResponse(Story story, boolean isLiked, List<CommentResponse> comments){
         return FindStoryResponse.builder()
-                .id(story.getId())
+                .storyId(story.getId())
                 .isLiked(isLiked)
                 .images(story.getImageUrls())
                 .title(story.getTitle())
                 .writer(story.getMember().getNickname())
-                .contents(story.getContents())
-                .HeartCnt(story.getHearts().size())
-                .CommentCnt(story.getComments().size())
+                .content(story.getContent())
+                .heartCnt(story.getHearts().size())
+                .commentCnt(story.getComments().size())
                 .comments(comments)
                 .build();
     }
 
-    public FindAllStoryGroupResponse toFindAllStoryGroupDto(Slice<Story> stories) {
+    public FindAllStoryGroupResponse toFindAllStoryGroupResponse(Slice<Story> stories) {
         List<FindAllStoryResponse> responses = stories.getContent().stream()
-                .map(story -> toFindAllStoryDto(story))
+                .map(this::toFindAllStoryResponse)
                 .toList();
 
         return new FindAllStoryGroupResponse(responses, stories.hasNext());

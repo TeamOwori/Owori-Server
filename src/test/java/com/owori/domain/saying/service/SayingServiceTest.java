@@ -11,9 +11,9 @@ import com.owori.domain.member.service.AuthService;
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingIdResponse;
 import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
-import com.owori.global.dto.IdResponse;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DatabaseTest
 @DisplayName("Saying 서비스의")
-public class SayingServiceTest extends LoginTest {
+class SayingServiceTest extends LoginTest {
     @Autowired private SayingService sayingService;
     @Autowired private SayingRepository sayingRepository;
     @Autowired private FamilyService familyService;
@@ -46,10 +46,10 @@ public class SayingServiceTest extends LoginTest {
         AddSayingRequest request = new AddSayingRequest(content, List.of());
 
         // when
-        IdResponse<UUID> response = sayingService.addSaying(request);
+        SayingIdResponse response = sayingService.addSaying(request);
 
         // then
-        Saying saying = sayingRepository.findById(response.getId()).orElseThrow();
+        Saying saying = sayingRepository.findById(response.getSayingId()).orElseThrow();
 
         assertThat(saying.getContent()).isEqualTo(content);
         assertThat(saying.getMember()).isEqualTo(authService.getLoginUser());
@@ -61,13 +61,13 @@ public class SayingServiceTest extends LoginTest {
     void updateSaying() {
         // given
         String content = "오늘 집에 일찍 가요";
-        UpdateSayingRequest request = new UpdateSayingRequest(content, List.of(UUID.randomUUID()));
         Saying oldSaying = sayingRepository.save(new Saying("오늘 집에 안들어가요", authService.getLoginUser(), List.of()));
+        UpdateSayingRequest request = new UpdateSayingRequest(oldSaying.getId(), content, List.of(UUID.randomUUID()));
 
 
         // when
-        IdResponse<UUID> response = sayingService.updateSaying(oldSaying.getId(), request);
-        Optional<Saying> newSaying = sayingRepository.findById(response.getId());
+        SayingIdResponse response = sayingService.updateSaying(request);
+        Optional<Saying> newSaying = sayingRepository.findById(response.getSayingId());
 
         // then
         newSaying.ifPresent(saying -> assertThat(saying.getContent()).isEqualTo(content));
@@ -119,7 +119,7 @@ public class SayingServiceTest extends LoginTest {
         List<SayingByFamilyResponse> responses = sayingService.findSayingByFamily();
 
         // then
-        assertThat(responses.stream().map(SayingByFamilyResponse::getId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
+        assertThat(responses.stream().map(SayingByFamilyResponse::getSayingId)).hasSameElementsAs(List.of(saying1.getId(), saying2.getId()));
     }
 
     @Test

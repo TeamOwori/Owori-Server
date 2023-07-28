@@ -3,8 +3,8 @@ package com.owori.domain.saying.controller;
 import com.owori.domain.saying.dto.request.AddSayingRequest;
 import com.owori.domain.saying.dto.request.UpdateSayingRequest;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
+import com.owori.domain.saying.dto.response.SayingIdResponse;
 import com.owori.domain.saying.service.SayingService;
-import com.owori.global.dto.IdResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -24,10 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 @DisplayName("Saying 컨트롤러의")
 @WebMvcTest(SayingController.class)
 public class SayingControllerTest extends RestDocsTest {
@@ -37,7 +37,7 @@ public class SayingControllerTest extends RestDocsTest {
     @DisplayName("POST / saying 서로에게 한마디 등록 API 테스트")
     void addSaying() throws Exception {
         // given
-        IdResponse<UUID> expected = new IdResponse<>(UUID.randomUUID());
+        SayingIdResponse expected = new SayingIdResponse(UUID.randomUUID());
         given(sayingService.addSaying(any())).willReturn(expected);
 
         AddSayingRequest request = new AddSayingRequest("오늘 집 안 들어가요", List.of());
@@ -48,7 +48,7 @@ public class SayingControllerTest extends RestDocsTest {
                         post("/saying")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(toRequestBody(request))
                 );
 
@@ -65,19 +65,18 @@ public class SayingControllerTest extends RestDocsTest {
     void updateSaying() throws Exception {
         // given
         UUID id = UUID.randomUUID();
-        IdResponse<UUID> expected = new IdResponse<>(id);
-        given(sayingService.updateSaying(any(), any())).willReturn(expected);
+        SayingIdResponse expected = new SayingIdResponse(id);
+        given(sayingService.updateSaying(any())).willReturn(expected);
 
-        UpdateSayingRequest request = new UpdateSayingRequest("오늘 집 들어갈래", List.of(UUID.randomUUID()));
+        UpdateSayingRequest request = new UpdateSayingRequest(UUID.randomUUID(), "오늘 집 들어갈래", List.of(UUID.randomUUID()));
 
         // when
         ResultActions perform =
                 mockMvc.perform(
                         post("/saying/update")
-                                .param("sayingId", id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 .content(toRequestBody(request))
                 );
 
@@ -98,11 +97,10 @@ public class SayingControllerTest extends RestDocsTest {
         // when
         ResultActions perform =
                 mockMvc.perform(
-                        delete("/saying")
-                                .param("sayingId", id.toString())
+                        delete("/saying/" + id.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization","Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then
@@ -128,7 +126,7 @@ public class SayingControllerTest extends RestDocsTest {
                         get("/saying")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                 );
 
         // then

@@ -2,24 +2,23 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.service.ScheduleService;
-import com.owori.global.dto.IdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
 @Validated
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
@@ -32,20 +31,20 @@ public class ScheduleController {
      * @return AddScheduleResponse는 추가된 일정의 id값입니다.
      */
     @PostMapping
-    public ResponseEntity<IdResponse<UUID>> addSchedule(@Valid @RequestBody AddScheduleRequest addScheduleRequest) {
+    public ResponseEntity<ScheduleIdResponse> addSchedule(@Valid @RequestBody AddScheduleRequest addScheduleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.addSchedule(addScheduleRequest));
     }
 
     /**
      * 일정 수정 컨트롤러입니다.
      * 수정된 일정 정보(제목, 시작일, 종료일, 타입, 디데이 여부, 알람 옵션)을 입력받고 기존 일정을 수정합니다.
-     * @param scheduleId 수정할 일정의 id값입니다.
      * @param updateScheduleRequest 수정된 일정의 정보입니다.
      * @return UpdateScheduleResponse는 수정된 일정의 id값입니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<IdResponse<UUID>> updateSchedule(@RequestParam UUID scheduleId,@Valid @RequestBody UpdateScheduleRequest updateScheduleRequest) {
-        return ResponseEntity.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequest));
+    public ResponseEntity<ScheduleIdResponse> updateSchedule(
+            @Valid @RequestBody UpdateScheduleRequest updateScheduleRequest) {
+        return ResponseEntity.ok(scheduleService.updateSchedule(updateScheduleRequest));
     }
 
     /**
@@ -56,7 +55,7 @@ public class ScheduleController {
      */
     @GetMapping("/month")
     public ResponseEntity<List<ScheduleByMonthResponse>> findScheduleByMonth(
-            @RequestParam @Pattern(regexp = "\\d{4}-(0[1-9]|1[012])", message = "\"yyyy-MM\"형태로 입력하세요") String yearMonth) {
+            @RequestParam("year_month") @Pattern(regexp = "\\d{4}-(0[1-9]|1[012])", message = "\"yyyy-MM\"형태로 입력하세요") String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
 
@@ -65,8 +64,8 @@ public class ScheduleController {
      * @param scheduleId 삭제할 일정 id 입니다.
      * @return Void 반환
      */
-    @DeleteMapping
-    public ResponseEntity<Void> deleteSchedule(@RequestParam UUID scheduleId) {
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> deleteSchedule(@PathVariable UUID scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
         return ResponseEntity.ok().build();
     }
@@ -79,11 +78,5 @@ public class ScheduleController {
     @GetMapping("/dday")
     public ResponseEntity<List<ScheduleDDayResponse>> findDDayByFamily() {
         return ResponseEntity.ok(scheduleService.findDDayByFamily());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public Object exception(Exception e) {
-        return e.getMessage();
     }
 }
