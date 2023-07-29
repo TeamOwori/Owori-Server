@@ -1,6 +1,7 @@
 package com.owori.domain.story.controller;
 
 import com.owori.domain.story.dto.request.PostStoryRequest;
+import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
@@ -112,7 +113,7 @@ public class StoryController {
      * @return 수정한 story의 id 값이 반환됩니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<StoryIdResponse> updateStory(@RequestBody @Valid PostStoryRequest request){
+    public ResponseEntity<StoryIdResponse> updateStory(@RequestBody @Valid UpdateStoryRequest request){
         return ResponseEntity.ok(storyService.updateStory(request));
     }
 

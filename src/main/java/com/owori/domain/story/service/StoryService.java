@@ -7,6 +7,7 @@ import com.owori.domain.keyword.service.KeywordService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
+import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
@@ -58,7 +59,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     @Transactional
-    public StoryIdResponse updateStory(PostStoryRequest request) {
+    public StoryIdResponse updateStory(UpdateStoryRequest request) {
         Story story = loadEntity(request.getStoryId());
         if(!story.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
         story.update(request.getContent(), request.getTitle(), request.getStartDate(), request.getEndDate());

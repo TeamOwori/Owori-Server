@@ -15,7 +15,10 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostStoryRequest {
+public class UpdateStoryRequest {
+    @NotNull
+    private UUID storyId;
+
     @NotNull(message = "startDate는 필수 입력 값입니다.")
     @PastOrPresent(message = "startDate에 미래의 날짜를 입력할 수 없습니다.")
     private LocalDate startDate;

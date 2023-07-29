@@ -12,6 +12,7 @@ import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
+import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
@@ -156,7 +157,7 @@ public class StoryServiceTest extends LoginTest {
         imageRepository.save(image);
         image.updateStory(story);
 
-        PostStoryRequest request = new PostStoryRequest(story.getId(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, List.of());
+        UpdateStoryRequest request = new UpdateStoryRequest(story.getId(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, List.of());
 
         //when
         StoryIdResponse response = storyService.updateStory(request);
