@@ -47,8 +47,8 @@ public class StoryMapper {
                 .title(story.getTitle())
                 .writer(story.getMember().getNickname())
                 .content(story.getContent())
-                .heartCnt(story.getHearts().size())
-                .commentCnt(story.getComments().size())
+                .heartCount(story.getHearts().size())
+                .commentCount(story.getComments().size())
                 .comments(comments)
                 .build();
     }

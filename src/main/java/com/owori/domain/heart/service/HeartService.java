@@ -36,7 +36,7 @@ public class HeartService implements EntityLoader<Heart, UUID> {
         Heart heart = heartMapper.toEntity(member, story);
         heartRepository.save(heart);
 
-        return new HeartStatusResponse(Boolean.FALSE);
+        return new HeartStatusResponse(Boolean.TRUE);
     }
 
     public boolean hasHeart(Member member, Story story){

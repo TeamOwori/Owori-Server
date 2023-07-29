@@ -20,7 +20,7 @@ public class FindStoryResponse {
     private String title;
     private String writer;
     private String content;
-    private Integer heartCnt;
-    private Integer commentCnt;
+    private Integer heartCount;
+    private Integer commentCount;
     private List<CommentResponse> comments;
 }
