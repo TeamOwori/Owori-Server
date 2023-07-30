@@ -54,7 +54,7 @@ public class StoryServiceTest extends LoginTest {
     void addStory() {
         //given
         String title = "기다리고 기다리던 하루";
-        PostStoryRequest request = new PostStoryRequest(UUID.randomUUID(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
 
         //when
         storyService.addStory(request);
@@ -157,7 +157,7 @@ public class StoryServiceTest extends LoginTest {
         imageRepository.save(image);
         image.updateStory(story);
 
-        UpdateStoryRequest request = new UpdateStoryRequest(story.getId(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", null, List.of());
+        UpdateStoryRequest request = new UpdateStoryRequest(story.getId(), LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "제목", "내용", List.of(image.getId()));
 
         //when
         StoryIdResponse response = storyService.updateStory(request);

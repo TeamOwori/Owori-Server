@@ -61,7 +61,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional
     public StoryIdResponse updateStory(UpdateStoryRequest request) {
         Story story = loadEntity(request.getStoryId());
-        if(!story.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
+        if(!story.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException();}
         story.update(request.getContent(), request.getTitle(), request.getStartDate(), request.getEndDate());
         imageService.updateStory(story, request.getImagesId());
 
@@ -70,7 +70,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     @Transactional
     public void removeStory(Story story) {
-        if(!story.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
+        if(!story.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException();}
 
         imageService.removeImages(story); // 이미지 삭제
         story.getHearts().forEach(story::removeHeart); // 좋아요 삭제

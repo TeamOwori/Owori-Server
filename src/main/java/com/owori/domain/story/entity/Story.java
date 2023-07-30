@@ -67,14 +67,6 @@ public class Story implements Auditable {
         this.member = member;
     }
 
-    public void updateStartDate(LocalDate startDate){ this.startDate = startDate; }
-
-    public void updateEndDate(LocalDate endDate){ this.endDate = endDate; }
-
-    public void updateTitle(String title){ this.title = title; }
-
-    public void updateContents(String content){ this.content = content; }
-
     /* image */
     public void updateImage(Image image){ this.images.add(image); }
     public void removeImage(Image image){
