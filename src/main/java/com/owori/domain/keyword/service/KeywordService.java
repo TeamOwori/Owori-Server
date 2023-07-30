@@ -48,7 +48,7 @@ public class KeywordService implements EntityLoader<Keyword, UUID> {
     @Transactional
     public void deleteSearchWord(UUID keywordId) {
         Keyword keyword = loadEntity(keywordId);
-        if(!keyword.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException(); }
+        if(!keyword.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException(); }
         keywordRepository.delete(keyword);
     }
 
