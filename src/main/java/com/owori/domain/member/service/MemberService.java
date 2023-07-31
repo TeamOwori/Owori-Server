@@ -66,9 +66,9 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
         JwtToken jwtToken = createMemberJwtToken(member);
         if (member.isServiceMember()) {
-            return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
+            return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
         }
-        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
+        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
     }
 
 
