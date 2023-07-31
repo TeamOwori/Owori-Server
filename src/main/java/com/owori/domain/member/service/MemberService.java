@@ -7,10 +7,7 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
-import com.owori.domain.member.dto.response.MemberColorResponse;
-import com.owori.domain.member.dto.response.MemberHomeResponse;
-import com.owori.domain.member.dto.response.MemberJwtResponse;
-import com.owori.domain.member.dto.response.MyPageProfileResponse;
+import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
@@ -68,8 +65,14 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
         JwtToken jwtToken = createMemberJwtToken(member);
-
+        if (isServiceMember(member)) {
+            return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
+        }
         return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
+    }
+
+    private boolean isServiceMember(final Member member) {
+        return Objects.isNull(member.getNickname()) || Objects.isNull(member.getBirthDay());
     }
 
     private String getClientId(final MemberRequest memberRequest) {
@@ -88,10 +91,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public void updateMemberDetails(final MemberDetailsRequest memberDetailsRequest) {
+    public MemberValidateResponse updateMemberDetails(final MemberDetailsRequest memberDetailsRequest) {
         authService.getLoginUser().update(
                 memberDetailsRequest.getNickname(),
                 memberDetailsRequest.getBirthday());
+
+        return new MemberValidateResponse(Boolean.TRUE);
     }
 
     @Transactional

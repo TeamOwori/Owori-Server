@@ -1,13 +1,10 @@
 package com.owori.domain.member.controller;
 
-import com.owori.domain.member.dto.response.MemberColorResponse;
-import com.owori.domain.member.dto.response.MemberHomeResponse;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
-import com.owori.domain.member.dto.response.MemberJwtResponse;
-import com.owori.domain.member.dto.response.MyPageProfileResponse;
+import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.service.MemberService;
 import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +40,8 @@ public class MemberController {
      * @return 바디로 response 하는 정보는 없습니다.
      */
     @PostMapping("/details")
-    public ResponseEntity<Void> updateMemberDetails(@RequestBody @Valid MemberDetailsRequest memberDetailsRequest) {
-        memberService.updateMemberDetails(memberDetailsRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<MemberValidateResponse> updateMemberDetails(@RequestBody @Valid MemberDetailsRequest memberDetailsRequest) {
+        return ResponseEntity.ok(memberService.updateMemberDetails(memberDetailsRequest));
     }
 
     /**
