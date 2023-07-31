@@ -30,7 +30,7 @@ public class Member implements Auditable {
 
     private String profileImage;
 
-    private LocalDate birthDay;
+    private LocalDate birthday;
 
     private String refreshToken;
 
@@ -67,7 +67,7 @@ public class Member implements Auditable {
 
     public void update(String nickname, LocalDate birthDay) {
         this.nickname = nickname;
-        this.birthDay = birthDay;
+        this.birthday = birthDay;
     }
 
     public void generateColor() {
@@ -107,8 +107,12 @@ public class Member implements Auditable {
 
     public void updateProfile(String nickname, LocalDate birthday, Color color) {
         this.nickname = nickname;
-        this.birthDay = birthday;
+        this.birthday = birthday;
         updateColor(color);
+    }
+
+    public boolean isServiceMember() {
+        return this.nickname == null || this.birthday == null;
     }
 
     @Override

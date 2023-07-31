@@ -65,15 +65,12 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
         JwtToken jwtToken = createMemberJwtToken(member);
-        if (isServiceMember(member)) {
+        if (member.isServiceMember()) {
             return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
         }
         return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
     }
 
-    private boolean isServiceMember(final Member member) {
-        return Objects.isNull(member.getNickname()) || Objects.isNull(member.getBirthDay());
-    }
 
     private String getClientId(final MemberRequest memberRequest) {
         if (memberRequest.getAuthProvider().equals(AuthProvider.KAKAO)) {
@@ -151,7 +148,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     public MyPageProfileResponse getMyPageProfile() {
         Member loginUser = authService.getLoginUser();
-        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthDay(), loginUser.getColor(), loginUser.getEmotionalBadge());
+        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthday(), loginUser.getColor(), loginUser.getEmotionalBadge());
     }
 
 

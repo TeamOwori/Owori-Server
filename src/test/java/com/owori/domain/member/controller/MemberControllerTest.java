@@ -5,11 +5,7 @@ import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
 import com.owori.domain.member.dto.request.MemberRequest;
-import com.owori.domain.member.dto.response.MemberColorResponse;
-import com.owori.domain.member.dto.response.MemberHomeResponse;
-import com.owori.domain.member.dto.response.MemberJwtResponse;
-import com.owori.domain.member.dto.response.MemberProfileResponse;
-import com.owori.domain.member.dto.response.MyPageProfileResponse;
+import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.EmotionalBadge;
@@ -82,7 +78,8 @@ class MemberControllerTest extends RestDocsTest {
     @DisplayName("멤버 기본 정보 업데이트가 수행되는가")
     void updateMemberDetails() throws Exception {
         //given
-        doNothing().when(memberService).updateMemberDetails(any());
+
+        when(memberService.updateMemberDetails(any())).thenReturn(new MemberValidateResponse(true));
 
         //when
         ResultActions perform =

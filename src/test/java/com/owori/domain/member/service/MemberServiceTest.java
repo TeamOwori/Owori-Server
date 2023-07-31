@@ -74,7 +74,7 @@ class MemberServiceTest extends LoginTest {
     @DisplayName("멤버 기본 정보 업데이트가 수행되는가")
     void updateMemberDetails() {
         //given
-        LocalDate birthDay = authService.getLoginUser().getBirthDay();
+        LocalDate birthDay = authService.getLoginUser().getBirthday();
         String nickname = authService.getLoginUser().getNickname();
 
         //when
@@ -86,7 +86,7 @@ class MemberServiceTest extends LoginTest {
         Member member = authService.getLoginUser();
         assertThat(birthDay).isNull();
         assertThat(nickname).isNull();
-        assertThat(member.getBirthDay()).isEqualTo(now);
+        assertThat(member.getBirthday()).isEqualTo(now);
         assertThat(member.getNickname()).isEqualTo(name);
     }
 
@@ -115,7 +115,7 @@ class MemberServiceTest extends LoginTest {
 
         //then
         Member member = memberService.loadEntity(loginUser.getId());
-        assertThat(member.getBirthDay()).isEqualTo(birthday);
+        assertThat(member.getBirthday()).isEqualTo(birthday);
         assertThat(member.getNickname()).isEqualTo(nickname);
         assertThat(member.getColor()).isEqualTo(color);
     }
