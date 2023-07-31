@@ -112,7 +112,7 @@ public class Member implements Auditable {
     }
 
     public boolean isServiceMember() {
-        return this.nickname == null || this.birthday == null;
+        return this.nickname != null && this.birthday != null;
     }
 
     @Override
