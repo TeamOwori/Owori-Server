@@ -60,7 +60,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private MemberJwtResponse getNewMemberJwtResponse(final MemberRequest memberRequest, final String clientId) {
         Member member = memberRepository.save(memberMapper.toEntity(clientId, memberRequest));
         JwtToken jwtToken = createMemberJwtToken(member);
-        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
+        return memberMapper.toJwtResponse(jwtToken, member.getId(), member.isServiceMember());
     }
 
     private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
