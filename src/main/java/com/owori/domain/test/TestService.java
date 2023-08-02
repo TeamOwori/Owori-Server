@@ -11,6 +11,7 @@ import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.repository.ImageRepository;
 import com.owori.domain.member.entity.*;
 import com.owori.domain.member.repository.MemberRepository;
+import com.owori.domain.saying.entity.Saying;
 import com.owori.domain.saying.repository.SayingRepository;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -19,8 +20,10 @@ import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class TestService {
     private final ImageRepository imageRepository;
     private final FamilyService familyService;
 
+    @Transactional
     public String addTestData(){
         // member
         Member member1 = new Member(new OAuth2Info("1347891913847", AuthProvider.KAKAO));
@@ -92,6 +96,14 @@ public class TestService {
         storyRepository.save(member3Story);
         storyRepository.save(member3Story2);
         storyRepository.save(member4Story);
+
+        //saying
+        sayingRepository.save(Saying.builder().content("hello1").member(member1).tagMembers(List.of(member2, member3)).build());
+        sayingRepository.save(Saying.builder().content("hello2").member(member2).tagMembers(List.of(member3)).build());
+        sayingRepository.save(Saying.builder().content("hello3").member(member3).tagMembers(List.of(member1)).build());
+
+        //family image
+        family.addImage("https://owori.s3.ap-northeast-2.amazonaws.com/story/%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%B3.jpeg");
 
         // image
         Image image = new Image("https://owori.s3.ap-northeast-2.amazonaws.com/story/%E1%84%83%E1%85%A1%E1%84%8B%E1%85%AE%E1%86%AB%E1%84%85%E1%85%A9%E1%84%83%E1%85%B3+(1).jpeg", 1L);
