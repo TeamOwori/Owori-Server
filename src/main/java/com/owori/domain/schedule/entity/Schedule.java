@@ -57,7 +57,7 @@ public class Schedule implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Schedule(String title, LocalDate startDate, LocalDate endDate, ScheduleType scheduleType, Boolean dDayOption, List<Alarm> alarmList, Member member){
+    public Schedule(String title, LocalDate startDate, LocalDate endDate, ScheduleType scheduleType, Boolean dDayOption, List<Alarm> alarmList, Member member) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -67,7 +67,7 @@ public class Schedule implements Auditable {
         this.member = member;
     }
 
-    public void updateSchedule(String title, LocalDate startDate, LocalDate endDate, Boolean dDayOption, List<Alarm> alarmList){
+    public void updateSchedule(String title, LocalDate startDate, LocalDate endDate, Boolean dDayOption, List<Alarm> alarmList) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

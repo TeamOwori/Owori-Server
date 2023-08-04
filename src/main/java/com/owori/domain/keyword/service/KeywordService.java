@@ -18,19 +18,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class KeywordService implements EntityLoader<Keyword, UUID> {
 
     private final KeywordRepository keywordRepository;
     private final AuthService authService;
 
-    @Transactional
     public void addKeyword(String keyword, Member member) {
         Optional<Keyword> findKeyword = keywordRepository.findByContents(keyword);
         findKeyword.ifPresentOrElse(word -> word.getBaseTime().setCreatedAt(LocalDateTime.now()), // 같은 검색어가 이미 존재하면 createdAt만 update
                 () -> keywordRepository.save(new Keyword(keyword, member)));
     }
 
+    @Transactional(readOnly = true)
     public List<FindKeywordsResponse> findSearchWords() {
         Member loginUser = authService.getLoginUser();
         List<Keyword> keywordList = keywordRepository.findByMember(loginUser);
@@ -43,13 +44,18 @@ public class KeywordService implements EntityLoader<Keyword, UUID> {
     }
 
     @Transactional
-    public void deleteSearchWords() { keywordRepository.deleteAll(); }
+    public void deleteSearchWords() {
+        Member loginUser = authService.getLoginUser();
+        keywordRepository.findByMember(loginUser).forEach(Keyword::delete);
+    }
 
     @Transactional
     public void deleteSearchWord(UUID keywordId) {
         Keyword keyword = loadEntity(keywordId);
-        if(!keyword.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException(); }
-        keywordRepository.delete(keyword);
+        if (!keyword.getMember().getId().equals(authService.getLoginUser().getId())) {
+            throw new NoAuthorityException();
+        }
+        keyword.delete();
     }
 
     @Override

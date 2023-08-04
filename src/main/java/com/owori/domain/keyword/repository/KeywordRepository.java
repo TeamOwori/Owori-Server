@@ -11,7 +11,5 @@ public interface KeywordRepository {
     Optional<Keyword> findByContents(String contents);
     List<Keyword> findByMember(Member member);
     Keyword save(Keyword keyword);
-    void deleteAll();
-    void delete(Keyword keyword);
     Optional<Keyword> findById(UUID id);
 }

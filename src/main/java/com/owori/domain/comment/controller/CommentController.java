@@ -26,7 +26,7 @@ public class CommentController {
      * @return 생성된 댓글의 id를 반환합니다.
      */
     @PostMapping
-    public ResponseEntity<CommentIdResponse> addComment(@RequestBody AddCommentRequest request){
+    public ResponseEntity<CommentIdResponse> addComment(@RequestBody AddCommentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(facadeService.addComment(request));
     }
 
@@ -35,7 +35,7 @@ public class CommentController {
      * @param commentId 삭제할 댓글의 id 입니다.
      */
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> removeComment(@PathVariable UUID commentId){
+    public ResponseEntity<Void> removeComment(@PathVariable UUID commentId) {
         commentService.removeComment(commentId);
         return ResponseEntity.ok().build();
     }
@@ -46,7 +46,7 @@ public class CommentController {
      * @return 수정한 댓글의 id를 반환합니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<CommentIdResponse> updateComment(@RequestBody UpdateCommentRequest request){
+    public ResponseEntity<CommentIdResponse> updateComment(@RequestBody UpdateCommentRequest request) {
         return ResponseEntity.ok().body(commentService.updateComment(request));
     }
 }

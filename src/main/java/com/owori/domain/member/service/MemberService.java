@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -97,13 +96,13 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public ImageResponse updateMemberProfileImage(final MultipartFile profileImage) throws IOException {
+    public ImageResponse updateMemberProfileImage(final MultipartFile profileImage) {
         String profileImageUrl = uploadImage(profileImage);
         authService.getLoginUser().updateProfileImage(profileImageUrl);
         return new ImageResponse(profileImageUrl);
     }
 
-    private String uploadImage(final MultipartFile profileImage) throws IOException {
+    private String uploadImage(final MultipartFile profileImage) {
         if (profileImage.isEmpty()) {
             throw new NoSuchProfileImageException();
         }
@@ -126,6 +125,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     /**
      * 멤버 아이디 리스트를 통해 멤버 리스트를 반환해주는 함수
+     *
      * @param memberIds 멤버 아이디 리스트
      * @return 멤버 리스트
      */
@@ -138,6 +138,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
         authService.getLoginUser().updateEmotionalBadge(emotionalBadgeRequest.getEmotionalBadge());
     }
 
+    @Transactional(readOnly = true)
     public MemberHomeResponse findHomeData() {
         Member nowMember = authService.getLoginUser();
         List<ScheduleDDayResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
@@ -146,12 +147,14 @@ public class MemberService implements EntityLoader<Member, UUID> {
         return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);
     }
 
+    @Transactional(readOnly = true)
     public MyPageProfileResponse getMyPageProfile() {
         Member loginUser = authService.getLoginUser();
         return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthday(), loginUser.getColor(), loginUser.getEmotionalBadge());
     }
 
 
+    @Transactional(readOnly = true)
     public MemberColorResponse getEnableColor() {
         Member loginUser = authService.getLoginUser();
         Set<Member> familyMembers = loginUser.getFamily().getMembers();

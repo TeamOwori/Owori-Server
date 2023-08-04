@@ -23,10 +23,10 @@ public class HeartService implements EntityLoader<Heart, UUID> {
     private final AuthService authService;
 
     @Transactional
-    public HeartStatusResponse toggleHeart(Story story){
+    public HeartStatusResponse toggleHeart(Story story) {
         Member member = authService.getLoginUser();
 
-        if(hasHeart(member, story)){
+        if (hasHeart(member, story)) {
             Heart heart = heartRepository.findByMemberAndStory(member, story).orElseThrow(EntityNotFoundException::new);
             story.removeHeart(heart);
 
@@ -39,7 +39,7 @@ public class HeartService implements EntityLoader<Heart, UUID> {
         return new HeartStatusResponse(Boolean.TRUE);
     }
 
-    public boolean hasHeart(Member member, Story story){
+    public boolean hasHeart(Member member, Story story) {
         return heartRepository.existsByMemberAndStory(member, story);
     }
 

@@ -21,6 +21,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtValidator jwtValidator;
+
     public JwtToken refreshToken(final String oldRefreshToken, final String oldAccessToken) {
         validateTokens(oldRefreshToken, oldAccessToken);
 

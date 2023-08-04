@@ -47,7 +47,7 @@ public class Comment implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Comment(Member member, Story story, Comment parent, String content){
+    public Comment(Member member, Story story, Comment parent, String content) {
         this.member = member;
         this.story = story;
         this.parent = parent;
@@ -55,15 +55,15 @@ public class Comment implements Auditable {
         story.addComment(this);
     }
 
-    public void updateContent(String content){
+    public void updateContent(String content) {
         this.content = content;
     }
 
-    public String getTimeBefore(){
+    public String getTimeBefore() {
         return TimesAgo.of(this.getBaseTime().getCreatedAt());
     }
 
-    public UUID getParentId(){
+    public UUID getParentId() {
         return this.parent == null ? null : this.parent.getId();
     }
 }

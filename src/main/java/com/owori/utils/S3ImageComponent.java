@@ -11,39 +11,44 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
 public class S3ImageComponent {
+    private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private final AmazonS3Client amazonS3Client;
-
     /**
      * 이미지 업로드
-     * @param category 파일의 카테고리 ex. story, profile ...
+     *
+     * @param category      파일의 카테고리 ex. story, profile ...
      * @param multipartFile 넘겨받은 파일
      * @return 업로드된 파일의 접근 URL
      */
-    public String uploadImage(String category, MultipartFile multipartFile) throws IOException {
+    public String uploadImage(String category, MultipartFile multipartFile) {
 
         // 파일명
-        String fileName = createFileName(category, multipartFile.getOriginalFilename());
+        String fileName = createFileName(category, Objects.requireNonNull(multipartFile.getOriginalFilename()));
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(multipartFile.getContentType());
 
         // S3에 업로드
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+        try {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+        } catch (IOException ignored) {
+        }
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     /**
      * 파일명 생성
+     *
      * @param category
      * @param originalFileName 파일의 이름
      * @return 작명된 파일 이름
@@ -59,10 +64,11 @@ public class S3ImageComponent {
 
     /**
      * 이미지 삭제
+     *
      * @param fileUrl
      */
     public void deleteImage(String fileUrl) {
-        String[] deleteUrl = fileUrl.split("/",4);
+        String[] deleteUrl = fileUrl.split("/", 4);
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, deleteUrl[3]));
     }
 

@@ -52,7 +52,7 @@ public class MemberController {
      * @throws IOException 파일 업로드시 발생할 수 있는 예외입니다.
      */
     @PostMapping("/profile-image")
-    public ResponseEntity<ImageResponse> updateMemberProfileImage(MultipartFile profileImage) throws IOException {
+    public ResponseEntity<ImageResponse> updateMemberProfileImage(MultipartFile profileImage) {
         return ResponseEntity.ok(memberService.updateMemberProfileImage(profileImage));
     }
 

@@ -59,7 +59,7 @@ public class Story implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Story(String title, String content, LocalDate startDate, LocalDate endDate, Member member){
+    public Story(String title, String content, LocalDate startDate, LocalDate endDate, Member member) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -68,30 +68,41 @@ public class Story implements Auditable {
     }
 
     /* image */
-    public void updateImage(Image image){ this.images.add(image); }
-    public void removeImage(Image image){
+    public void updateImage(Image image) {
+        this.images.add(image);
+    }
+
+    public void removeImage(Image image) {
         this.images.remove(image);
         image.delete();
     }
-    public String getMainImage(){
+
+    public String getMainImage() {
         return images == null || images.isEmpty() ? null : images.get(0).getUrl();
     }
-    public List<String> getImageUrls(){
+
+    public List<String> getImageUrls() {
         return images.stream().map(Image::getUrl).toList();
     }
 
 
     /* comment */
-    public void addComment(Comment comment){ this.comments.add(comment); }
-    public void removeComment(Comment comment){
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+    public void removeComment(Comment comment) {
         this.comments.remove(comment);
         comment.delete();
     }
 
 
     /* heart */
-    public void addHeart(Heart heart){ this.hearts.add(heart); }
-    public void removeHeart(Heart heart){
+    public void addHeart(Heart heart) {
+        this.hearts.add(heart);
+    }
+
+    public void removeHeart(Heart heart) {
         this.hearts.remove(heart);
         heart.delete();
     }

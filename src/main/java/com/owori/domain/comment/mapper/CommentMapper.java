@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CommentMapper {
-    public Comment toEntity(Member member, Story story, Comment parent, String content){
+    public Comment toEntity(Member member, Story story, Comment parent, String content) {
         return Comment.builder()
                 .member(member)
                 .story(story)
@@ -17,7 +17,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public CommentResponse toResponse(Comment comment){
+    public CommentResponse toResponse(Comment comment) {
         return CommentResponse.builder()
                 .parentCommentId(comment.getParentId())
                 .commentId(comment.getId())

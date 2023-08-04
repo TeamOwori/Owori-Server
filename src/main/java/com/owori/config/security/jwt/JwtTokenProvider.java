@@ -13,10 +13,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    private final Key key;
-    private final MemberRepository memberRepository;
     private static final Long ACCESS_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 1000; // 1 Day
     private static final Long REFRESH_TOKEN_EXPIRE_LENGTH = 60L * 60 * 24 * 14 * 1000; // 14 Days
+    private final Key key;
+    private final MemberRepository memberRepository;
 
     public JwtToken createToken(Member loginUser) {
         Claims claims = getClaims(loginUser);

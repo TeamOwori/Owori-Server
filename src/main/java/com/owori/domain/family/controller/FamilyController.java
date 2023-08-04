@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class FamilyController {
      * @return 이미지의 url을 response 합니다.
      */
     @PostMapping("/images")
-    public ResponseEntity<ImageResponse> saveFamilyImage(MultipartFile familyImage) throws IOException {
+    public ResponseEntity<ImageResponse> saveFamilyImage(MultipartFile familyImage) {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamilyImage(familyImage));
     }
 

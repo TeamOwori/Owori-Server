@@ -16,7 +16,7 @@ import static com.owori.domain.heart.entity.QHeart.heart;
 import static com.owori.domain.story.entity.QStory.story;
 
 @RequiredArgsConstructor
-public class StoryRepositoryCustomImpl implements StoryRepositoryCustom{
+public class StoryRepositoryCustomImpl implements StoryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final StoryOrderConverter storyOrderConverter;
 

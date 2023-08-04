@@ -132,5 +132,7 @@ public class Member implements Auditable {
         this.emotionalBadge = emotionalBadge;
     }
 
-    public void addSaying(Saying saying) { this.saying = saying; }
+    public void addSaying(Saying saying) {
+        this.saying = saying;
+    }
 }

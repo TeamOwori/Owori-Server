@@ -1,6 +1,6 @@
 package com.owori.domain.keyword.entity;
 
-import com.owori.domain.member.entity.*;
+import com.owori.domain.member.entity.Member;
 import com.owori.global.audit.AuditListener;
 import com.owori.global.audit.Auditable;
 import com.owori.global.audit.BaseTime;

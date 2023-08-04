@@ -20,7 +20,7 @@ public class KeywordController {
      * @return 검색어 정보가 담긴 dto list를 반환합니다.
      */
     @GetMapping
-    public ResponseEntity<List<FindKeywordsResponse>> findSearchWords(){
+    public ResponseEntity<List<FindKeywordsResponse>> findSearchWords() {
         return ResponseEntity.ok(keywordService.findSearchWords());
     }
 
@@ -29,7 +29,7 @@ public class KeywordController {
      * 최근 검색어를 전체 삭제하는 컨트롤러입니다.
      */
     @DeleteMapping
-    public ResponseEntity<Void> deleteSearchWords(){
+    public ResponseEntity<Void> deleteSearchWords() {
         keywordService.deleteSearchWords();
         return ResponseEntity.ok().build();
     }
@@ -39,7 +39,7 @@ public class KeywordController {
      * @param keywordId 삭제할 검색어의 id 값
      */
     @DeleteMapping("/{keywordId}")
-    public ResponseEntity<Void> deleteSearchWords(@PathVariable UUID keywordId){
+    public ResponseEntity<Void> deleteSearchWords(@PathVariable UUID keywordId) {
         keywordService.deleteSearchWord(keywordId);
         return ResponseEntity.ok().build();
     }
