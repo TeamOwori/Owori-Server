@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.UUID;
 
 @Getter
@@ -64,6 +65,6 @@ public class Comment implements Auditable {
     }
 
     public UUID getParentId() {
-        return this.parent == null ? null : this.parent.getId();
+        return Optional.ofNullable(this.parent).map(Comment::getId).orElse(null);
     }
 }

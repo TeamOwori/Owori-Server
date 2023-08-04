@@ -78,7 +78,10 @@ public class Story implements Auditable {
     }
 
     public String getMainImage() {
-        return images == null || images.isEmpty() ? null : images.get(0).getUrl();
+        if (images.isEmpty()) {
+            return null;
+        }
+        return images.get(0).getUrl();
     }
 
     public List<String> getImageUrls() {
