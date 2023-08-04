@@ -23,7 +23,6 @@ public class S3ImageComponent {
 
     /**
      * 이미지 업로드
-     *
      * @param category      파일의 카테고리 ex. story, profile ...
      * @param multipartFile 넘겨받은 파일
      * @return 업로드된 파일의 접근 URL
@@ -48,7 +47,6 @@ public class S3ImageComponent {
 
     /**
      * 파일명 생성
-     *
      * @param category
      * @param originalFileName 파일의 이름
      * @return 작명된 파일 이름
@@ -64,7 +62,6 @@ public class S3ImageComponent {
 
     /**
      * 이미지 삭제
-     *
      * @param fileUrl
      */
     public void deleteImage(String fileUrl) {

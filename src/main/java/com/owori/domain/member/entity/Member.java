@@ -16,6 +16,7 @@ import java.util.*;
 
 @Getter
 @Entity
+@EqualsAndHashCode(of = "oAuth2Info")
 @Where(clause = "deleted_at is null")
 @EntityListeners(AuditListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -113,19 +114,6 @@ public class Member implements Auditable {
 
     public boolean isServiceMember() {
         return this.nickname != null && this.birthday != null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Member member = (Member) o;
-        return Objects.equals(oAuth2Info, member.oAuth2Info);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(oAuth2Info);
     }
 
     public void updateEmotionalBadge(EmotionalBadge emotionalBadge) {
