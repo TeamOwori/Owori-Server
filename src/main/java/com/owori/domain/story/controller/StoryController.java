@@ -51,23 +51,23 @@ public class StoryController {
     @GetMapping
     public ResponseEntity<FindAllStoryGroupResponse> findAllStory(
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
+            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
 
         return ResponseEntity.ok(storyService.findAllStory(pageable, lastViewed));
     }
 
     /**
      * 이야기 검색을 위한 컨트롤러입니다.
-     * @param keyword 검색어입니다.
+     * @param keyword    검색어입니다.
      * @param lastViewed
      * @param pageable
      * @return 검색 결과 dto가 반환됩니다.
      */
-    @GetMapping( "/search")
+    @GetMapping("/search")
     public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch(
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
             @RequestParam("last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed,
-            @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword){
+            @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword) {
         return ResponseEntity.ok(storyService.findStoryBySearch(keyword, pageable, lastViewed));
     }
 
@@ -76,10 +76,10 @@ public class StoryController {
      * @param pageable
      * @return 전체 조회 dto가 반환됩니다.
      */
-    @GetMapping( "/member")
+    @GetMapping("/member")
     public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter(
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
+            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
 
         return ResponseEntity.ok(storyService.findStoryByWriter(pageable, lastViewed));
     }
@@ -89,10 +89,10 @@ public class StoryController {
      * @param pageable
      * @return 전체 조회 dto가 반환됩니다.
      */
-    @GetMapping( "/heart")
+    @GetMapping("/heart")
     public ResponseEntity<FindAllStoryGroupResponse> findStoryByHeart(
             @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed){
+            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
 
         return ResponseEntity.ok(storyService.findStoryByHeart(pageable, lastViewed));
     }
@@ -103,7 +103,7 @@ public class StoryController {
      * @return 상세 조회 dto가 반환됩니다.
      */
     @GetMapping("/{storyId}")
-    public ResponseEntity<FindStoryResponse> findStory(@PathVariable UUID storyId){
+    public ResponseEntity<FindStoryResponse> findStory(@PathVariable UUID storyId) {
         return ResponseEntity.ok(facadeService.findStory(storyId));
     }
 
@@ -113,7 +113,7 @@ public class StoryController {
      * @return 수정한 story의 id 값이 반환됩니다.
      */
     @PostMapping("/update")
-    public ResponseEntity<StoryIdResponse> updateStory(@RequestBody @Valid UpdateStoryRequest request){
+    public ResponseEntity<StoryIdResponse> updateStory(@RequestBody @Valid UpdateStoryRequest request) {
         return ResponseEntity.ok(storyService.updateStory(request));
     }
 
@@ -122,7 +122,7 @@ public class StoryController {
      * @param storyId 수정할 story의 id 값 입니다.
      */
     @DeleteMapping("/{storyId}")
-    public ResponseEntity<Void> removeStory(@PathVariable UUID storyId){
+    public ResponseEntity<Void> removeStory(@PathVariable UUID storyId) {
         facadeService.removeStory(storyId);
         return ResponseEntity.ok().build();
     }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ImageMapper {
-    public Image toEntity(String imgUrl, Long order){
+    public Image toEntity(String imgUrl, Long order) {
         return Image.builder()
                 .url(imgUrl)
                 .orderNum(order)

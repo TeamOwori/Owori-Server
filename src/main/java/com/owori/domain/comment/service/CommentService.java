@@ -34,8 +34,7 @@ public class CommentService implements EntityLoader<Comment, UUID> {
         Comment parentComment = Optional.ofNullable(request.getParentCommentId())
                 .map(this::loadEntity).orElse(null);
 
-        Comment comment = commentMapper.toEntity(member, story, parentComment, request.getContent());
-        commentRepository.save(comment);
+        Comment comment = commentRepository.save(commentMapper.toEntity(member, story, parentComment, request.getContent()));
 
         return new CommentIdResponse(comment.getId());
     }
@@ -43,7 +42,9 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     @Transactional
     public void removeComment(UUID commentId) {
         Comment comment = loadEntity(commentId);
-        if(!comment.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
+        if (!comment.getMember().getId().equals(authService.getLoginUser().getId())) {
+            throw new NoAuthorityException();
+        }
 
         Story story = comment.getStory();
         story.removeComment(comment);
@@ -52,13 +53,15 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     @Transactional
     public CommentIdResponse updateComment(UpdateCommentRequest request) {
         Comment comment = loadEntity(request.getCommentId());
-        if(!comment.getMember().equals(authService.getLoginUser())){ throw new NoAuthorityException();}
+        if (!comment.getMember().getId().equals(authService.getLoginUser().getId())) {
+            throw new NoAuthorityException();
+        }
         comment.updateContent(request.getComment());
 
         return new CommentIdResponse(comment.getId());
     }
 
-    public List<CommentResponse> findComments(Story story, Member member){
+    public List<CommentResponse> findComments(Story story, Member member) {
         List<Comment> comments = commentRepository.findAllComments(story, member.getFamily());
         return comments.stream().map(commentMapper::toResponse).toList();
     }

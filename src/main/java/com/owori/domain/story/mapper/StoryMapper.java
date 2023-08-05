@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 public class StoryMapper {
-    public Story toEntity(PostStoryRequest request, Member member){
+    public Story toEntity(PostStoryRequest request, Member member) {
         return Story.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -25,7 +25,7 @@ public class StoryMapper {
                 .build();
     }
 
-    public FindAllStoryResponse toFindAllStoryResponse(Story story){
+    public FindAllStoryResponse toFindAllStoryResponse(Story story) {
         return FindAllStoryResponse.builder()
                 .storyId(story.getId())
                 .title(story.getTitle())
@@ -39,7 +39,7 @@ public class StoryMapper {
                 .build();
     }
 
-    public FindStoryResponse toFindStoryResponse(Story story, boolean isLiked, List<CommentResponse> comments){
+    public FindStoryResponse toFindStoryResponse(Story story, boolean isLiked, List<CommentResponse> comments) {
         return FindStoryResponse.builder()
                 .storyId(story.getId())
                 .isLiked(isLiked)

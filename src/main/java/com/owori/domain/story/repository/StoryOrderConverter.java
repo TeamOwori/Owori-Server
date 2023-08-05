@@ -40,10 +40,12 @@ public class StoryOrderConverter implements OrderConverter {
     }
 
     public BooleanExpression createOrderExpression(Pageable pageable, LocalDate date) {
-        if (date == null) { return null; }
+        if (date == null) {
+            return null;
+        }
         String sortProperty = pageable.getSort().toList().get(0).getProperty();
 
-        if (sortProperty.equals("start_date")){
+        if (sortProperty.equals("start_date")) {
             return story.startDate.lt(date);
         }
         return story.baseTime.createdAt.lt(date.atStartOfDay());

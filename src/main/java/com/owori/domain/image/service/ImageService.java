@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.IntStream;
 
 
 @Service
@@ -24,23 +24,19 @@ public class ImageService implements EntityLoader<Image, UUID> {
     private final ImageMapper imageMapper;
     private final S3ImageComponent s3ImageComponent;
 
-    public List<UUID> addStoryImage(List<MultipartFile> images) throws IOException {
+    public List<UUID> addStoryImage(List<MultipartFile> images) {
         if (images.size() > 10) {
             throw new ImageLimitExceededException();
         }
 
-        List<UUID> response = new ArrayList<>();
-        Long order = 1L;
-        for (MultipartFile image : images) {
-            if(image != null) {
-                String imgUrl = s3ImageComponent.uploadImage("story", image);
-                Image newImage = imageMapper.toEntity(imgUrl, order);
-                imageRepository.save(newImage);
-                response.add(newImage.getId());
-                order += 1;
-            }
-        }
-        return response;
+        images.removeIf(Objects::isNull);
+        return IntStream.range(0, images.size()).mapToObj(i -> uploadImage(images.get(i), i)).toList();
+    }
+
+    private UUID uploadImage(MultipartFile file, long order) {
+        String imgUrl = s3ImageComponent.uploadImage("story", file);
+        Image newImage = imageRepository.save(imageMapper.toEntity(imgUrl, order));
+        return newImage.getId();
     }
 
     @Transactional
@@ -53,21 +49,17 @@ public class ImageService implements EntityLoader<Image, UUID> {
     }
 
     @Transactional
-    public void removeImages(Story story){
+    public void removeImages(Story story) {
         List<Image> oldImages = imageRepository.findAllByStory(story);
 
-        Optional.ofNullable(oldImages).ifPresent(images -> {
-            images.forEach(img -> {
-                s3ImageComponent.deleteImage(img.getUrl());
-                story.removeImage(img);
-            });
-        });
+        Optional.ofNullable(oldImages).ifPresent(images -> images.forEach(img -> {
+            s3ImageComponent.deleteImage(img.getUrl());
+            story.removeImage(img);
+        }));
     }
 
     @Override
     public Image loadEntity(UUID id) {
         return imageRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
-
 }

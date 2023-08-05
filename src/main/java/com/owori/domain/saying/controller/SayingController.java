@@ -56,7 +56,7 @@ public class SayingController {
      * @return 가족의 서로에게 한마디를 정보를 반환합니다.
      */
     @GetMapping
-    public ResponseEntity<List<SayingByFamilyResponse>> findSayingByFamily(){
+    public ResponseEntity<List<SayingByFamilyResponse>> findSayingByFamily() {
         return ResponseEntity.ok(sayingService.findSayingByFamily());
     }
 }

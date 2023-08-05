@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HeartMapper {
-    public Heart toEntity(Member member, Story story){
+    public Heart toEntity(Member member, Story story) {
         return Heart.builder()
                 .story(story)
                 .member(member)

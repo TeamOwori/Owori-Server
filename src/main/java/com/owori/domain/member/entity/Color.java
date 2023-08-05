@@ -24,6 +24,6 @@ public enum Color {
         return Arrays.stream(Color.values())
                 .filter(c -> !colors.contains(c))
                 .findFirst()
-                .orElseGet(() ->Arrays.stream(Color.values()).filter(c -> c.getNum() == colors.size() % 7 + 1).findFirst().orElseThrow());
+                .orElseGet(() -> Arrays.stream(Color.values()).filter(c -> c.getNum() == colors.size() % 7 + 1).findFirst().orElseThrow());
     }
 }

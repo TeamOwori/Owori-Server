@@ -41,12 +41,13 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
         List<UUID> imagesIds = request.getImagesId();
-        if(imagesIds != null){
+        if (imagesIds != null) {
             imageService.updateStory(newStory, imagesIds);
         }
         return new StoryIdResponse(newStory.getId());
     }
 
+    @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
@@ -61,7 +62,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional
     public StoryIdResponse updateStory(UpdateStoryRequest request) {
         Story story = loadEntity(request.getStoryId());
-        if(!story.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException();}
+        if (!story.getMember().getId().equals(authService.getLoginUser().getId())) {
+            throw new NoAuthorityException();
+        }
         story.update(request.getContent(), request.getTitle(), request.getStartDate(), request.getEndDate());
         imageService.updateStory(story, request.getImagesId());
 
@@ -70,13 +73,16 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     @Transactional
     public void removeStory(Story story) {
-        if(!story.getMember().getId().equals(authService.getLoginUser().getId())){ throw new NoAuthorityException();}
+        if (!story.getMember().getId().equals(authService.getLoginUser().getId())) {
+            throw new NoAuthorityException();
+        }
 
         imageService.removeImages(story); // 이미지 삭제
         story.getHearts().forEach(story::removeHeart); // 좋아요 삭제
         story.delete(); // 스토리 삭제
     }
 
+    @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
         Member loginUser = authService.getLoginUser();
         Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily(), lastViewed);
@@ -85,6 +91,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindAllStoryGroupResponse(storyBySearch);
     }
 
+    @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryByWriter(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
         Slice<Story> storyByWriter = storyRepository.findStoryByWriter(pageable, member, lastViewed);
@@ -92,6 +99,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindAllStoryGroupResponse(storyByWriter);
     }
 
+    @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
         Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);

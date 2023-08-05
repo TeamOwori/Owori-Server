@@ -27,7 +27,7 @@ public class FacadeService {
     private final HeartService heartService;
     private final AuthService authService;
 
-    public List<CommentResponse> findComments(Story story, Member member){
+    public List<CommentResponse> findComments(Story story, Member member) {
         return commentService.findComments(story, member);
     }
 
@@ -44,6 +44,7 @@ public class FacadeService {
         return storyService.loadEntity(storyId);
     }
 
+    @Transactional(readOnly = true)
     public FindStoryResponse findStory(UUID storyId) {
         Story story = loadStoryEntity(storyId);
         Member member = authService.getLoginUser();

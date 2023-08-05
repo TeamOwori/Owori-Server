@@ -38,12 +38,12 @@ public class TestService {
     private final FamilyService familyService;
 
     @Transactional
-    public String addTestData(){
+    public String addTestData() {
         // member
-        Member member1 = new Member(new OAuth2Info("1347891913847", AuthProvider.KAKAO));
-        Member member2 = new Member(new OAuth2Info("1347891913847", AuthProvider.APPLE));
-        Member member3 = new Member(new OAuth2Info("1347891913847", AuthProvider.KAKAO));
-        Member member4 = new Member(new OAuth2Info("1347891913847", AuthProvider.APPLE));
+        Member member1 = new Member(new OAuth2Info("13478919138471", AuthProvider.KAKAO));
+        Member member2 = new Member(new OAuth2Info("13478919138472", AuthProvider.APPLE));
+        Member member3 = new Member(new OAuth2Info("13478919138473", AuthProvider.KAKAO));
+        Member member4 = new Member(new OAuth2Info("13478919138474", AuthProvider.APPLE));
 
         memberRepository.save(member1);
         memberRepository.save(member2);
@@ -52,40 +52,40 @@ public class TestService {
 
         // family
         InviteCodeResponse inviteCode = familyService.saveFamily(new FamilyRequest("금쪽이 네명"));
-        Family family = familyRepository.findByInviteCode(inviteCode.getInviteCode()).get();
+        Family family = familyRepository.findByInviteCode(inviteCode.getInviteCode()).orElseThrow();
         family.addMember(member1);
         family.addMember(member2);
         family.addMember(member3);
         family.addMember(member4);
 
-        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000,04,22), Color.PINK);
+        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000, 4, 22), Color.PINK);
         member1.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/32lkrj.png");
         member1.updateEmotionalBadge(EmotionalBadge.JOY);
 
-        member2.updateProfile("고삼이", LocalDate.of(1962,11,30), Color.GREEN);
+        member2.updateProfile("고삼이", LocalDate.of(1962, 11, 30), Color.GREEN);
         member2.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2023-07-22+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+5.04.20.png");
 
-        member3.updateProfile("지롱", LocalDate.of(2012,05,10), Color.PURPLE);
+        member3.updateProfile("지롱", LocalDate.of(2012, 5, 10), Color.PURPLE);
         member3.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/lal.png");
         member3.updateEmotionalBadge(EmotionalBadge.ANGRY);
 
-        member4.updateProfile("푸학학학", LocalDate.of(1975,12,8), Color.YELLOW);
+        member4.updateProfile("푸학학학", LocalDate.of(1975, 12, 8), Color.YELLOW);
         member4.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/ghQkd23.png");
         member4.updateEmotionalBadge(EmotionalBadge.CRY);
 
         // story
-        Story member1Story = new Story("여기에만 사진과 댓글이 있음", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2023, 03, 12), LocalDate.of(2023, 03, 12), member1);
-        Story member1Story2 = new Story("경주로 떠난 가족 여행!", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!! 오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2022, 01, 02), LocalDate.of(2022, 01, 05), member1);
-        Story member1Story3 = new Story("생일은 즐거워", "푸학", LocalDate.of(2013, 03, 12), LocalDate.of(2013, 03, 12), member1);
-        Story member1Story4 = new Story("야호", "야야야호 호 호 호 호 호 ", LocalDate.of(2009, 05, 02), LocalDate.of(2009, 05, 05), member1);
+        Story member1Story = new Story("여기에만 사진과 댓글이 있음", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2023, 3, 12), LocalDate.of(2023, 3, 12), member1);
+        Story member1Story2 = new Story("경주로 떠난 가족 여행!", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!! 오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2022, 1, 2), LocalDate.of(2022, 1, 5), member1);
+        Story member1Story3 = new Story("생일은 즐거워", "푸학", LocalDate.of(2013, 3, 12), LocalDate.of(2013, 3, 12), member1);
+        Story member1Story4 = new Story("야호", "야야야호 호 호 호 호 호 ", LocalDate.of(2009, 5, 2), LocalDate.of(2009, 5, 5), member1);
 
-        Story member2Story = new Story("배고프다", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2022, 03, 12), LocalDate.of(2022, 03, 19), member2);
+        Story member2Story = new Story("배고프다", "오늘은 데모데이 대상을 탔다. 즐거웠다. 즐거웠다. 즐거웠다. 재미났다. 뿌듯하다 야호 야호 야호 야호 !!!!", LocalDate.of(2022, 3, 12), LocalDate.of(2022, 3, 19), member2);
         Story member2Story2 = new Story("애국가 부르기", "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 이 기상과 이 마음으로 충성을 다하여 괴로우나 즐거우나 나라사랑하세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세", LocalDate.of(2010, 11, 12), LocalDate.of(2010, 11, 15), member2);
 
-        Story member3Story = new Story("도로로로", "얍 ", LocalDate.of(2023, 05, 18), LocalDate.of(2023, 05, 18), member3);
-        Story member3Story2 = new Story("푸하하하하학", "야야호", LocalDate.of(2009, 05, 02), LocalDate.of(2009, 05, 05), member3);
+        Story member3Story = new Story("도로로로", "얍 ", LocalDate.of(2023, 5, 18), LocalDate.of(2023, 5, 18), member3);
+        Story member3Story2 = new Story("푸하하하하학", "야야호", LocalDate.of(2009, 5, 2), LocalDate.of(2009, 5, 5), member3);
 
-        Story member4Story = new Story("야", "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 이 기상과 이 마음으로 충성을 다하여 괴로우나 즐거우나 나라사랑하세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세", LocalDate.of(2019, 9, 02), LocalDate.of(2019, 9, 05), member4);
+        Story member4Story = new Story("야", "동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 이 기상과 이 마음으로 충성을 다하여 괴로우나 즐거우나 나라사랑하세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 남산 위에 저 소나무 철갑을 두른듯 바람서리 불변함은 우리 기상일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세 가을 하늘 공활한데 높고 구름 없이 밝은 달은 우리 가슴 일편단심일세 무궁화 삼천리 화려 강산 대한사람 대한으로 길이 보전하세", LocalDate.of(2019, 9, 02), LocalDate.of(2019, 9, 5), member4);
 
         storyRepository.save(member1Story);
         storyRepository.save(member1Story2);
@@ -154,11 +154,10 @@ public class TestService {
         commentRepository.save(story1comment5);
 
         // schedule
-        scheduleRepository.save(new Schedule("가족 사진 찍는 날", LocalDate.of(2022, 01, 18), LocalDate.of(2022,01,19), ScheduleType.FAMILY, true, null, member1));
-        scheduleRepository.save(new Schedule("외식 day", LocalDate.of(2022, 02, 18), LocalDate.of(2022,03,18), ScheduleType.FAMILY, true, null, member2));
-        scheduleRepository.save(new Schedule("지렁이 졸업식", LocalDate.of(2022, 03, 18), LocalDate.of(2022,03,19), ScheduleType.FAMILY, true, null, member3));
+        scheduleRepository.save(new Schedule("가족 사진 찍는 날", LocalDate.of(2022, 01, 18), LocalDate.of(2022, 1, 19), ScheduleType.FAMILY, true, null, member1));
+        scheduleRepository.save(new Schedule("외식 day", LocalDate.of(2022, 02, 18), LocalDate.of(2022, 3, 18), ScheduleType.FAMILY, true, null, member2));
+        scheduleRepository.save(new Schedule("지렁이 졸업식", LocalDate.of(2022, 03, 18), LocalDate.of(2022, 3, 19), ScheduleType.FAMILY, true, null, member3));
 
         return inviteCode.getInviteCode();
     }
-
 }

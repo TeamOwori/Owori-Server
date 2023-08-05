@@ -43,7 +43,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         UUID scheduleId = updateScheduleRequest.getScheduleId();
         Schedule schedule = loadEntity(scheduleId);
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
-        if(isValidMember(schedule)) throw new NoAuthorityException();
+        if (nonValidMember(schedule)) throw new NoAuthorityException();
 
         schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
                 updateScheduleRequest.getEndDate(), updateScheduleRequest.getDdayOption(), updateScheduleRequest.getAlarmOptions());
@@ -51,7 +51,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return new ScheduleIdResponse(scheduleId);
     }
 
-    private boolean isValidMember(Schedule schedule) {
+    private boolean nonValidMember(Schedule schedule) {
         return schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId());
     }
 
@@ -59,10 +59,11 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     public void deleteSchedule(UUID scheduleId) {
         Schedule schedule = loadEntity(scheduleId);
         // 생성자와 동일하지 않을 경우 예외처리
-        if(!authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
+        if (!authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
         schedule.delete();
     }
 
+    @Transactional(readOnly = true)
     public List<ScheduleByMonthResponse> findScheduleByMonth(String month) {
         // 넘겨받은 'yyyy'-MM' 통해 해당 달의 사작일과 마지막일 찾기
         LocalDate firstDate = scheduleMapper.toFirstDate(month);
@@ -81,7 +82,8 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return scheduleMapper.toMonthResponseList(monthSchedules);
     }
 
-    public List<ScheduleDDayResponse> findDDayByFamily(){
+    @Transactional(readOnly = true)
+    public List<ScheduleDDayResponse> findDDayByFamily() {
 
         // 현재 유저 가족에 포함된 회원 정보 받기
         Set<Member> familyMembers = authService.getLoginUser().getFamily().getMembers();

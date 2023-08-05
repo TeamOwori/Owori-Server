@@ -13,7 +13,7 @@ public class TestController {
     private final TestService testService;
 
     @GetMapping
-    public String addTestDate(){
+    public String addTestDate() {
         return testService.addTestData();
     }
 }

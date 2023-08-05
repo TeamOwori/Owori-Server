@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -80,28 +79,28 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         family.updateGroupName(groupNameRequest.getFamilyGroupName());
     }
 
-    public ImageResponse saveFamilyImage(final MultipartFile multipartFile) throws IOException {
+    public ImageResponse saveFamilyImage(final MultipartFile multipartFile) {
         Family family = authService.getLoginUser().getFamily();
         String imageUrl = uploadImage(multipartFile);
         family.addImage(imageUrl);
         return new ImageResponse(imageUrl);
     }
 
-    private String uploadImage(final MultipartFile multipartFile) throws IOException {
+    private String uploadImage(final MultipartFile multipartFile) {
         return s3ImageComponent.uploadImage("family-image", multipartFile);
     }
 
     @Transactional
     public InviteCodeResponse generateInviteCode() {
         Family family = authService.getLoginUser().getFamily();
-        hasInviteCode(family.getInvite());
+        validateInviteCodeNotExists(family.getInvite());
 
         String code = generateRandomInviteCode();
         family.organizeInvite(code);
         return new InviteCodeResponse(code);
     }
 
-    private void hasInviteCode(final Invite invite) {
+    private void validateInviteCodeNotExists(final Invite invite) {
         if (isValidCode(invite)) {
             throw new InviteCodeExistException();
         }

@@ -39,12 +39,12 @@ public class Image implements Auditable {
     private BaseTime baseTime;
 
     @Builder
-    public Image (String url, Long orderNum){
+    public Image(String url, Long orderNum) {
         this.url = url;
         this.orderNum = orderNum;
     }
 
-    public void updateStory(Story story){
+    public void updateStory(Story story) {
         this.story = story;
         this.story.updateImage(this);
     }

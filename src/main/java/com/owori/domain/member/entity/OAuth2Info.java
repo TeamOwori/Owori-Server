@@ -1,16 +1,13 @@
 package com.owori.domain.member.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Getter
 @Embeddable
 @AllArgsConstructor
+@EqualsAndHashCode(of = "clientId")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OAuth2Info {
     @Lob
@@ -19,17 +16,4 @@ public class OAuth2Info {
 
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OAuth2Info that = (OAuth2Info) o;
-        return Objects.equals(clientId, that.clientId) && authProvider == that.authProvider;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(clientId, authProvider);
-    }
 }

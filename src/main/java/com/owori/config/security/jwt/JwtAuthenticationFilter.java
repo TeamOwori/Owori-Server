@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void validateMemberId(HttpServletRequest request, Authentication authentication) {
         UUID memberId = UUID.fromString(request.getHeader(memberTag));
-        if (!memberId.equals(((Member)(authentication.getPrincipal())).getId())) {
+        if (!memberId.equals(((Member) (authentication.getPrincipal())).getId())) {
             throw new JwtProcessingException();
         }
     }
