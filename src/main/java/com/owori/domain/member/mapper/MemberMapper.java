@@ -3,10 +3,7 @@ package com.owori.domain.member.mapper;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.dto.request.MemberRequest;
-import com.owori.domain.member.dto.response.MemberColorResponse;
-import com.owori.domain.member.dto.response.MemberHomeResponse;
-import com.owori.domain.member.dto.response.MemberJwtResponse;
-import com.owori.domain.member.dto.response.MemberProfileResponse;
+import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.entity.OAuth2Info;
@@ -25,6 +22,18 @@ public class MemberMapper {
     public Member toEntity(String clientId, MemberRequest memberRequest) {
         return Member.builder()
                 .oAuth2Info(new OAuth2Info(clientId, memberRequest.getAuthProvider()))
+                .build();
+    }
+
+    public MyPageProfileResponse toMyPageProfileResponse(Member member, Integer storyCount, Integer heartCount) {
+        return MyPageProfileResponse.builder()
+                .nickname(member.getNickname())
+                .birthday(member.getBirthday())
+                .color(member.getColor())
+                .emotionalBadge(member.getEmotionalBadge())
+                .profileImage(member.getProfileImage())
+                .storyCount(storyCount)
+                .heartCount(heartCount)
                 .build();
     }
 

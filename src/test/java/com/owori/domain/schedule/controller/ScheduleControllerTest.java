@@ -45,7 +45,7 @@ public class ScheduleControllerTest extends RestDocsTest {
         ScheduleIdResponse expected = new ScheduleIdResponse(UUID.randomUUID());
         given(scheduleService.addSchedule(any())).willReturn(expected);
 
-        AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(Alarm.TODAY, Alarm.A_DAY_AGO));
+        AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2024-07-31"), LocalDate.parse("2024-08-02"), ScheduleType.FAMILY, true, List.of(Alarm.TODAY, Alarm.A_DAY_AGO));
 
         // when
         ResultActions perform =
@@ -71,7 +71,7 @@ public class ScheduleControllerTest extends RestDocsTest {
         ScheduleIdResponse expected = new ScheduleIdResponse(UUID.randomUUID());
         given(scheduleService.updateSchedule(any())).willReturn(expected);
 
-        UpdateScheduleRequest request = new UpdateScheduleRequest(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-04"), true, List.of());
+        UpdateScheduleRequest request = new UpdateScheduleRequest(UUID.randomUUID(), "가족 여행", LocalDate.parse("2024-07-31"), LocalDate.parse("2024-08-04"), true, List.of());
 
         // when
         ResultActions perform =

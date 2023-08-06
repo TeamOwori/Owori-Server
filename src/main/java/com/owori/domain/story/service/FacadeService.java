@@ -72,4 +72,12 @@ public class FacadeService {
         Story story = loadStoryEntity(request.getStoryId());
         return commentService.addComment(story, request);
     }
+
+    public Integer findStoryNumByMember(Member member) {
+        return storyService.findStoryNumByMember(member);
+    }
+
+    public Integer findHeartNumByMember(Member member) {
+        return heartService.findHeartNumByMember(member);
+    }
 }

@@ -47,4 +47,8 @@ public class HeartService implements EntityLoader<Heart, UUID> {
     public Heart loadEntity(UUID id) {
         return heartRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    public Integer findHeartNumByMember(final Member member) {
+        return heartRepository.countByMember(member);
+    }
 }

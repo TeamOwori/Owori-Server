@@ -17,6 +17,7 @@ import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.service.ScheduleService;
+import com.owori.domain.story.service.FacadeService;
 import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
@@ -38,6 +39,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
+    private final FacadeService facadeService;
 
     @Override
     public Member loadEntity(final UUID id) {
@@ -150,7 +152,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     @Transactional(readOnly = true)
     public MyPageProfileResponse getMyPageProfile() {
         Member loginUser = authService.getLoginUser();
-        return new MyPageProfileResponse(loginUser.getNickname(), loginUser.getBirthday(), loginUser.getColor(), loginUser.getEmotionalBadge());
+        return memberMapper.toMyPageProfileResponse(loginUser, facadeService.findStoryNumByMember(loginUser), facadeService.findHeartNumByMember(loginUser));
     }
 
 

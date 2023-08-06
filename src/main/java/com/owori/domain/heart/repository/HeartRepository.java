@@ -12,4 +12,5 @@ public interface HeartRepository {
     Heart save(Heart heart);
     Optional<Heart> findByMemberAndStory(Member member, Story story);
     boolean existsByMemberAndStory(Member member, Story story);
+    Integer countByMember(Member member);
 }
