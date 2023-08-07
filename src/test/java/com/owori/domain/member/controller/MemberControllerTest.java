@@ -199,9 +199,9 @@ class MemberControllerTest extends RestDocsTest {
         UUID member1 = UUID.randomUUID();
         UUID member2 = UUID.randomUUID();
         List<MemberProfileResponse> membersProfile = List.of(
-                new MemberProfileResponse(member1, "아빠", "111111", EmotionalBadge.SO_HAPPY),
-                new MemberProfileResponse(member2, "엄마", "222222", EmotionalBadge.JOY),
-                new MemberProfileResponse(UUID.randomUUID(), "아들","333333",EmotionalBadge.CRY)
+                new MemberProfileResponse(member1, "아빠", "http://someProfileImageUrl", EmotionalBadge.SO_HAPPY),
+                new MemberProfileResponse(member2, "엄마", "http://someProfileImageUrl", EmotionalBadge.JOY),
+                new MemberProfileResponse(UUID.randomUUID(), "아들","http://someProfileImageUrl",EmotionalBadge.CRY)
         );
 
         List<SayingByFamilyResponse> sayings = List.of(

@@ -30,7 +30,7 @@ public class Image implements Auditable {
     @Column
     private Long orderNum;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String url;
 
     @Setter

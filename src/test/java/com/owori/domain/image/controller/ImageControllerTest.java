@@ -2,6 +2,7 @@ package com.owori.domain.image.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owori.domain.image.service.ImageService;
+import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -38,11 +40,11 @@ public class ImageControllerTest extends RestDocsTest{
     @DisplayName("POST /images 이야기 이미지 업로드 API 테스트")
     void addStoryImage() throws Exception {
         //given
-        List<UUID> expected = List.of(UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID(),UUID.randomUUID());
+        List<ImageResponse> expected = Stream.of("http://storyImage1Url","http://storyImage2Url").map(ImageResponse::new).toList();
         given(imageService.addStoryImage(any())).willReturn(expected);
 
-        MockMultipartFile image1 = new MockMultipartFile("images", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 1".getBytes(StandardCharsets.UTF_8));
-        MockMultipartFile image2 = new MockMultipartFile("images", "image2.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 2".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image1 = new MockMultipartFile("story_images", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 1".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile image2 = new MockMultipartFile("story_images", "image2.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 2".getBytes(StandardCharsets.UTF_8));
 
         //when
         ResultActions perform =

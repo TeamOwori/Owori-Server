@@ -5,6 +5,7 @@ import com.owori.domain.image.exception.ImageLimitExceededException;
 import com.owori.domain.image.mapper.ImageMapper;
 import com.owori.domain.image.repository.ImageRepository;
 import com.owori.domain.story.entity.Story;
+import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import com.owori.utils.S3ImageComponent;
@@ -24,19 +25,20 @@ public class ImageService implements EntityLoader<Image, UUID> {
     private final ImageMapper imageMapper;
     private final S3ImageComponent s3ImageComponent;
 
-    public List<UUID> addStoryImage(List<MultipartFile> images) {
+    public List<ImageResponse> addStoryImage(List<MultipartFile> images) {
         if (images.size() > 10) {
             throw new ImageLimitExceededException();
         }
 
         images.removeIf(Objects::isNull);
-        return IntStream.range(0, images.size()).mapToObj(i -> uploadImage(images.get(i), i)).toList();
+        List<String> urls = IntStream.range(0, images.size()).mapToObj(i -> uploadImage(images.get(i), i)).toList();
+        return urls.stream().map(ImageResponse::new).toList();
     }
 
-    private UUID uploadImage(MultipartFile file, long order) {
+    private String uploadImage(MultipartFile file, long order) {
         String imgUrl = s3ImageComponent.uploadImage("story", file);
         Image newImage = imageRepository.save(imageMapper.toEntity(imgUrl, order));
-        return newImage.getId();
+        return newImage.getUrl();
     }
 
     @Transactional
