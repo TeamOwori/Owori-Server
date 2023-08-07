@@ -62,7 +62,7 @@ public class FamilyController {
      * @return 이미지의 url을 response 합니다.
      */
     @PostMapping("/images")
-    public ResponseEntity<FamilyImageResponse> saveFamilyImage(MultipartFile familyImage) {
+    public ResponseEntity<FamilyImageResponse> saveFamilyImage(@RequestPart("family_image") MultipartFile familyImage) {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamilyImage(familyImage));
     }
 
