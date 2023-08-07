@@ -77,7 +77,6 @@ public class ScheduleControllerTest extends RestDocsTest {
         ResultActions perform =
                 mockMvc.perform(
                         post("/schedule/update")
-                                .param("schedule_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
