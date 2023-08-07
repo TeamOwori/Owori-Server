@@ -2,6 +2,7 @@ package com.owori.domain.family.controller;
 
 import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
+import com.owori.domain.family.dto.response.FamilyImageResponse;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.service.FamilyService;
 import com.owori.global.dto.ImageResponse;
@@ -114,7 +115,7 @@ class FamilyControllerTest extends RestDocsTest {
     @DisplayName("가족 사진 업로드를 수행하는가")
     void saveFamilyImage() throws Exception {
         //given
-        ImageResponse expected = new ImageResponse("http://someUrlToS3");
+        FamilyImageResponse expected = new FamilyImageResponse("http://someUrlToS3");
         given(familyService.saveFamilyImage(any())).willReturn(expected);
         MockMultipartFile image1 = new MockMultipartFile("family_image", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "Image".getBytes(StandardCharsets.UTF_8));
 

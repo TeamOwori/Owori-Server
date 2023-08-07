@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,11 +17,13 @@ import java.util.UUID;
 public class FindStoryResponse {
     private UUID storyId;
     private Boolean isLiked;
-    private List<String> images;
+    private List<String> storyImages;
     private String title;
     private String writer;
     private String content;
     private Integer heartCount;
     private Integer commentCount;
     private List<CommentResponse> comments;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

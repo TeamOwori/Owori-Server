@@ -2,6 +2,7 @@ package com.owori.domain.family.service;
 
 import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
+import com.owori.domain.family.dto.response.FamilyImageResponse;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.entity.Family;
 import com.owori.domain.family.entity.Invite;
@@ -79,11 +80,11 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         family.updateGroupName(groupNameRequest.getFamilyGroupName());
     }
 
-    public ImageResponse saveFamilyImage(final MultipartFile multipartFile) {
+    public FamilyImageResponse saveFamilyImage(final MultipartFile multipartFile) {
         Family family = authService.getLoginUser().getFamily();
         String imageUrl = uploadImage(multipartFile);
         family.addImage(imageUrl);
-        return new ImageResponse(imageUrl);
+        return new FamilyImageResponse(imageUrl);
     }
 
     private String uploadImage(final MultipartFile multipartFile) {

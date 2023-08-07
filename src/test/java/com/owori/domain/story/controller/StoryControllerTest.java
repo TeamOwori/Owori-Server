@@ -9,6 +9,7 @@ import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
 import com.owori.domain.story.service.FacadeService;
 import com.owori.domain.story.service.StoryService;
+import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -45,8 +47,8 @@ class StoryControllerTest extends RestDocsTest{
         StoryIdResponse expected = new StoryIdResponse(UUID.randomUUID());
         given(storyService.addStory(any())).willReturn(expected);
 
-        List<UUID> imgId = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ",imgId);
+        List<String> imgsUrl = List.of("http://storyImage1Url","http://storyImage2Url", "http://storyImage3Url", "http://storyImage4Url");
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", imgsUrl);
 
         //when
         ResultActions perform =
@@ -71,9 +73,8 @@ class StoryControllerTest extends RestDocsTest{
         //given
         StoryIdResponse expected = new StoryIdResponse(UUID.randomUUID());
         given(storyService.updateStory(any())).willReturn(expected);
-
-        List<UUID> imgId = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
-        UpdateStoryRequest request = new UpdateStoryRequest(UUID.randomUUID(), LocalDate.parse("2012-12-25"), LocalDate.parse("2012-12-25"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", imgId);
+        List<String> imgsUrl = List.of("http://storyImage1Url","http://storyImage2Url", "http://storyImage3Url", "http://storyImage4Url");
+        UpdateStoryRequest request = new UpdateStoryRequest(UUID.randomUUID(), LocalDate.parse("2012-12-25"), LocalDate.parse("2012-12-25"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", imgsUrl);
 
         //when
         ResultActions perform =
@@ -169,7 +170,7 @@ class StoryControllerTest extends RestDocsTest{
                 new CommentResponse(null, UUID.randomUUID(),"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
         );
 
-        FindStoryResponse response = new FindStoryResponse(UUID.randomUUID(),true, images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5, 4, comments);
+        FindStoryResponse response = new FindStoryResponse(UUID.randomUUID(),true, images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5, 4, comments, LocalDate.now(), LocalDate.now());
         given(facadeService.findStory(any())).willReturn(response);
 
         //when

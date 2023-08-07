@@ -30,7 +30,7 @@ public class StoryMapper {
                 .storyId(story.getId())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .image(story.getMainImage())
+                .thumbnail(story.getMainImage())
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
                 .writer(story.getMember().getNickname())
@@ -43,13 +43,15 @@ public class StoryMapper {
         return FindStoryResponse.builder()
                 .storyId(story.getId())
                 .isLiked(isLiked)
-                .images(story.getImageUrls())
+                .storyImages(story.getImageUrls())
                 .title(story.getTitle())
                 .writer(story.getMember().getNickname())
                 .content(story.getContent())
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
                 .comments(comments)
+                .startDate(story.getStartDate())
+                .endDate(story.getEndDate())
                 .build();
     }
 

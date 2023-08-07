@@ -2,6 +2,7 @@ package com.owori.domain.family.controller;
 
 import com.owori.domain.family.dto.request.AddMemberRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
+import com.owori.domain.family.dto.response.FamilyImageResponse;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
 import com.owori.domain.family.service.FamilyService;
 import com.owori.global.dto.ImageResponse;
@@ -61,7 +62,7 @@ public class FamilyController {
      * @return 이미지의 url을 response 합니다.
      */
     @PostMapping("/images")
-    public ResponseEntity<ImageResponse> saveFamilyImage(MultipartFile familyImage) {
+    public ResponseEntity<FamilyImageResponse> saveFamilyImage(MultipartFile familyImage) {
         return ResponseEntity.status(HttpStatus.CREATED).body(familyService.saveFamilyImage(familyImage));
     }
 
