@@ -114,7 +114,7 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(0).getCommentCount()).isEqualTo(1);
         assertThat(response.getStories().get(0).getHeartCount()).isEqualTo(1);
         assertThat(response.getStories().get(1).getContent()).isEqualTo("내용2");
-        assertThat(response.getStories().get(0).getImage()).isEqualTo("a.png");
+        assertThat(response.getStories().get(0).getThumbnail()).isEqualTo("a.png");
     }
 
     @Test

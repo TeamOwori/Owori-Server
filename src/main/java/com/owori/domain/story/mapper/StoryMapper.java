@@ -30,7 +30,7 @@ public class StoryMapper {
                 .storyId(story.getId())
                 .title(story.getTitle())
                 .content(story.getContent())
-                .image(story.getMainImage())
+                .thumbnail(story.getMainImage())
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
                 .writer(story.getMember().getNickname())

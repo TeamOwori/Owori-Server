@@ -16,7 +16,7 @@ public class FindAllStoryResponse {
     private UUID storyId;
     private String title;
     private String content;
-    private String image;
+    private String thumbnail;
     private Integer heartCount;
     private Integer commentCount;
     private String writer;
