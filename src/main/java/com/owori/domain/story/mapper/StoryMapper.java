@@ -50,6 +50,8 @@ public class StoryMapper {
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
                 .comments(comments)
+                .startDate(story.getStartDate())
+                .endDate(story.getEndDate())
                 .build();
     }
 
