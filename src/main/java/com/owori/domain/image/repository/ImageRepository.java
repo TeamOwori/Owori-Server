@@ -11,4 +11,7 @@ public interface ImageRepository {
     Optional<Image> findById(UUID id);
     Image save(Image image);
     List<Image> findAllByStory(Story story);
+
+    List<Image> findAllByUrls(List<String> urls);
+
 }

@@ -17,7 +17,7 @@ import java.util.UUID;
 public class FindStoryResponse {
     private UUID storyId;
     private Boolean isLiked;
-    private List<String> images;
+    private List<String> storyImages;
     private String title;
     private String writer;
     private String content;

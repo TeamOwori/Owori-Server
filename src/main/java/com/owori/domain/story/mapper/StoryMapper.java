@@ -43,7 +43,7 @@ public class StoryMapper {
         return FindStoryResponse.builder()
                 .storyId(story.getId())
                 .isLiked(isLiked)
-                .images(story.getImageUrls())
+                .storyImages(story.getImageUrls())
                 .title(story.getTitle())
                 .writer(story.getMember().getNickname())
                 .content(story.getContent())

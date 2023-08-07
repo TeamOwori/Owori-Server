@@ -40,9 +40,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     public StoryIdResponse addStory(PostStoryRequest request) {
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
-        List<UUID> imagesIds = request.getImagesId();
-        if (imagesIds != null) {
-            imageService.updateStory(newStory, imagesIds);
+        List<String> imagesUrl = request.getStoryImages();
+        if (imagesUrl != null) {
+            imageService.updateStory(newStory, imagesUrl);
         }
         return new StoryIdResponse(newStory.getId());
     }
@@ -66,7 +66,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
             throw new NoAuthorityException();
         }
         story.update(request.getContent(), request.getTitle(), request.getStartDate(), request.getEndDate());
-        imageService.updateStory(story, request.getImagesId());
+        imageService.updateStory(story, request.getStoryImages());
 
         return new StoryIdResponse(story.getId());
     }

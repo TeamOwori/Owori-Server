@@ -42,12 +42,13 @@ public class ImageService implements EntityLoader<Image, UUID> {
     }
 
     @Transactional
-    public void updateStory(Story story, List<UUID> imageIds) {
+    public void updateStory(Story story, List<String> imagesUrl) {
         removeImages(story);
-        imageIds.stream()
-                .map(this::loadEntity)
-                .sorted(Comparator.comparing(Image::getOrderNum))
-                .forEach(image -> image.updateStory(story));
+        List<Image> images = imageRepository.findAllByUrls(imagesUrl);
+        if(images != null)  {
+            images.stream().sorted(Comparator.comparing(Image::getOrderNum))
+                    .forEach(image -> image.updateStory(story));
+        }
     }
 
     @Transactional

@@ -32,5 +32,5 @@ public class UpdateStoryRequest {
     @Size(min = 1, max = 500)
     private String content;
 
-    private List<UUID> imagesId;
+    private List<String> storyImages;
 }
