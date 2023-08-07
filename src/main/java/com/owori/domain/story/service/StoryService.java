@@ -112,7 +112,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
-    public Integer findStoryNumByMember(Member member) {
+    public Long findStoryNumByMember(Member member) {
         return storyRepository.countByMember(member);
     }
 }

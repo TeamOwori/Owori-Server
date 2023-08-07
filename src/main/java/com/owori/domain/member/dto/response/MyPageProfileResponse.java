@@ -19,6 +19,6 @@ public class MyPageProfileResponse {
     private Color color;
     private EmotionalBadge emotionalBadge;
     private String profileImage;
-    private Integer storyCount;
-    private Integer heartCount;
+    private Long storyCount;
+    private Long heartCount;
 }
