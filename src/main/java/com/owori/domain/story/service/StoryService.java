@@ -82,7 +82,6 @@ public class StoryService implements EntityLoader<Story, UUID> {
         story.delete(); // 스토리 삭제
     }
 
-    @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
         Member loginUser = authService.getLoginUser();
         Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily(), lastViewed);
