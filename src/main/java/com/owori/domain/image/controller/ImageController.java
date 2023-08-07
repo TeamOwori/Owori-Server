@@ -1,5 +1,6 @@
 package com.owori.domain.image.controller;
 
+import com.owori.domain.image.dto.response.ImagesStoryResponse;
 import com.owori.domain.image.service.ImageService;
 import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class ImageController {
      * @return 생성된 이야기의 id가 반환됩니다.
      */
     @PostMapping
-    public ResponseEntity<List<ImageResponse>> addStoryImage(@RequestPart(value = "story_images", required = false) List<MultipartFile> storyImages) {
+    public ResponseEntity<ImagesStoryResponse> addStoryImage(@RequestPart(value = "story_images", required = false) List<MultipartFile> storyImages) {
         return ResponseEntity.status(HttpStatus.CREATED).body(imageService.addStoryImage(storyImages));
     }
 }

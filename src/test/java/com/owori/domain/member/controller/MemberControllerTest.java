@@ -103,7 +103,7 @@ class MemberControllerTest extends RestDocsTest {
     @DisplayName("멤버 프로필 이미지 저장이 수행되는가")
     void updateMemberProfileImage() throws Exception {
         //given
-        ImageResponse expected = new ImageResponse("http://someImageToUrl");
+        MemberImageResponse expected = new MemberImageResponse("http://someImageToUrl");
         given(memberService.updateMemberProfileImage(any())).willReturn(expected);
         MockMultipartFile image1 = new MockMultipartFile("profile_image", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "Image".getBytes(StandardCharsets.UTF_8));
 

@@ -1,6 +1,7 @@
 package com.owori.domain.image.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.owori.domain.image.dto.response.ImagesStoryResponse;
 import com.owori.domain.image.service.ImageService;
 import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
@@ -40,7 +41,7 @@ public class ImageControllerTest extends RestDocsTest{
     @DisplayName("POST /images 이야기 이미지 업로드 API 테스트")
     void addStoryImage() throws Exception {
         //given
-        List<ImageResponse> expected = Stream.of("http://storyImage1Url","http://storyImage2Url").map(ImageResponse::new).toList();
+        ImagesStoryResponse expected = new ImagesStoryResponse(List.of("http://storyImage1Url","http://storyImage2Url"));
         given(imageService.addStoryImage(any())).willReturn(expected);
 
         MockMultipartFile image1 = new MockMultipartFile("story_images", "image1.jpg", MediaType.IMAGE_JPEG_VALUE, "Image 1".getBytes(StandardCharsets.UTF_8));

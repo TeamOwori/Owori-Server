@@ -1,5 +1,6 @@
 package com.owori.domain.image.service;
 
+import com.owori.domain.image.dto.response.ImagesStoryResponse;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.exception.ImageLimitExceededException;
 import com.owori.domain.image.mapper.ImageMapper;
@@ -25,14 +26,14 @@ public class ImageService implements EntityLoader<Image, UUID> {
     private final ImageMapper imageMapper;
     private final S3ImageComponent s3ImageComponent;
 
-    public List<ImageResponse> addStoryImage(List<MultipartFile> images) {
+    public ImagesStoryResponse addStoryImage(List<MultipartFile> images) {
         if (images.size() > 10) {
             throw new ImageLimitExceededException();
         }
 
         images.removeIf(Objects::isNull);
         List<String> urls = IntStream.range(0, images.size()).mapToObj(i -> uploadImage(images.get(i), i)).toList();
-        return urls.stream().map(ImageResponse::new).toList();
+        return new ImagesStoryResponse(urls);
     }
 
     private String uploadImage(MultipartFile file, long order) {

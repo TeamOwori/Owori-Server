@@ -98,10 +98,10 @@ public class MemberService implements EntityLoader<Member, UUID> {
     }
 
     @Transactional
-    public ImageResponse updateMemberProfileImage(final MultipartFile profileImage) {
+    public MemberImageResponse updateMemberProfileImage(final MultipartFile profileImage) {
         String profileImageUrl = uploadImage(profileImage);
         authService.getLoginUser().updateProfileImage(profileImageUrl);
-        return new ImageResponse(profileImageUrl);
+        return new MemberImageResponse(profileImageUrl);
     }
 
     private String uploadImage(final MultipartFile profileImage) {
