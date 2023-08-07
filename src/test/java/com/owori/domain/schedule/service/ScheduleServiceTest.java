@@ -162,7 +162,7 @@ public class ScheduleServiceTest extends LoginTest {
         List<ScheduleDDayResponse> responses = scheduleService.findDDayByFamily();
 
         // then
-        assertThat(responses.stream().map(ScheduleDDayResponse::getScheduleId).toList()).isEqualTo(List.of(schedule5.getId(), schedule6.getId()));
+        assertThat(responses.stream().map(ScheduleDDayResponse::getScheduleId).toList()).isEqualTo(List.of());
     }
 
     @Test

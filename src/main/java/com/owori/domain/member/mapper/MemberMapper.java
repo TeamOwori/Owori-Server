@@ -25,7 +25,7 @@ public class MemberMapper {
                 .build();
     }
 
-    public MyPageProfileResponse toMyPageProfileResponse(Member member, Integer storyCount, Integer heartCount) {
+    public MyPageProfileResponse toMyPageProfileResponse(Member member, Long storyCount, Long heartCount) {
         return MyPageProfileResponse.builder()
                 .nickname(member.getNickname())
                 .birthday(member.getBirthday())

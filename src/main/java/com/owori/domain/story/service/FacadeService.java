@@ -73,11 +73,11 @@ public class FacadeService {
         return commentService.addComment(story, request);
     }
 
-    public Integer findStoryNumByMember(Member member) {
+    public Long findStoryNumByMember(Member member) {
         return storyService.findStoryNumByMember(member);
     }
 
-    public Integer findHeartNumByMember(Member member) {
+    public Long findHeartNumByMember(Member member) {
         return heartService.findHeartNumByMember(member);
     }
 }

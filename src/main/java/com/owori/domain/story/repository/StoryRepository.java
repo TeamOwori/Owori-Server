@@ -11,5 +11,5 @@ import java.util.UUID;
 public interface StoryRepository extends JpaRepository<Story, Long>, StoryRepositoryCustom {
     Story save(Story story);
     Optional<Story> findById(UUID id);
-    Integer countByMember(Member member);
+    Long countByMember(Member member);
 }
