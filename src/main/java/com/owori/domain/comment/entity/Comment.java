@@ -10,6 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,6 +40,9 @@ public class Comment implements Auditable {
     @JoinColumn
     private Comment parent;
 
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Comment> children = new ArrayList<>();
+
     @Lob
     @Column(nullable = false)
     private String content;
@@ -59,6 +64,8 @@ public class Comment implements Auditable {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void deleteComment() { this.content = "삭제된 댓글입니다."; }
 
     public String getTimeBefore() {
         return TimesAgo.of(this.getBaseTime().getCreatedAt());
