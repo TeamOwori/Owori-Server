@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final AuthService authService;
+    private final Long NO_CHILD_COMMENT = 0L;
 
     public CommentIdResponse addComment(Story story, AddCommentRequest request) {
         Member member = authService.getLoginUser();
@@ -49,14 +51,17 @@ public class CommentService implements EntityLoader<Comment, UUID> {
         if (!comment.getMember().getId().equals(authService.getLoginUser().getId())) {
             throw new NoAuthorityException();
         }
-
         // 하위 댓글이 없는 경우 : 삭제
-        if(commentRepository.countByParent(comment) == 0L) {
+        if(Objects.equals(commentRepository.countByParent(comment), NO_CHILD_COMMENT)) {
+            Comment parentComment = comment.getParent();
             Story story = comment.getStory();
             story.removeComment(comment);
+
+            // 상위 댓글 존재 시 하위 댓글이 존재하지 않는 경우 : 삭제
+            if(parentComment != null && Objects.equals(commentRepository.countByParent(parentComment), NO_CHILD_COMMENT)) story.removeComment(parentComment);
         }
-        // 하위 댓글이 있는 경우 : 내용 변경
-        else comment.deleteComment();
+        // 하위 댓글이 있는 경우 : deleteCheck 필드값 변경(false -> true)
+        if(!Objects.equals(commentRepository.countByParent(comment), NO_CHILD_COMMENT)) comment.deleteComment();
     }
 
     @Transactional
