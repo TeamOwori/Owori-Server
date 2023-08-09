@@ -40,12 +40,13 @@ public class Comment implements Auditable {
     @JoinColumn
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Comment> children = new ArrayList<>();
-
     @Lob
     @Column(nullable = false)
     private String content;
+
+    // 대댓글 있을 경우 삭제 처리를 위한 Boolean 변수
+    @Column(nullable = false)
+    private Boolean deleteCheck = Boolean.FALSE;
 
     @Setter
     @Embedded
@@ -65,7 +66,7 @@ public class Comment implements Auditable {
         this.content = content;
     }
 
-    public void deleteComment() { this.content = "삭제된 댓글입니다."; }
+    public void deleteComment() { this.deleteCheck = Boolean.TRUE; }
 
     public String getTimeBefore() {
         return TimesAgo.of(this.getBaseTime().getCreatedAt());
