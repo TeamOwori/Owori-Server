@@ -24,6 +24,7 @@ public class CommentMapper {
                 .comment(comment.getContent())
                 .writer(comment.getMember().getNickname())
                 .timeBeforeWriting(comment.getTimeBefore())
+                .deleteCommentCheck(comment.getDeleteCheck())
                 .build();
     }
 }
