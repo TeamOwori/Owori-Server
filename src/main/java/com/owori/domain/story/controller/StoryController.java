@@ -57,6 +57,16 @@ public class StoryController {
     }
 
     /**
+     * 이야기를 전체 조회를 위한 임시 컨트롤러입니다.
+     * @param sort 정렬 조건입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findAllStory2(@RequestParam(value = "sort") String sort) {
+        return ResponseEntity.ok(storyService.findAllStory2(sort));
+    }
+
+    /**
      * 이야기 검색을 위한 컨트롤러입니다.
      * @param keyword    검색어입니다.
      * @param lastViewed
@@ -85,7 +95,15 @@ public class StoryController {
     }
 
     /**
-     * 유저가 작성한 좋아한 조회를 위한 컨트롤러입니다.
+     * 유저가 작성한 이야기 조회를 위한 컨트롤러입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/member/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter2() {
+        return ResponseEntity.ok(storyService.findStoryByWriter2());
+    }
+    /**
+     * 유저가 작성한 좋아한 조회를 위한 임시 컨트롤러입니다.
      * @param pageable
      * @return 전체 조회 dto가 반환됩니다.
      */
@@ -95,6 +113,15 @@ public class StoryController {
             @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
 
         return ResponseEntity.ok(storyService.findStoryByHeart(pageable, lastViewed));
+    }
+
+    /**
+     * 유저가 작성한 좋아한 조회를 위한 임시 컨트롤러입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/heart/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryByHeart2() {
+        return ResponseEntity.ok(storyService.findStoryByHeart2());
     }
 
     /**
