@@ -114,7 +114,7 @@ class StoryControllerTest extends RestDocsTest{
                                 .param("last_viewed","2022-03-31")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 );
 
         //then

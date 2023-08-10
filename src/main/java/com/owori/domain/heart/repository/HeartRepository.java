@@ -4,6 +4,7 @@ import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.story.entity.Story;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +14,7 @@ public interface HeartRepository {
     Optional<Heart> findByMemberAndStory(Member member, Story story);
     boolean existsByMemberAndStory(Member member, Story story);
     Long countByMember(Member member);
+
+    List<Story> findAllByMember(Member member);
+
 }
