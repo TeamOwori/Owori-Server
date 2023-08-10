@@ -10,6 +10,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,6 +44,10 @@ public class Comment implements Auditable {
     @Column(nullable = false)
     private String content;
 
+    // 대댓글 있을 경우 삭제 처리를 위한 Boolean 변수
+    @Column(nullable = false)
+    private Boolean deleteCheck = Boolean.FALSE;
+
     @Setter
     @Embedded
     @Column(nullable = false)
@@ -59,6 +65,8 @@ public class Comment implements Auditable {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void deleteComment() { this.deleteCheck = Boolean.TRUE; }
 
     public String getTimeBefore() {
         return TimesAgo.of(this.getBaseTime().getCreatedAt());

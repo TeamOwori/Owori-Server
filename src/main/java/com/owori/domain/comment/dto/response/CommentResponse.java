@@ -15,4 +15,5 @@ public class CommentResponse {
     private String comment;
     private String writer;
     private String timeBeforeWriting;
+    private Boolean deleteCommentCheck;
 }

@@ -2,10 +2,12 @@ package com.owori.domain.story.service;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.family.entity.Family;
+import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.image.service.ImageService;
 import com.owori.domain.keyword.service.KeywordService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
+import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
@@ -24,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +38,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final StoryRepository storyRepository;
     private final StoryMapper storyMapper;
     private final ImageService imageService;
+    private final HeartService heartService;
     private final AuthService authService;
     private final KeywordService keywordService;
 
@@ -51,8 +56,18 @@ public class StoryService implements EntityLoader<Story, UUID> {
     public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
         Family family = authService.getLoginUser().getFamily();
         Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
-
         return storyMapper.toFindAllStoryGroupResponse(storyBySlice);
+    }
+
+    public FindAllStoryGroupResponse findAllStory2(String sort) {
+        Family family = authService.getLoginUser().getFamily();
+        List<Story> familyStories = findFamilyStories(sort, family);
+        return storyMapper.toFindAllStoryGroupResponse2(familyStories);
+    }
+
+    private List<Story> findFamilyStories(String sort, Family family) {
+        if(sort.equals("created_at")) return storyRepository.findAllByFamilyOrderByCreatedAt(family);
+        return storyRepository.findAllByFamilyOrderByStartDate(family);
     }
 
     public FindStoryResponse findStory(Story story, List<CommentResponse> comments, boolean isLiked) {
@@ -98,12 +113,26 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindAllStoryGroupResponse(storyByWriter);
     }
 
+    public FindAllStoryGroupResponse findStoryByWriter2() {
+        Member member = authService.getLoginUser();
+        List<Story> storyByWriter = storyRepository.findAllByMember(member);
+
+        return storyMapper.toFindAllStoryGroupResponse2(storyByWriter);
+    }
+
     @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();
         Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);
 
         return storyMapper.toFindAllStoryGroupResponse(storyByHeart);
+    }
+
+    public FindAllStoryGroupResponse findStoryByHeart2() {
+        Member member = authService.getLoginUser();
+        List<Story> storyByHeart = heartService.findStoryByMember(member);
+
+        return storyMapper.toFindAllStoryGroupResponse2(storyByHeart);
     }
 
     @Override

@@ -114,7 +114,7 @@ class StoryControllerTest extends RestDocsTest{
                                 .param("last_viewed","2022-03-31")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-                                .header("memberId", UUID.randomUUID().toString())
+                                .header("member_id", UUID.randomUUID().toString())
                                 );
 
         //then
@@ -164,10 +164,10 @@ class StoryControllerTest extends RestDocsTest{
         List<String> images = List.of("image2.png","image3.png","image2.png","image3.png","image3.png");
 
         List<CommentResponse> comments = List.of(
-                new CommentResponse(null, UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"),"야호 첫번째 최상위 댓글입니다.","허지렁지렁","3시간 전"),
-                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"첫번째 대댓글입니다.","김건빵","2시간 전"),
-                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"두번째 대댓글입니다.","고구마","30분 전"),
-                new CommentResponse(null, UUID.randomUUID(),"야호 두번째 최상위댓글입니다.","아몬드","2시간 전")
+                new CommentResponse(null, UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"),"야호 첫번째 최상위 댓글입니다.","허지렁지렁","3시간 전", Boolean.FALSE),
+                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"첫번째 대댓글입니다.","김건빵","2시간 전", Boolean.FALSE),
+                new CommentResponse(UUID.fromString("6da8a00c-b1df-4496-a8d7-6323294ba0ef"), UUID.randomUUID(),"두번째 대댓글입니다.","고구마","30분 전", Boolean.FALSE),
+                new CommentResponse(null, UUID.randomUUID(),"야호 두번째 최상위댓글입니다.","아몬드","2시간 전", Boolean.FALSE)
         );
 
         FindStoryResponse response = new FindStoryResponse(UUID.randomUUID(),true, images, "~ 다같이 야구 보고온 날 ~", "김건빵", "오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 오늘은 엘지가 이겼다. 얏호", 5, 4, comments, LocalDate.now(), LocalDate.now());

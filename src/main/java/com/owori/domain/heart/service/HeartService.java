@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,5 +51,9 @@ public class HeartService implements EntityLoader<Heart, UUID> {
 
     public Long findHeartNumByMember(final Member member) {
         return heartRepository.countByMember(member);
+    }
+
+    public List<Story> findStoryByMember(Member member) {
+        return heartRepository.findAllByMember(member);
     }
 }
