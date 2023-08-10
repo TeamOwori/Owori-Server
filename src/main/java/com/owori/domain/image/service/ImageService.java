@@ -27,7 +27,7 @@ public class ImageService implements EntityLoader<Image, UUID> {
     private final S3ImageComponent s3ImageComponent;
 
     public ImagesStoryResponse addStoryImage(List<MultipartFile> images) {
-        if (images.size() > 10) {
+        if (images == null || images.size() > 10) {
             throw new ImageLimitExceededException();
         }
 
