@@ -7,12 +7,9 @@ import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindAllStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.entity.Story;
-import com.owori.global.audit.BaseTime;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -55,6 +52,7 @@ public class StoryMapper {
                 .comments(comments)
                 .startDate(story.getStartDate())
                 .endDate(story.getEndDate())
+                .thumbnail(story.getMainImage())
                 .build();
     }
 

@@ -26,4 +26,5 @@ public class FindStoryResponse {
     private List<CommentResponse> comments;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String thumbnail;
 }
