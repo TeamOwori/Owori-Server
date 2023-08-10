@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 @Aspect
 @Component
 public class LogIntroduction {
-    private static final String FORMAT = "METHOD : {}, ARGS : {}";
+    private static final String FORMAT = "METHOD : {}";
 
     @Pointcut("execution(* com.owori..*Controller*.*(..))")
     public void allController() {
