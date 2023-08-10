@@ -85,7 +85,7 @@ public class Story implements Auditable {
     }
 
     public List<String> getImageUrls() {
-        return images.stream().map(Image::getUrl).toList();
+        return images.stream().sorted(Comparator.comparing(Image::getOrderNum)).map(Image::getUrl).toList();
     }
 
 
