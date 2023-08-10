@@ -30,7 +30,7 @@ public class CommentService implements EntityLoader<Comment, UUID> {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final AuthService authService;
-    private final Long NO_CHILD_COMMENT = 0L;
+    private final static Long NO_CHILD_COMMENT = 0L;
 
     public CommentIdResponse addComment(Story story, AddCommentRequest request) {
         Member member = authService.getLoginUser();
