@@ -3,8 +3,8 @@ package com.owori.domain.member.controller;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
 import com.owori.domain.member.dto.request.MemberDetailsRequest;
+import com.owori.domain.member.dto.request.MemberKakaoRequest;
 import com.owori.domain.member.dto.request.MemberProfileRequest;
-import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
@@ -13,7 +13,6 @@ import com.owori.domain.member.service.MemberService;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.entity.ScheduleType;
-import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,7 @@ class MemberControllerTest extends RestDocsTest {
         //given
         JwtToken jwt = new JwtToken("accesasdfagfwaerg.tokenasfd13sad.isthisahtfgwiueoh", "refreshriuqwhfoieu.tokenqiweurhu.isthiswheoituhw");
         MemberJwtResponse expected = new MemberJwtResponse(UUID.randomUUID(), Boolean.TRUE, jwt);
-        when(memberService.saveIfNone(any())).thenReturn(expected);
+        when(memberService.saveWithKakaoIfNone(any())).thenReturn(expected);
 
         //when
         ResultActions perform =
@@ -61,7 +60,7 @@ class MemberControllerTest extends RestDocsTest {
                         post("/members")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
-                                        toRequestBody(new MemberRequest("382y5e3a5", AuthProvider.KAKAO))));
+                                        toRequestBody(new MemberKakaoRequest("382y5e3a5", AuthProvider.KAKAO))));
 
         //then
         perform.andExpect(status().isCreated())

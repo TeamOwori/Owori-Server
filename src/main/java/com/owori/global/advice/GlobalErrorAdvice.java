@@ -1,5 +1,6 @@
 package com.owori.global.advice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.exception.NoAuthorityException;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,12 @@ public class GlobalErrorAdvice {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorResponse> exception(ConstraintViolationException e) {
+    public ResponseEntity<ErrorResponse> constraintViolationException(ConstraintViolationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<ErrorResponse> jsonProcessingException(JsonProcessingException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getMessage()));
     }
 }

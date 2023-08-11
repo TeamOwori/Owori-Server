@@ -1,16 +1,19 @@
 package com.owori.domain.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.owori.config.security.jwt.JwtToken;
+import com.owori.domain.member.client.ApplePublicKeyClient;
 import com.owori.domain.member.client.KakaoMemberClient;
+import com.owori.domain.member.dto.client.ApplePublicKeyResponse;
 import com.owori.domain.member.dto.client.KakaoMemberResponse;
-import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
-import com.owori.domain.member.dto.request.MemberDetailsRequest;
-import com.owori.domain.member.dto.request.MemberProfileRequest;
-import com.owori.domain.member.dto.request.MemberRequest;
+import com.owori.domain.member.dto.collection.AppleMap;
+import com.owori.domain.member.dto.request.*;
 import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.exception.NoSuchProfileImageException;
+import com.owori.domain.member.jwt.AppleKeyGenerator;
+import com.owori.domain.member.jwt.JwtParser;
 import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
@@ -18,7 +21,6 @@ import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.domain.story.service.FacadeService;
-import com.owori.global.dto.ImageResponse;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import com.owori.utils.S3ImageComponent;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.PublicKey;
 import java.util.*;
 
 @Service
@@ -39,6 +42,9 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
+    private final ApplePublicKeyClient applePublicKeyClient;
+    private final JwtParser jwtParser;
+    private final AppleKeyGenerator appleKeyGenerator;
     private final FacadeService facadeService;
 
     @Override
@@ -47,37 +53,47 @@ public class MemberService implements EntityLoader<Member, UUID> {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public MemberJwtResponse saveIfNone(final MemberRequest memberRequest) {
-        String clientId = getClientId(memberRequest);
+    public MemberJwtResponse saveWithKakaoIfNone(final MemberKakaoRequest memberKakaoRequest) {
+        String clientId = getKakaoClientId(memberKakaoRequest);
 
-        Optional<Member> member = memberRepository.findByClientIdAndAuthProvider(clientId, memberRequest.getAuthProvider());
+        Optional<Member> member = memberRepository.findByClientIdAndAuthProvider(clientId, AuthProvider.KAKAO);
         if (member.isPresent()) {
             return getServiceMemberJwtResponse(member.get());
         }
-
-        return getNewMemberJwtResponse(memberRequest, clientId);
+        return getNewMemberJwtResponse(AuthProvider.KAKAO, clientId);
     }
 
-    private MemberJwtResponse getNewMemberJwtResponse(final MemberRequest memberRequest, final String clientId) {
-        Member member = memberRepository.save(memberMapper.toEntity(clientId, memberRequest));
+    public MemberJwtResponse saveWithAppleIfNone(final MemberAppleRequest memberAppleRequest) throws JsonProcessingException {
+        String clientId = getAppleClientId(memberAppleRequest);
+
+        Optional<Member> member = memberRepository.findByClientIdAndAuthProvider(clientId, AuthProvider.APPLE);
+        if (member.isPresent()) {
+            return getServiceMemberJwtResponse(member.get());
+        }
+        return getNewMemberJwtResponse(AuthProvider.APPLE, clientId);
+    }
+
+    private String getKakaoClientId(final MemberKakaoRequest memberKakaoRequest) {
+        return Long.toString(requestToKakao(memberKakaoRequest.getToken()).getId());
+    }
+
+    private String getAppleClientId(final MemberAppleRequest memberAppleRequest) throws JsonProcessingException {
+        String identityToken = memberAppleRequest.getToken();
+        AppleMap appleMap = jwtParser.parseHeader(identityToken);
+        ApplePublicKeyResponse response = applePublicKeyClient.requestToApple();
+        PublicKey publicKey = appleKeyGenerator.generatePublicKey(appleMap, response);
+        return jwtParser.parseClaims(identityToken, publicKey);
+    }
+
+    private MemberJwtResponse getNewMemberJwtResponse(final AuthProvider authProvider, final String clientId) {
+        Member member = memberRepository.save(memberMapper.toEntity(clientId, authProvider));
         JwtToken jwtToken = createMemberJwtToken(member);
         return memberMapper.toJwtResponse(jwtToken, member.getId(), member.isServiceMember());
     }
 
     private MemberJwtResponse getServiceMemberJwtResponse(final Member member) {
         JwtToken jwtToken = createMemberJwtToken(member);
-        if (member.isServiceMember()) {
-            return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.TRUE);
-        }
-        return memberMapper.toJwtResponse(jwtToken, member.getId(), Boolean.FALSE);
-    }
-
-
-    private String getClientId(final MemberRequest memberRequest) {
-        if (memberRequest.getAuthProvider().equals(AuthProvider.KAKAO)) {
-            return Long.toString(requestToKakao(memberRequest.getToken()).getId());
-        }
-        return memberRequest.getToken();
+        return memberMapper.toJwtResponse(jwtToken, member.getId(), member.isServiceMember());
     }
 
     private JwtToken createMemberJwtToken(final Member member) {

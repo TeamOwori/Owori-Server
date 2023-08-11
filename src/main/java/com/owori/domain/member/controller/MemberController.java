@@ -1,12 +1,9 @@
 package com.owori.domain.member.controller;
 
-import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
-import com.owori.domain.member.dto.request.MemberDetailsRequest;
-import com.owori.domain.member.dto.request.MemberProfileRequest;
-import com.owori.domain.member.dto.request.MemberRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.owori.domain.member.dto.request.*;
 import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.service.MemberService;
-import com.owori.global.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +20,25 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 멤버 생성 컨트롤러입니다.
+     * 카카오를 통한 멤버 생성 컨트롤러입니다.
      * 멤버를 조회한 후 이미 존재하면 Jwt 토큰을 생성하고, 없다면 생성 후 Jwt 토큰을 생성해 response 합니다.
-     * @param memberRequest 멤버의 OAuth2 인증 후 OAuth2 Provider 와 조회가능한 accountId 를 가집니다.
+     * @param memberKakaoRequest 멤버의 OAuth2 인증 후 OAuth2 Provider 와 조회가능한 accountId 를 가집니다.
      * @return 멤버의 JwtToken 입니다.
      */
-    @PostMapping
-    public ResponseEntity<MemberJwtResponse> saveMember(@RequestBody @Valid MemberRequest memberRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveIfNone(memberRequest));
+    @PostMapping("/kakao")
+    public ResponseEntity<MemberJwtResponse> saveMemberWithKakao(@RequestBody @Valid MemberKakaoRequest memberKakaoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveWithKakaoIfNone(memberKakaoRequest));
+    }
+
+    /**
+     * 애플을 통한 멤버 생성 컨트롤러입니다.
+     * 멤버를 조회한 후 이미 존재하면 Jwt 토큰을 생성하고, 없다면 생성 후 Jwt 토큰을 생성해 response 합니다.
+     * @param memberAppleRequest 멤버의 OAuth2 인증 후 OAuth2 Provider 와 조회가능한 accountId 를 가집니다.
+     * @return 멤버의 JwtToken 입니다.
+     */
+    @PostMapping("/apple")
+    public ResponseEntity<MemberJwtResponse> saveMemberApple(@RequestBody @Valid MemberAppleRequest memberAppleRequest) throws JsonProcessingException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveWithAppleIfNone(memberAppleRequest));
     }
 
     /**

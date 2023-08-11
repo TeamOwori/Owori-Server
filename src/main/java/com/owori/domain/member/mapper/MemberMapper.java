@@ -2,8 +2,8 @@ package com.owori.domain.member.mapper;
 
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.family.entity.Family;
-import com.owori.domain.member.dto.request.MemberRequest;
 import com.owori.domain.member.dto.response.*;
+import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.entity.OAuth2Info;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class MemberMapper {
-    public Member toEntity(String clientId, MemberRequest memberRequest) {
+    public Member toEntity(String clientId, AuthProvider authProvider) {
         return Member.builder()
-                .oAuth2Info(new OAuth2Info(clientId, memberRequest.getAuthProvider()))
+                .oAuth2Info(new OAuth2Info(clientId, authProvider))
                 .build();
     }
 
