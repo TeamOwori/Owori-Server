@@ -88,6 +88,9 @@ public class Story implements Auditable {
         return images.stream().sorted(Comparator.comparing(Image::getOrderNum)).map(Image::getUrl).toList();
     }
 
+    public Boolean isMultipleImages(){
+        return getImageUrls().size() > 1;
+    }
 
     /* comment */
     public void addComment(Comment comment) {
