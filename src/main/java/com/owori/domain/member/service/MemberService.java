@@ -92,7 +92,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     public MemberValidateResponse updateMemberDetails(final MemberDetailsRequest memberDetailsRequest) {
         authService.getLoginUser().update(
                 memberDetailsRequest.getNickname(),
-                memberDetailsRequest.getBirthday());
+                memberMapper.toLocalDate(memberDetailsRequest.getBirthday()));
 
         return new MemberValidateResponse(Boolean.TRUE);
     }

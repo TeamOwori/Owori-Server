@@ -11,6 +11,7 @@ import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -93,6 +94,11 @@ public class MemberMapper {
                 .blue(familyColors.contains(Color.BLUE))
                 .purple(familyColors.contains(Color.PURPLE))
                 .build();
+    }
+
+    public LocalDate toLocalDate(String date) {
+        String localDate = date.substring(0,4) + "-" + date.substring(4,6) + "-" + date.substring(6,8);
+        return LocalDate.parse(localDate);
     }
 
     private MemberColorResponse defaultColorResponse() {
