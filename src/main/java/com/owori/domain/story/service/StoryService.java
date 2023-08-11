@@ -17,6 +17,7 @@ import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.InvalidDateException;
 import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     private final KeywordService keywordService;
 
     public StoryIdResponse addStory(PostStoryRequest request) {
+        validateDate(request.getStartDate(), request.getEndDate());
         Member loginUser = authService.getLoginUser();
         Story newStory = storyRepository.save(storyMapper.toEntity(request, loginUser));
         List<String> imagesUrl = request.getStoryImages();
@@ -50,6 +52,10 @@ public class StoryService implements EntityLoader<Story, UUID> {
             imageService.updateStory(newStory, imagesUrl);
         }
         return new StoryIdResponse(newStory.getId());
+    }
+
+    private void validateDate(LocalDate startDate, LocalDate endDate) {
+        if(startDate.isAfter(endDate)) throw new InvalidDateException();
     }
 
     @Transactional(readOnly = true)
@@ -76,6 +82,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
 
     @Transactional
     public StoryIdResponse updateStory(UpdateStoryRequest request) {
+        validateDate(request.getStartDate(), request.getEndDate());
         Story story = loadEntity(request.getStoryId());
         if (!story.getMember().getId().equals(authService.getLoginUser().getId())) {
             throw new NoAuthorityException();

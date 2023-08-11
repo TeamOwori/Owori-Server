@@ -12,6 +12,7 @@ import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.domain.schedule.mapper.ScheduleMapper;
 import com.owori.domain.schedule.repository.ScheduleRepository;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.InvalidDateException;
 import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,19 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
     private final AuthService authService;
 
     public ScheduleIdResponse addSchedule(AddScheduleRequest addScheduleRequest) {
+        validateDate(addScheduleRequest.getStartDate(), addScheduleRequest.getEndDate());
         Member member = authService.getLoginUser();
         Schedule newSchedule = scheduleRepository.save(scheduleMapper.toEntity(addScheduleRequest, member));
         return new ScheduleIdResponse(newSchedule.getId());
     }
 
+    private void validateDate(LocalDate startDate, LocalDate endDate) {
+        if(startDate.isAfter(endDate)) throw new InvalidDateException();
+    }
+
     @Transactional
     public ScheduleIdResponse updateSchedule(UpdateScheduleRequest updateScheduleRequest) {
+        validateDate(updateScheduleRequest.getStartDate(), updateScheduleRequest.getEndDate());
         // id 값으로 일정 찾기
         UUID scheduleId = updateScheduleRequest.getScheduleId();
         Schedule schedule = loadEntity(scheduleId);
