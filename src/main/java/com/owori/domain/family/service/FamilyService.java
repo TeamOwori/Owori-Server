@@ -80,6 +80,7 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         family.updateGroupName(groupNameRequest.getFamilyGroupName());
     }
 
+    @Transactional
     public FamilyImageResponse saveFamilyImage(final MultipartFile multipartFile) {
         Family family = authService.getLoginUser().getFamily();
         String imageUrl = uploadImage(multipartFile);
