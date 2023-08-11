@@ -212,7 +212,7 @@ class MemberServiceTest extends LoginTest {
     @DisplayName("유저 정보 조회가 제대로 이루어지는가")
     void findMyPageProfile() {
         //given
-        new Family("우리가족", loginUser, "1231231234");
+        familyService.saveFamily(new FamilyRequest("우리가족"));
         LocalDate birthday = LocalDate.of(2000, 04, 22);
         loginUser.updateProfile("지렁이", birthday, Color.PINK);
 
