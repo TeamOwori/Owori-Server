@@ -17,6 +17,7 @@ public class FindAllStoryResponse {
     private String title;
     private String content;
     private String thumbnail;
+    private Boolean isMultipleImages;
     private Integer heartCount;
     private Integer commentCount;
     private String writer;

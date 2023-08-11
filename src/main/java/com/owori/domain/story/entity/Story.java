@@ -77,17 +77,20 @@ public class Story implements Auditable {
         image.delete();
     }
 
-    public String getMainImage() {
+    public String getMainImage() {  
         if (images.isEmpty()) {
             return null;
         }
-        return images.get(0).getUrl();
+        return getImageUrls().get(0);
     }
 
     public List<String> getImageUrls() {
         return images.stream().sorted(Comparator.comparing(Image::getOrderNum)).map(Image::getUrl).toList();
     }
 
+    public Boolean isMultipleImages(){
+        return getImageUrls().size() > 1;
+    }
 
     /* comment */
     public void addComment(Comment comment) {

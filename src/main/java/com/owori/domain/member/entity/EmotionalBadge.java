@@ -8,7 +8,7 @@ public enum EmotionalBadge {
     HAPPY("행복쓰"),
     SO_HAPPY("엄청 행복쓰"),
     LOVE("사랑해"),
-    SURRISED("놀람"),
+    SURPRISED("놀람"),
     INSIDIOUS("음흉쓰"),
     NORMAL("보통"),
     SLEEPY("졸림"),
