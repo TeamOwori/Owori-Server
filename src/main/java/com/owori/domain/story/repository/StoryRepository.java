@@ -19,9 +19,9 @@ public interface StoryRepository extends JpaRepository<Story, Long>, StoryReposi
     @Query("select s from Story s where s.member.family = :family order by s.baseTime.createdAt DESC ")
     List<Story> findAllByFamilyOrderByCreatedAt(Family family);
 
-    @Query("select s from Story s where s.member.family = :family order by s.startDate DESC")
+    @Query("select s from Story s where s.member.family = :family order by s.startDate, s.baseTime.createdAt DESC")
     List<Story> findAllByFamilyOrderByStartDate(Family family);
 
-    @Query("select s from Story s where s.member = :member order by s.startDate DESC")
+    @Query("select s from Story s where s.member = :member order by s.startDate, s.baseTime.createdAt DESC")
     List<Story> findAllByMember(Member member);
 }
