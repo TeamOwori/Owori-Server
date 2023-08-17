@@ -6,9 +6,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-
   config:
     import: classpath:env.yml
 
