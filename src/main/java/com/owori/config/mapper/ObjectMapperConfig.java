@@ -20,6 +20,7 @@ public class ObjectMapperConfig {
                 .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
                 .setTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Seoul")))
+                .configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false)
                 .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .registerModule(dateTimeModule());
     }
