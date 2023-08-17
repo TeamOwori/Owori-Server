@@ -204,7 +204,7 @@ public class StoryServiceTest extends LoginTest {
         Story story3 = new Story("제목3", "내용 기다리고", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
 
         familyRepository.save(family);
-        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.PINK);
+        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.OWORI_PINK);
         storyRepository.save(story);
         storyRepository.save(story2);
         storyRepository.save(story3);
@@ -228,7 +228,7 @@ public class StoryServiceTest extends LoginTest {
         Story story3 = new Story("제목3", "정답", LocalDate.parse("2015-12-25"), LocalDate.parse("2015-12-30"), member);
 
         familyRepository.save(family);
-        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.PINK);
+        member.updateProfile("파인애플",LocalDate.of(2000,04,22), Color.OWORI_PINK);
         storyRepository.save(story3);
 
         //when

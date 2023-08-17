@@ -58,18 +58,18 @@ public class TestService {
         family.addMember(member3);
         family.addMember(member4);
 
-        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000, 4, 22), Color.PINK);
+        member1.updateProfile("고마워감자탕탕", LocalDate.of(2000, 4, 22), Color.OWORI_PINK);
         member1.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/32lkrj.png");
         member1.updateEmotionalBadge(EmotionalBadge.JOY);
 
-        member2.updateProfile("고삼이", LocalDate.of(1962, 11, 30), Color.GREEN);
+        member2.updateProfile("고삼이", LocalDate.of(1962, 11, 30), Color.OWORI_GREEN);
         member2.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA+2023-07-22+%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE+5.04.20.png");
 
-        member3.updateProfile("지롱", LocalDate.of(2012, 5, 10), Color.PURPLE);
+        member3.updateProfile("지롱", LocalDate.of(2012, 5, 10), Color.OWORI_PURPLE);
         member3.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/lal.png");
         member3.updateEmotionalBadge(EmotionalBadge.ANGRY);
 
-        member4.updateProfile("푸학학학", LocalDate.of(1975, 12, 8), Color.YELLOW);
+        member4.updateProfile("푸학학학", LocalDate.of(1975, 12, 8), Color.OWORI_YELLOW);
         member4.updateProfileImage("https://owori.s3.ap-northeast-2.amazonaws.com/profile-image/ghQkd23.png");
         member4.updateEmotionalBadge(EmotionalBadge.CRY);
 

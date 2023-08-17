@@ -134,7 +134,7 @@ class MemberControllerTest extends RestDocsTest {
                 mockMvc.perform(
                         post("/members/profile")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(toRequestBody(new MemberProfileRequest("오월이", LocalDate.now(), Color.GREEN)))
+                                .content(toRequestBody(new MemberProfileRequest("오월이", LocalDate.now(), Color.OWORI_GREEN)))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString()));
 
@@ -208,9 +208,9 @@ class MemberControllerTest extends RestDocsTest {
                 new SayingByFamilyResponse(UUID.randomUUID(),"오늘 저녁 카레", member2, List.of(), LocalDateTime.now())
         );
         List<ScheduleDDayResponse> dDaySchedules = List.of(
-                new ScheduleDDayResponse(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of()),
-                new ScheduleDDayResponse(UUID.randomUUID(), "휴가", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.SKYBLUE, true, List.of()),
-                new ScheduleDDayResponse(UUID.randomUUID(), "친구 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.GREEN, true, List.of())
+                new ScheduleDDayResponse(UUID.randomUUID(), "가족 여행", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.OWORI_BLUE, true, List.of()),
+                new ScheduleDDayResponse(UUID.randomUUID(), "휴가", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.OWORI_SKYBLUE, true, List.of()),
+                new ScheduleDDayResponse(UUID.randomUUID(), "친구 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.OWORI_GREEN, true, List.of())
                 );
 
         MemberHomeResponse expected = new MemberHomeResponse("오월이 가족",membersProfile,dDaySchedules ,List.of("111111","222222"), sayings);
@@ -262,7 +262,7 @@ class MemberControllerTest extends RestDocsTest {
     @DisplayName("마이페이지 유저 조회가 제대로 수행되는가")
     void findMyPageProfile() throws Exception {
         //given
-        MyPageProfileResponse expected = new MyPageProfileResponse("꼼지락", LocalDate.of(2000, 04, 22), Color.BLUE, EmotionalBadge.HAPPY, "http://someProfileImageUrl", 3L, 6L);
+        MyPageProfileResponse expected = new MyPageProfileResponse("꼼지락", LocalDate.of(2000, 04, 22), Color.OWORI_BLUE, EmotionalBadge.HAPPY, "http://someProfileImageUrl", 3L, 6L);
         given(memberService.getMyPageProfile()).willReturn(expected);
 
         //when

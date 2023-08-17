@@ -110,7 +110,7 @@ class MemberServiceTest extends LoginTest {
         //when
         String nickname = "오월이";
         LocalDate birthday = LocalDate.now();
-        Color color = Color.GREEN;
+        Color color = Color.OWORI_GREEN;
         memberService.updateMemberProfile(new MemberProfileRequest(nickname, birthday, color));
 
         //then
@@ -214,7 +214,7 @@ class MemberServiceTest extends LoginTest {
         //given
         familyService.saveFamily(new FamilyRequest("우리가족"));
         LocalDate birthday = LocalDate.of(2000, 04, 22);
-        loginUser.updateProfile("지렁이", birthday, Color.PINK);
+        loginUser.updateProfile("지렁이", birthday, Color.OWORI_PINK);
 
         //when
         MyPageProfileResponse response = memberService.getMyPageProfile();
@@ -222,7 +222,7 @@ class MemberServiceTest extends LoginTest {
         //then
         assertThat(response.getBirthday()).isEqualTo(birthday);
         assertThat(response.getNickname()).isEqualTo("지렁이");
-        assertThat(response.getColor()).isEqualTo(Color.PINK);
+        assertThat(response.getColor()).isEqualTo(Color.OWORI_PINK);
     }
 
 }

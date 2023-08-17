@@ -9,13 +9,13 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public enum Color {
-    RED("빨간색", 1),
-    YELLOW("노란색", 2),
-    GREEN("초록색", 3),
-    PINK("분홍색", 4),
-    SKYBLUE("하늘색", 5),
-    BLUE("파란색", 6),
-    PURPLE("보라색", 7);
+    OWORI_RED("빨간색", 1),
+    OWORI_YELLOW("노란색", 2),
+    OWORI_GREEN("초록색", 3),
+    OWORI_PINK("분홍색", 4),
+    OWORI_SKYBLUE("하늘색", 5),
+    OWORI_BLUE("파란색", 6),
+    OWORI_PURPLE("보라색", 7);
 
     private final String toKorean;
     private final int num;

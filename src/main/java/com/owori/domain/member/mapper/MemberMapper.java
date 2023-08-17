@@ -86,13 +86,13 @@ public class MemberMapper {
 
     private MemberColorResponse toColorResponseWithFamilyColors(List<Color> familyColors) {
         return MemberColorResponse.builder()
-                .red(familyColors.contains(Color.RED))
-                .yellow(familyColors.contains(Color.YELLOW))
-                .green(familyColors.contains(Color.GREEN))
-                .pink(familyColors.contains(Color.PINK))
-                .skyblue(familyColors.contains(Color.SKYBLUE))
-                .blue(familyColors.contains(Color.BLUE))
-                .purple(familyColors.contains(Color.PURPLE))
+                .red(familyColors.contains(Color.OWORI_RED))
+                .yellow(familyColors.contains(Color.OWORI_YELLOW))
+                .green(familyColors.contains(Color.OWORI_GREEN))
+                .pink(familyColors.contains(Color.OWORI_PINK))
+                .skyblue(familyColors.contains(Color.OWORI_SKYBLUE))
+                .blue(familyColors.contains(Color.OWORI_BLUE))
+                .purple(familyColors.contains(Color.OWORI_PURPLE))
                 .build();
     }
 

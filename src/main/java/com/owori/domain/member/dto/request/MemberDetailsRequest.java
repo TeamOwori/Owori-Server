@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
