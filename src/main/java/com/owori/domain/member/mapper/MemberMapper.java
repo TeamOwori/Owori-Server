@@ -96,11 +96,6 @@ public class MemberMapper {
                 .build();
     }
 
-    public LocalDate toLocalDate(String date) {
-        String localDate = date.substring(0,4) + "-" + date.substring(4,6) + "-" + date.substring(6,8);
-        return LocalDate.parse(localDate);
-    }
-
     private MemberColorResponse defaultColorResponse() {
         return MemberColorResponse.builder().build();
     }

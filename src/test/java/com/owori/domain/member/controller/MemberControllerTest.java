@@ -1,10 +1,7 @@
 package com.owori.domain.member.controller;
 
 import com.owori.config.security.jwt.JwtToken;
-import com.owori.domain.member.dto.request.EmotionalBadgeRequest;
-import com.owori.domain.member.dto.request.MemberDetailsRequest;
-import com.owori.domain.member.dto.request.MemberKakaoRequest;
-import com.owori.domain.member.dto.request.MemberProfileRequest;
+import com.owori.domain.member.dto.request.*;
 import com.owori.domain.member.dto.response.*;
 import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
@@ -47,8 +44,8 @@ class MemberControllerTest extends RestDocsTest {
     @MockBean private MemberService memberService;
 
     @Test
-    @DisplayName("멤버 생성 후 JwtToken 생성이 수행되는가")
-    void saveMember() throws Exception {
+    @DisplayName("멤버 생성 후 카카오 JwtToken 생성이 수행되는가")
+    void saveMemberWithKakao() throws Exception {
         //given
         JwtToken jwt = new JwtToken("accesasdfagfwaerg.tokenasfd13sad.isthisahtfgwiueoh", "refreshriuqwhfoieu.tokenqiweurhu.isthiswheoituhw");
         MemberJwtResponse expected = new MemberJwtResponse(UUID.randomUUID(), Boolean.TRUE, jwt);
@@ -57,7 +54,7 @@ class MemberControllerTest extends RestDocsTest {
         //when
         ResultActions perform =
                 mockMvc.perform(
-                        post("/members")
+                        post("/members/kakao")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         toRequestBody(new MemberKakaoRequest("382y5e3a5", AuthProvider.KAKAO))));
@@ -70,9 +67,35 @@ class MemberControllerTest extends RestDocsTest {
 
         //docs
         perform.andDo(print())
-                .andDo(document("save member and get jwt", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("save member by kakao and get jwt", getDocumentRequest(), getDocumentResponse()));
     }
 
+    @Test
+    @DisplayName("멤버 생성 후 애플 JwtToken 생성이 수행되는가")
+    void saveMemberWithApple() throws Exception {
+        //given
+        JwtToken jwt = new JwtToken("accesasdfagfwaerg.tokenasfd13sad.isthisahtfgwiueoh", "refreshriuqwhfoieu.tokenqiweurhu.isthiswheoituhw");
+        MemberJwtResponse expected = new MemberJwtResponse(UUID.randomUUID(), Boolean.TRUE, jwt);
+        when(memberService.saveWithAppleIfNone(any())).thenReturn(expected);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/members/apple")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        toRequestBody(new MemberAppleRequest("382y5e3a5","code", AuthProvider.APPLE))));
+
+        //then
+        perform.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.jwt_token.access_token").exists())
+                .andExpect(jsonPath("$.jwt_token.refresh_token").exists())
+                .andExpect(jsonPath("$.member_id").exists());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("save member by apple and get jwt", getDocumentRequest(), getDocumentResponse()));
+    }
     @Test
     @DisplayName("멤버 기본 정보 업데이트가 수행되는가")
     void updateMemberDetails() throws Exception {
