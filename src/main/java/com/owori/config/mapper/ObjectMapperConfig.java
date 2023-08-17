@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 @Configuration
 public class ObjectMapperConfig {
@@ -17,6 +19,7 @@ public class ObjectMapperConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+                .setTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Seoul")))
                 .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .registerModule(dateTimeModule());
     }
