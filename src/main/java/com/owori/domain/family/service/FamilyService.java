@@ -52,8 +52,9 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         return code;
     }
 
+    @Transactional
     public void addMember(final AddMemberRequest addMemberRequest) {
-        familyRepository.findByInviteCode(addMemberRequest.getInviteCode().strip())
+        familyRepository.findByInviteCode(addMemberRequest.getInviteCode())
                 .ifPresent(family -> {
                     Invite invite = family.getInvite();
                     if (!isValidCode(invite)) {
