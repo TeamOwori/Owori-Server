@@ -21,6 +21,7 @@ public class UpdateScheduleRequest {
     private UUID scheduleId;
     @NotBlank(message = "제목을 입력해주세요")
     private String title;
+    private String content;
     @NotNull(message = "startDate는 필수 입력값입니다.")
     private LocalDate startDate;
     @NotNull(message = "endDate는 필수 입력값입니다.")

@@ -154,9 +154,9 @@ public class TestService {
         commentRepository.save(story1comment5);
 
         // schedule
-        scheduleRepository.save(new Schedule("가족 사진 찍는 날", LocalDate.of(2022, 01, 18), LocalDate.of(2022, 1, 19), ScheduleType.FAMILY, true, null, member1));
-        scheduleRepository.save(new Schedule("외식 day", LocalDate.of(2022, 02, 18), LocalDate.of(2022, 3, 18), ScheduleType.FAMILY, true, null, member2));
-        scheduleRepository.save(new Schedule("지렁이 졸업식", LocalDate.of(2022, 03, 18), LocalDate.of(2022, 3, 19), ScheduleType.FAMILY, true, null, member3));
+        scheduleRepository.save(new Schedule("가족 사진 찍는 날","뿌엥", LocalDate.of(2022, 01, 18), LocalDate.of(2022, 1, 19), ScheduleType.FAMILY, true, null, member1));
+        scheduleRepository.save(new Schedule("외식 day", "뿌엥", LocalDate.of(2022, 02, 18), LocalDate.of(2022, 3, 18), ScheduleType.FAMILY, true, null, member2));
+        scheduleRepository.save(new Schedule("지렁이 졸업식", "뿌엥", LocalDate.of(2022, 03, 18), LocalDate.of(2022, 3, 19), ScheduleType.FAMILY, true, null, member3));
 
         return inviteCode.getInviteCode();
     }

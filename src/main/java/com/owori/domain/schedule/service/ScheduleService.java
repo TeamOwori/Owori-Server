@@ -52,7 +52,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         // 현재 일정이 개인 일정이고 현재 사용자와 생성자가 다를 경우 예외처리
         if (nonValidMember(schedule)) throw new NoAuthorityException();
 
-        schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getStartDate(),
+        schedule.updateSchedule(updateScheduleRequest.getTitle(), updateScheduleRequest.getContent(), updateScheduleRequest.getStartDate(),
                 updateScheduleRequest.getEndDate(), updateScheduleRequest.getDdayOption(), updateScheduleRequest.getAlarmOptions());
 
         return new ScheduleIdResponse(scheduleId);

@@ -46,7 +46,7 @@ public class ScheduleServiceTest extends LoginTest {
     @DisplayName("일정 생성이 수행되는가")
     void addSchedule() {
         // given
-        AddScheduleRequest request = new AddScheduleRequest("가족 여행", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(TODAY, A_DAY_AGO));
+        AddScheduleRequest request = new AddScheduleRequest("가족 여행", "뿌엥", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(TODAY, A_DAY_AGO));
 
         // when
         UUID uuid = scheduleService.addSchedule(request).getScheduleId();
@@ -63,8 +63,8 @@ public class ScheduleServiceTest extends LoginTest {
     void updateSchedule() {
         // given
         String title = "가족 여행";
-        Schedule oldSchedule = scheduleRepository.save(new Schedule("가족 여", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
-        UpdateScheduleRequest request = new UpdateScheduleRequest(oldSchedule.getId(), title, LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), true, List.of(TODAY, A_DAY_AGO));
+        Schedule oldSchedule = scheduleRepository.save(new Schedule("가족 여", "뿌엥", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
+        UpdateScheduleRequest request = new UpdateScheduleRequest(oldSchedule.getId(), title, oldSchedule.getContent(), LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), true, List.of(TODAY, A_DAY_AGO));
 
         // when
         ScheduleIdResponse response = scheduleService.updateSchedule(request);
@@ -81,7 +81,7 @@ public class ScheduleServiceTest extends LoginTest {
     @DisplayName("일정 삭제가 수행되는가")
     void deleteSchedule() {
         // given
-        Schedule schedule = scheduleRepository.save(new Schedule("가족 여행", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
+        Schedule schedule = scheduleRepository.save(new Schedule("가족 여행", "뿌엥", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY,false, List.of(TODAY, A_DAY_AGO), authService.getLoginUser()));
 
         // when
         scheduleService.deleteSchedule(schedule.getId());
@@ -115,12 +115,12 @@ public class ScheduleServiceTest extends LoginTest {
         }
 
         // 일정 생성
-        Schedule schedule5 = scheduleRepository.save(new Schedule("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(A_DAY_AGO, A_WEEK_AGO), authService.getLoginUser()));
-        scheduleRepository.save(new Schedule("코딩 테스트", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
-        scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL,true, List.of(TODAY), member2));
-        Schedule schedule4 = scheduleRepository.save(new Schedule("카카오 면접", LocalDate.parse("2023-07-11"), LocalDate.parse("2023-07-11"), ScheduleType.INDIVIDUAL,true, List.of(), member1));
-        scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-08-01"), LocalDate.parse("2023-08-10"), ScheduleType.INDIVIDUAL,true, List.of(A_WEEK_AGO), authService.getLoginUser()));
-        Schedule schedule2 = scheduleRepository.save(new Schedule("기말고사", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), member1));
+        Schedule schedule5 = scheduleRepository.save(new Schedule("가족여행", "뿌엥", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(A_DAY_AGO, A_WEEK_AGO), authService.getLoginUser()));
+        scheduleRepository.save(new Schedule("코딩 테스트", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
+        scheduleRepository.save(new Schedule("친구랑 여행", "뿌엥", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL,true, List.of(TODAY), member2));
+        Schedule schedule4 = scheduleRepository.save(new Schedule("카카오 면접", "뿌엥", LocalDate.parse("2023-07-11"), LocalDate.parse("2023-07-11"), ScheduleType.INDIVIDUAL,true, List.of(), member1));
+        scheduleRepository.save(new Schedule("친구랑 여행", "뿌엥", LocalDate.parse("2023-08-01"), LocalDate.parse("2023-08-10"), ScheduleType.INDIVIDUAL,true, List.of(A_WEEK_AGO), authService.getLoginUser()));
+        Schedule schedule2 = scheduleRepository.save(new Schedule("기말고사", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), member1));
 
         // when
         List<ScheduleByMonthResponse> responses = scheduleService.findScheduleByMonth(month);
@@ -151,12 +151,12 @@ public class ScheduleServiceTest extends LoginTest {
         }
 
         // 일정 생성
-        Schedule schedule5 = scheduleRepository.save(new Schedule("가족여행",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(A_DAY_AGO, A_WEEK_AGO), authService.getLoginUser()));
-        scheduleRepository.save(new Schedule("코딩 테스트", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
-        scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL,true, List.of(TODAY), saveMember2));
-        scheduleRepository.save(new Schedule("카카오 면접", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-24"), ScheduleType.INDIVIDUAL,false, List.of(), saveMember1));
-        Schedule schedule6 = scheduleRepository.save(new Schedule("친구랑 여행", LocalDate.parse("2023-08-01"), LocalDate.parse("2023-08-10"), ScheduleType.INDIVIDUAL,true, List.of(A_WEEK_AGO), authService.getLoginUser()));
-        scheduleRepository.save(new Schedule("기말고사", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), saveMember1));
+        Schedule schedule5 = scheduleRepository.save(new Schedule("가족여행", "뿌엥", LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, true, List.of(A_DAY_AGO, A_WEEK_AGO), authService.getLoginUser()));
+        scheduleRepository.save(new Schedule("코딩 테스트", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
+        scheduleRepository.save(new Schedule("친구랑 여행", "뿌엥", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL,true, List.of(TODAY), saveMember2));
+        scheduleRepository.save(new Schedule("카카오 면접", "뿌엥", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-24"), ScheduleType.INDIVIDUAL,false, List.of(), saveMember1));
+        Schedule schedule6 = scheduleRepository.save(new Schedule("친구랑 여행", "뿌엥", LocalDate.parse("2023-08-01"), LocalDate.parse("2023-08-10"), ScheduleType.INDIVIDUAL,true, List.of(A_WEEK_AGO), authService.getLoginUser()));
+        scheduleRepository.save(new Schedule("기말고사", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), saveMember1));
 
         // when
         List<ScheduleDDayResponse> responses = scheduleService.findDDayByFamily();
@@ -169,7 +169,7 @@ public class ScheduleServiceTest extends LoginTest {
     @DisplayName("id를 통한 조회가 수행되는가")
     void loadEntity() {
         // given
-        Schedule schedule = scheduleRepository.save(new Schedule("코딩 테스트", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
+        Schedule schedule = scheduleRepository.save(new Schedule("코딩 테스트", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-06-23"), ScheduleType.INDIVIDUAL, true, List.of(TODAY), authService.getLoginUser()));
 
         // when
         Schedule result = scheduleService.loadEntity(schedule.getId());

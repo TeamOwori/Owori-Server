@@ -17,6 +17,7 @@ import java.util.UUID;
 public class ScheduleDDayResponse {
     private UUID scheduleId;
     private String title;
+    private String content;
     private LocalDate startDate;
     private LocalDate endDate;
     private String dday;

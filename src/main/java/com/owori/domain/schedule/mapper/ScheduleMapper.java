@@ -16,6 +16,7 @@ public class ScheduleMapper {
     public Schedule toEntity(AddScheduleRequest request, Member member) {
         return Schedule.builder()
                 .title(request.getTitle())
+                .content(request.getContent())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .scheduleType(request.getScheduleType())
@@ -41,6 +42,7 @@ public class ScheduleMapper {
         return ScheduleByMonthResponse.builder()
                 .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
+                .content(schedule.getContent())
                 .startDate(schedule.getStartDate())
                 .endDate(schedule.getEndDate())
                 .scheduleType(schedule.getScheduleType())
@@ -55,6 +57,7 @@ public class ScheduleMapper {
         return ScheduleDDayResponse.builder()
                 .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
+                .content(schedule.getContent())
                 .startDate(schedule.getStartDate())
                 .endDate(schedule.getEndDate())
                 .dday(dDay)
