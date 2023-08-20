@@ -1,6 +1,7 @@
 package com.owori.domain.family.service;
 
 import com.owori.domain.family.dto.request.AddMemberRequest;
+import com.owori.domain.family.dto.request.DeleteFamilyimageRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.dto.response.FamilyImageResponse;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
@@ -10,6 +11,7 @@ import com.owori.domain.family.exception.InviteCodeDuplicateException;
 import com.owori.domain.family.exception.InviteCodeExistException;
 import com.owori.domain.family.mapper.FamilyMapper;
 import com.owori.domain.family.repository.FamilyRepository;
+import com.owori.domain.image.service.ImageService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.global.dto.ImageResponse;
@@ -31,7 +33,6 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     private final FamilyMapper familyMapper;
     private final AuthService authService;
     private final S3ImageComponent s3ImageComponent;
-
     public InviteCodeResponse saveFamily(final FamilyRequest familyRequest) {
         Member member = authService.getLoginUser();
         String code = generateRandomInviteCode();
@@ -87,6 +88,13 @@ public class FamilyService implements EntityLoader<Family, UUID> {
         String imageUrl = uploadImage(multipartFile);
         family.addImage(imageUrl);
         return new FamilyImageResponse(imageUrl);
+    }
+
+    @Transactional
+    public void deleteFamilyImage(final DeleteFamilyimageRequest deleteFamilyimageRequest) {
+        Family family = authService.getLoginUser().getFamily();
+        family.deleteImage(deleteFamilyimageRequest.getFamilyImage());
+        s3ImageComponent.deleteImage(deleteFamilyimageRequest.getFamilyImage());
     }
 
     private String uploadImage(final MultipartFile multipartFile) {

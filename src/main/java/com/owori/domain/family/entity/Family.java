@@ -63,4 +63,8 @@ public class Family implements Auditable {
     public void addImage(String image) {
         this.images.add(image);
     }
+
+    public void deleteImage(String image) {
+        this.images.remove(image);
+    }
 }

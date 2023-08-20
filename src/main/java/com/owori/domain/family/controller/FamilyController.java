@@ -1,6 +1,7 @@
 package com.owori.domain.family.controller;
 
 import com.owori.domain.family.dto.request.AddMemberRequest;
+import com.owori.domain.family.dto.request.DeleteFamilyimageRequest;
 import com.owori.domain.family.dto.request.FamilyRequest;
 import com.owori.domain.family.dto.response.FamilyImageResponse;
 import com.owori.domain.family.dto.response.InviteCodeResponse;
@@ -74,5 +75,11 @@ public class FamilyController {
     @GetMapping("/code")
     public ResponseEntity<InviteCodeResponse> generateInviteCode() {
         return ResponseEntity.ok(familyService.generateInviteCode());
+    }
+
+    @DeleteMapping("/images")
+    public ResponseEntity<Void> deleteFamilyImage(@RequestBody DeleteFamilyimageRequest deleteFamilyimageRequest) {
+        familyService.deleteFamilyImage(deleteFamilyimageRequest);
+        return ResponseEntity.ok().build();
     }
 }
