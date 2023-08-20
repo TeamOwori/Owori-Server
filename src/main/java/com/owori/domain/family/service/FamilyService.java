@@ -95,17 +95,24 @@ public class FamilyService implements EntityLoader<Family, UUID> {
     @Transactional
     public InviteCodeResponse generateInviteCode() {
         Family family = authService.getLoginUser().getFamily();
-        validateInviteCodeNotExists(family.getInvite());
+        if(!validateInviteCodeNotExists(family.getInvite())) {
+            return new InviteCodeResponse(family.getInvite().getCode());
+        }
 
         String code = generateRandomInviteCode();
         family.organizeInvite(code);
         return new InviteCodeResponse(code);
     }
 
-    private void validateInviteCodeNotExists(final Invite invite) {
-        if (isValidCode(invite)) {
-            throw new InviteCodeExistException();
-        }
+//    private void validateInviteCodeNotExists(final Invite invite) {
+//        if (isValidCode(invite)) {
+//            throw new InviteCodeExistException();
+//        }
+//        invite.delete();
+//    }
+    private Boolean validateInviteCodeNotExists(final Invite invite) {
+        if (isValidCode(invite)) return Boolean.FALSE;
         invite.delete();
+        return Boolean.TRUE;
     }
 }
