@@ -95,7 +95,7 @@ public class StoryController {
     }
 
     /**
-     * 유저가 작성한 이야기 조회를 위한 컨트롤러입니다.
+     * 유저가 작성한 이야기 조회를 위한 임시 컨트롤러입니다.
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping("/member/find")
@@ -103,7 +103,7 @@ public class StoryController {
         return ResponseEntity.ok(storyService.findStoryByWriter2());
     }
     /**
-     * 유저가 작성한 좋아한 조회를 위한 임시 컨트롤러입니다.
+     * 유저가 작성한 좋아한 조회를 위한 컨트롤러입니다.
      * @param pageable
      * @return 전체 조회 dto가 반환됩니다.
      */

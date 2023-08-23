@@ -150,4 +150,8 @@ public class StoryService implements EntityLoader<Story, UUID> {
     public Long findStoryNumByMember(Member member) {
         return storyRepository.countByMember(member);
     }
+
+    public List<Story> findStoriesByWriter(Member writer) {
+        return storyRepository.findAllByMember(writer);
+    }
 }

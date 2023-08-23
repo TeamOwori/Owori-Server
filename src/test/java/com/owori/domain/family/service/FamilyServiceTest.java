@@ -90,13 +90,13 @@ class FamilyServiceTest extends LoginTest {
     }
 
     @Test
-    @DisplayName("가족 그룹명 업데이트가 수행되는가")
+    @DisplayName("코드 재생성이 수행되는가")
     void generateInviteCode() {
         //given
         Family family = familyRepository.save(Family.builder().code("12341234").familyGroupName("오월이가족").member(loginUser).build());
 
         //when
-        assertThrows(InviteCodeExistException.class, familyService::generateInviteCode);
+        assertThat(family.getInvite().getCode()).isEqualTo(familyService.generateInviteCode().getInviteCode());
 
         //then
 

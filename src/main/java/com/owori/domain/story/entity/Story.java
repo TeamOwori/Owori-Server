@@ -1,6 +1,7 @@
 package com.owori.domain.story.entity;
 
 import com.owori.domain.comment.entity.Comment;
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.member.entity.Member;
@@ -44,6 +45,10 @@ public class Story implements Auditable {
     @JoinColumn
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Family family;
+
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL)
     private List<Image> images = new ArrayList<>();
 
@@ -65,6 +70,7 @@ public class Story implements Auditable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.member = member;
+        this.family = member.getFamily();
     }
 
     /* image */
@@ -118,5 +124,9 @@ public class Story implements Auditable {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public void deleteWriter() {
+        this.member = null;
     }
 }

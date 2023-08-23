@@ -1,6 +1,7 @@
 package com.owori.domain.story.mapper;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
+import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
@@ -34,7 +35,7 @@ public class StoryMapper {
                 .isMultipleImages(story.isMultipleImages())
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
-                .writer(story.getMember().getNickname())
+                .writer(checkIsNull(story))
                 .startDate(story.getStartDate())
                 .endDate(story.getEndDate())
                 .build();
@@ -46,7 +47,7 @@ public class StoryMapper {
                 .isLiked(isLiked)
                 .storyImages(story.getImageUrls())
                 .title(story.getTitle())
-                .writer(story.getMember().getNickname())
+                .writer(checkIsNull(story))
                 .content(story.getContent())
                 .heartCount(story.getHearts().size())
                 .commentCount(story.getComments().size())
@@ -70,5 +71,10 @@ public class StoryMapper {
                 .map(this::toFindAllStoryResponse)
                 .toList();
         return new FindAllStoryGroupResponse(responses, Boolean.FALSE);
+    }
+
+    private String checkIsNull(Story story) {
+        if(story.getMember() == null) return "탈퇴한 사용자";
+        return story.getMember().getNickname();
     }
 }

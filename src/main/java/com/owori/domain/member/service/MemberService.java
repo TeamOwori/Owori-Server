@@ -20,7 +20,9 @@ import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.mapper.SayingMapper;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.service.ScheduleService;
+import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.service.FacadeService;
+import com.owori.domain.story.service.StoryService;
 import com.owori.global.exception.EntityNotFoundException;
 import com.owori.global.service.EntityLoader;
 import com.owori.utils.S3ImageComponent;
@@ -39,6 +41,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final MemberMapper memberMapper;
     private final AuthService authService;
     private final SayingMapper sayingMapper;
+    private final StoryService storyService;
     private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
@@ -137,6 +140,11 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     @Transactional
     public void deleteMember() {
+        // 멤버 삭제 시 작성한 스토리 작성자 null 처리
+        Member nowMember = authService.getLoginUser();
+        List<Story> stories = storyService.findStoriesByWriter(nowMember).stream().toList();
+        stories.forEach(Story::deleteWriter);
+
         authService.getLoginUser().delete();
     }
 
