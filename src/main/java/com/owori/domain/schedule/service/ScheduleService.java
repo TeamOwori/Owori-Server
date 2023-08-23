@@ -102,7 +102,7 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
                 .sorted(Comparator.comparing(Schedule::getStartDate))
                 .toList();
 
-        return scheduleMapper.toDDayResponseList(dDaySchedules);
+        return scheduleMapper.toDDayResponseList(dDaySchedules, authService.getLoginUser());
     }
 
     @Override

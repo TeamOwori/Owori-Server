@@ -26,4 +26,5 @@ public class ScheduleDDayResponse {
     private Color color;
     private Boolean ddayOption;
     private List<Alarm> alarmOptions;
+    private Boolean isMine;
 }

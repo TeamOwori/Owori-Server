@@ -5,6 +5,7 @@ import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
 import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
 import com.owori.domain.schedule.entity.Schedule;
+import com.owori.domain.schedule.entity.ScheduleType;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -32,9 +33,9 @@ public class ScheduleMapper {
                 .toList();
     }
 
-    public List<ScheduleDDayResponse> toDDayResponseList(List<Schedule> schedules) {
+    public List<ScheduleDDayResponse> toDDayResponseList(List<Schedule> schedules, Member nowMember) {
         return schedules.stream()
-                .map(schedule -> toDDayResponse(schedule, toDDay(schedule.getStartDate())))
+                .map(schedule -> toDDayResponse(schedule, toDDay(schedule.getStartDate()), nowMember))
                 .toList();
     }
 
@@ -53,7 +54,7 @@ public class ScheduleMapper {
                 .build();
     }
 
-    private ScheduleDDayResponse toDDayResponse(Schedule schedule, String dDay) {
+    private ScheduleDDayResponse toDDayResponse(Schedule schedule, String dDay, Member nowMember) {
         return ScheduleDDayResponse.builder()
                 .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
@@ -66,7 +67,13 @@ public class ScheduleMapper {
                 .color(schedule.getMember().getColor())
                 .ddayOption(schedule.getDDayOption())
                 .alarmOptions(schedule.getAlarmList())
+                .isMine(checkMine(schedule, nowMember))
                 .build();
+    }
+
+    private Boolean checkMine(Schedule schedule, Member nowMember) {
+        if(schedule.getMember().getId() != nowMember.getId() && schedule.getScheduleType() == ScheduleType.INDIVIDUAL) return Boolean.FALSE;
+        return Boolean.TRUE;
     }
 
     private String toDDay(LocalDate toDate) {
