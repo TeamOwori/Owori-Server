@@ -58,16 +58,18 @@ public class ScheduleService implements EntityLoader<Schedule, UUID> {
         return new ScheduleIdResponse(scheduleId);
     }
 
-    private boolean nonValidMember(Schedule schedule) {
-        return schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId());
-    }
+
 
     @Transactional
     public void deleteSchedule(UUID scheduleId) {
         Schedule schedule = loadEntity(scheduleId);
-        // 생성자와 동일하지 않을 경우 예외처리
-        if (!authService.getLoginUser().getId().equals(schedule.getMember().getId())) throw new NoAuthorityException();
+        // 개인이고 생성자와 동일하지 않을 경우 예외처리
+        if (nonValidMember(schedule)) throw new NoAuthorityException();
         schedule.delete();
+    }
+
+    private boolean nonValidMember(Schedule schedule) {
+        return schedule.getScheduleType().equals(ScheduleType.INDIVIDUAL) && !authService.getLoginUser().getId().equals(schedule.getMember().getId());
     }
 
     @Transactional(readOnly = true)
