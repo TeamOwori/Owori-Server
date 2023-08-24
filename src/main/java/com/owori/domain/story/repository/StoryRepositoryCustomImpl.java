@@ -56,6 +56,22 @@ public class StoryRepositoryCustomImpl implements StoryRepositoryCustom {
     }
 
     @Override
+    public List<Story> findStoryBySearch2(String keyword, Family family) {
+        List<Story> results = queryFactory
+                .selectFrom(story)
+                .where(
+                        story.family.eq(family)
+                                .and(
+                                        story.title.contains(keyword)
+                                                .or(story.content.contains(keyword))
+                                                .or(story.member.nickname.contains(keyword))
+                                )
+                )
+                .fetch();
+        return results;
+    }
+
+    @Override
     public Slice<Story> findStoryByWriter(Pageable pageable, Member member, LocalDate date) {
         List<Story> results = queryFactory
                 .selectFrom(story)

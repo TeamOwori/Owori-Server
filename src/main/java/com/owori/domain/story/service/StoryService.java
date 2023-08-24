@@ -112,6 +112,13 @@ public class StoryService implements EntityLoader<Story, UUID> {
         return storyMapper.toFindAllStoryGroupResponse(storyBySearch);
     }
 
+    public FindAllStoryGroupResponse findStoryBySearch2(String keyword, String sort) {
+        Member loginUser = authService.getLoginUser();
+        List<Story> storyBySearch = storyRepository.findStoryBySearch2(keyword, loginUser.getFamily());
+        keywordService.addKeyword(keyword, loginUser);
+        return storyMapper.toFindAllStoryGroupResponse2(storyBySearch);
+    }
+
     @Transactional(readOnly = true)
     public FindAllStoryGroupResponse findStoryByWriter(Pageable pageable, LocalDate lastViewed) {
         Member member = authService.getLoginUser();

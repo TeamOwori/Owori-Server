@@ -81,6 +81,13 @@ public class StoryController {
         return ResponseEntity.ok(storyService.findStoryBySearch(keyword, pageable, lastViewed));
     }
 
+    @GetMapping("/search/temp")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch2(
+            @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword,
+            @RequestParam(value = "sort") String sort) {
+        return ResponseEntity.ok(storyService.findStoryBySearch2(keyword, sort));
+    }
+
     /**
      * 유저가 작성한 이야기 조회를 위한 컨트롤러입니다.
      * @param pageable

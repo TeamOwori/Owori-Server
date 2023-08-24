@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface StoryRepositoryCustom {
     Slice<Story> findAllStory(Pageable pageable, Family family, LocalDate date);
     Slice<Story> findStoryBySearch(Pageable pageable, String keyword, Family family, LocalDate date);
     Slice<Story> findStoryByWriter(Pageable pageable, Member member, LocalDate date);
     Slice<Story> findStoryByHeart(Pageable pageable, Member member, LocalDate date);
+    List<Story> findStoryBySearch2(String keyword, Family family);
 }
