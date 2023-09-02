@@ -10,12 +10,12 @@ spring:
     import: classpath:env.yml
 
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
 
   servlet:
     multipart:
