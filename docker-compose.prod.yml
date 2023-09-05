@@ -17,21 +17,6 @@ services:
     restart: on-failure
     tty: true
 
-  db:
-    image: mysql
-    container_name: owori-db
-    platform: linux/amd64
-    ports:
-      - 3306:3306
-    networks:
-      - app-tier
-    volumes:
-      - data_mysql:/var/lib/mysql
-    env_file:
-      - .env
-    restart: always
-    tty: true
-
   nginx:
     build: ./nginx
     platform: linux/amd64
