@@ -10,8 +10,6 @@ services:
       - 8080:8080
     networks:
       - app-tier
-    depends_on:
-      - db
     environment:
       SPRING_PROFILES_ACTIVE: prod
     restart: on-failure
