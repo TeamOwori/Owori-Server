@@ -3,11 +3,6 @@ server:
     context-path: /api/v1
 
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://owori-db.ckkvly7j7buu.ap-northeast-2.rds.amazonaws.com:3306/owori?serverTimezone=Asia/Seoul
-    username: owori
-
   config:
     import: classpath:env.yml
 
