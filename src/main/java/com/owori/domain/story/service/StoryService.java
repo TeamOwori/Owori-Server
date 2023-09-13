@@ -7,12 +7,12 @@ import com.owori.domain.image.service.ImageService;
 import com.owori.domain.keyword.service.KeywordService;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
-import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
+import com.owori.domain.story.dto.response.StoryPagingResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.mapper.StoryMapper;
 import com.owori.domain.story.repository.StoryRepository;
@@ -22,13 +22,10 @@ import com.owori.global.exception.NoAuthorityException;
 import com.owori.global.service.EntityLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,10 +56,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     @Transactional(readOnly = true)
-    public FindAllStoryGroupResponse findAllStory(Pageable pageable, LocalDate lastViewed) {
+    public StoryPagingResponse findAllStory(Pageable pageable) {
         Family family = authService.getLoginUser().getFamily();
-        Slice<Story> storyBySlice = storyRepository.findAllStory(pageable, family, lastViewed);
-        return storyMapper.toFindAllStoryGroupResponse(storyBySlice);
+        return StoryPagingResponse.of(storyRepository.findAllStory(pageable, family));
     }
 
     public FindAllStoryGroupResponse findAllStory2(String sort) {
@@ -104,12 +100,11 @@ public class StoryService implements EntityLoader<Story, UUID> {
         story.delete(); // 스토리 삭제
     }
 
-    public FindAllStoryGroupResponse findStoryBySearch(String keyword, Pageable pageable, LocalDate lastViewed) {
+    public StoryPagingResponse findStoryBySearch(String keyword, Pageable pageable) {
         Member loginUser = authService.getLoginUser();
-        Slice<Story> storyBySearch = storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily(), lastViewed);
         keywordService.addKeyword(keyword, loginUser);
 
-        return storyMapper.toFindAllStoryGroupResponse(storyBySearch);
+        return StoryPagingResponse.of(storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily()));
     }
 
     public FindAllStoryGroupResponse findStoryBySearch2(String keyword, String sort) {
@@ -120,11 +115,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     @Transactional(readOnly = true)
-    public FindAllStoryGroupResponse findStoryByWriter(Pageable pageable, LocalDate lastViewed) {
+    public StoryPagingResponse findStoryByWriter(Pageable pageable) {
         Member member = authService.getLoginUser();
-        Slice<Story> storyByWriter = storyRepository.findStoryByWriter(pageable, member, lastViewed);
-
-        return storyMapper.toFindAllStoryGroupResponse(storyByWriter);
+        return StoryPagingResponse.of(storyRepository.findStoryByWriter(pageable, member));
     }
 
     public FindAllStoryGroupResponse findStoryByWriter2() {
@@ -135,11 +128,9 @@ public class StoryService implements EntityLoader<Story, UUID> {
     }
 
     @Transactional(readOnly = true)
-    public FindAllStoryGroupResponse findStoryByHeart(Pageable pageable, LocalDate lastViewed) {
+    public StoryPagingResponse findStoryByHeart(Pageable pageable) {
         Member member = authService.getLoginUser();
-        Slice<Story> storyByHeart = storyRepository.findStoryByHeart(pageable, member, lastViewed);
-
-        return storyMapper.toFindAllStoryGroupResponse(storyByHeart);
+        return StoryPagingResponse.of(storyRepository.findStoryByHeart(pageable, member));
     }
 
     public FindAllStoryGroupResponse findStoryByHeart2() {

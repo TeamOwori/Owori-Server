@@ -3,13 +3,9 @@ package com.owori.domain.story.controller;
 import com.owori.domain.comment.dto.response.CommentResponse;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.request.UpdateStoryRequest;
-import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
-import com.owori.domain.story.dto.response.FindAllStoryResponse;
-import com.owori.domain.story.dto.response.FindStoryResponse;
-import com.owori.domain.story.dto.response.StoryIdResponse;
+import com.owori.domain.story.dto.response.*;
 import com.owori.domain.story.service.FacadeService;
 import com.owori.domain.story.service.StoryService;
-import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -103,15 +98,16 @@ class StoryControllerTest extends RestDocsTest{
                 new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
-        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
-        given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 4,2);
+        given(storyService.findAllStory(any())).willReturn(pagingResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories")
                                 .param("sort", "start_date")
-                                .param("last_viewed","2022-03-31")
+                                .param("page","1")
+                                .param("size","4")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
@@ -135,15 +131,16 @@ class StoryControllerTest extends RestDocsTest{
                 new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
                 new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)));
 
-        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
-        given(storyService.findAllStory(any(),any())).willReturn(findAllStoryGroupResponse);
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 4,2);
+        given(storyService.findAllStory(any())).willReturn(pagingResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories")
                                 .param("sort", "created_at")
-                                .param("last_viewed","2023-08-31")
+                                .param("page","1")
+                                .param("size","4")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
@@ -224,15 +221,16 @@ class StoryControllerTest extends RestDocsTest{
                 new FindAllStoryResponse(UUID.randomUUID(),"생일잔치", "못난이 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 1, 0, "허망고", LocalDate.of(2011, 02, 01), LocalDate.of(2011, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"쇼핑 데이 with 못난이", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 3, "못난이", LocalDate.of(2010, 02, 01), LocalDate.of(2022, 12, 03)));
 
-        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, false);
-        given(storyService.findStoryBySearch(any(),any(), any())).willReturn(findAllStoryGroupResponse);
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 10, -1);
+        given(storyService.findStoryBySearch(any(),any())).willReturn(pagingResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/search")
                                 .param("keyword", "못난이")
-                                .param("last_viewed","2023-08-31")
+                                .param("page", "10")
+                                .param("size", "4")
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
                                 .characterEncoding("UTF-8")
@@ -254,15 +252,16 @@ class StoryControllerTest extends RestDocsTest{
         List<FindAllStoryResponse> response = List.of(
                 new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)));
-        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, false);
-        given(storyService.findStoryByWriter(any(),any())).willReturn(findAllStoryGroupResponse);
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 21, 12);
+        given(storyService.findStoryByWriter(any())).willReturn(pagingResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/member")
                                 .param("sort", "start_date")
-                                .param("last_viewed","2023-08-31")
+                                .param("page","11")
+                                .param("size", "2")
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -284,15 +283,16 @@ class StoryControllerTest extends RestDocsTest{
                 new FindAllStoryResponse(UUID.randomUUID(),"선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png",  Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))
         );
-        FindAllStoryGroupResponse findAllStoryGroupResponse = new FindAllStoryGroupResponse(response, true);
-        given(storyService.findStoryByHeart(any(),any())).willReturn(findAllStoryGroupResponse);
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 12, 2);
+        given(storyService.findStoryByHeart(any())).willReturn(pagingResponse);
 
         //when
         ResultActions perform =
                 mockMvc.perform(
                         get("/stories/heart")
                                 .param("sort", "created_at")
-                                .param("last_viewed","2023-08-31")
+                                .param("page","1")
+                                .param("size", "2")
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
                                 .contentType(MediaType.APPLICATION_JSON)

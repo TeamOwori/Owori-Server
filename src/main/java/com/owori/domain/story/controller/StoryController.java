@@ -5,12 +5,12 @@ import com.owori.domain.story.dto.request.UpdateStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
+import com.owori.domain.story.dto.response.StoryPagingResponse;
 import com.owori.domain.story.service.FacadeService;
 import com.owori.domain.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -33,6 +32,45 @@ public class StoryController {
     private final FacadeService facadeService;
 
     /**
+     * todo : 다음 배포 시 삭제
+     * 이야기를 전체 조회를 위한 컨트롤러입니다.
+     * @param sort 정렬 조건입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findAllStory2(@RequestParam(value = "sort") String sort) {
+        return ResponseEntity.ok(storyService.findAllStory2(sort));
+    }
+
+    // * todo : 다음 배포 시 삭제
+    @GetMapping("/search/temp")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch2(
+            @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword,
+            @RequestParam(value = "sort") String sort) {
+        return ResponseEntity.ok(storyService.findStoryBySearch2(keyword, sort));
+    }
+
+    /**
+     * todo: 다음 배포 시 삭제
+     * 유저가 작성한 이야기 조회를 위한 임시 컨트롤러입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/member/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter2() {
+        return ResponseEntity.ok(storyService.findStoryByWriter2());
+    }
+
+    /**
+     * todo: 다음 배포 시 삭제
+     * 유저가 작성한 좋아한 조회를 위한 임시 컨트롤러입니다.
+     * @return 전체 조회 dto가 반환됩니다.
+     */
+    @GetMapping("/heart/find")
+    public ResponseEntity<FindAllStoryGroupResponse> findStoryByHeart2() {
+        return ResponseEntity.ok(storyService.findStoryByHeart2());
+    }
+
+    /**
      * 이야기를 생성합니다.
      * @param request 이야기 생성을 위한 dto 입니다.
      * @return 생성된 이야기의 id가 반환됩니다.
@@ -43,49 +81,27 @@ public class StoryController {
     }
 
     /**
-     * 이야기를 전체 조회를 위한 컨트롤러입니다.
+     * 페이징을 사용한 이야기를 전체 조회를 위한 컨트롤러입니다.
      * @param pageable
-     * @param lastViewed 조회할 게시글의 기준 (year_month) 입니다.
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping
-    public ResponseEntity<FindAllStoryGroupResponse> findAllStory(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
-
-        return ResponseEntity.ok(storyService.findAllStory(pageable, lastViewed));
-    }
-
-    /**
-     * 이야기를 전체 조회를 위한 임시 컨트롤러입니다.
-     * @param sort 정렬 조건입니다.
-     * @return 전체 조회 dto가 반환됩니다.
-     */
-    @GetMapping("/find")
-    public ResponseEntity<FindAllStoryGroupResponse> findAllStory2(@RequestParam(value = "sort") String sort) {
-        return ResponseEntity.ok(storyService.findAllStory2(sort));
+    public ResponseEntity<StoryPagingResponse> findAllStory(
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
+        return ResponseEntity.ok(storyService.findAllStory(pageable));
     }
 
     /**
      * 이야기 검색을 위한 컨트롤러입니다.
      * @param keyword    검색어입니다.
-     * @param lastViewed
      * @param pageable
      * @return 검색 결과 dto가 반환됩니다.
      */
     @GetMapping("/search")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam("last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed,
-            @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword) {
-        return ResponseEntity.ok(storyService.findStoryBySearch(keyword, pageable, lastViewed));
-    }
-
-    @GetMapping("/search/temp")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryBySearch2(
+    public ResponseEntity<StoryPagingResponse> findStoryBySearch(
             @RequestParam @Size(min = 2, message = "검색어를 2글자 이상 입력해주세요.") String keyword,
-            @RequestParam(value = "sort") String sort) {
-        return ResponseEntity.ok(storyService.findStoryBySearch2(keyword, sort));
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
+        return ResponseEntity.ok(storyService.findStoryBySearch(keyword, pageable));
     }
 
     /**
@@ -94,41 +110,22 @@ public class StoryController {
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping("/member")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
+    public ResponseEntity<StoryPagingResponse> findStoryByWriter(
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
 
-        return ResponseEntity.ok(storyService.findStoryByWriter(pageable, lastViewed));
+        return ResponseEntity.ok(storyService.findStoryByWriter(pageable));
     }
 
-    /**
-     * 유저가 작성한 이야기 조회를 위한 임시 컨트롤러입니다.
-     * @return 전체 조회 dto가 반환됩니다.
-     */
-    @GetMapping("/member/find")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryByWriter2() {
-        return ResponseEntity.ok(storyService.findStoryByWriter2());
-    }
     /**
      * 유저가 작성한 좋아한 조회를 위한 컨트롤러입니다.
      * @param pageable
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping("/heart")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryByHeart(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable,
-            @RequestParam(required = false, value = "last_viewed") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate lastViewed) {
+    public ResponseEntity<StoryPagingResponse> findStoryByHeart(
+            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
 
-        return ResponseEntity.ok(storyService.findStoryByHeart(pageable, lastViewed));
-    }
-
-    /**
-     * 유저가 작성한 좋아한 조회를 위한 임시 컨트롤러입니다.
-     * @return 전체 조회 dto가 반환됩니다.
-     */
-    @GetMapping("/heart/find")
-    public ResponseEntity<FindAllStoryGroupResponse> findStoryByHeart2() {
-        return ResponseEntity.ok(storyService.findStoryByHeart2());
+        return ResponseEntity.ok(storyService.findStoryByHeart(pageable));
     }
 
     /**

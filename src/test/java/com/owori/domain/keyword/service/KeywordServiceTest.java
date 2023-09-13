@@ -52,9 +52,9 @@ public class KeywordServiceTest extends LoginTest {
         storyRepository.save(story);
 
         //when
-        storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")), null);
-        storyService.findStoryBySearch("우리집", PageRequest.of(0, 4, Sort.by("created_at")), null);
-        storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")), null);
+        storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")));
+        storyService.findStoryBySearch("우리집", PageRequest.of(0, 4, Sort.by("created_at")));
+        storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")));
 
         List<Keyword> keywords = keywordRepository.findByMember(member);
 
@@ -77,9 +77,9 @@ public class KeywordServiceTest extends LoginTest {
         storyRepository.save(story);
 
         //when
-        storyService.findStoryBySearch("야호", PageRequest.of(0, 4, Sort.by("created_at")), null);
-        storyService.findStoryBySearch("우리집", PageRequest.of(0, 4, Sort.by("created_at")), null);
-        storyService.findStoryBySearch("야호", PageRequest.of(0, 4, Sort.by("created_at")), null);
+        storyService.findStoryBySearch("야호", PageRequest.of(0, 4, Sort.by("created_at")));
+        storyService.findStoryBySearch("우리집", PageRequest.of(0, 4, Sort.by("created_at")));
+        storyService.findStoryBySearch("야호", PageRequest.of(0, 4, Sort.by("created_at")));
 
         List<FindKeywordsResponse> searchWords = keywordService.findSearchWords();
 
