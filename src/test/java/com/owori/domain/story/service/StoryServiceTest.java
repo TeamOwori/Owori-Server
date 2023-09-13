@@ -83,9 +83,9 @@ public class StoryServiceTest extends LoginTest {
         StoryPagingResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
-        assertThat(response.getContents().get(0).getTitle()).isEqualTo(title);
-        assertThat(response.getContents().get(0).getCommentCount()).isEqualTo(1);
-        assertThat(response.getContents().get(0).getHeartCount()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
+        assertThat(response.getStories().get(0).getCommentCount()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCount()).isEqualTo(1);
     }
 
     @Test
@@ -110,11 +110,11 @@ public class StoryServiceTest extends LoginTest {
         StoryPagingResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("start_date")));
 
         //then
-        assertThat(response.getContents().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
-        assertThat(response.getContents().get(0).getCommentCount()).isEqualTo(1);
-        assertThat(response.getContents().get(0).getHeartCount()).isEqualTo(1);
-        assertThat(response.getContents().get(1).getContent()).isEqualTo("내용2");
-        assertThat(response.getContents().get(0).getThumbnail()).isEqualTo("a.png");
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
+        assertThat(response.getStories().get(0).getCommentCount()).isEqualTo(1);
+        assertThat(response.getStories().get(0).getHeartCount()).isEqualTo(1);
+        assertThat(response.getStories().get(1).getContent()).isEqualTo("내용2");
+        assertThat(response.getStories().get(0).getThumbnail()).isEqualTo("a.png");
     }
 
     @Test
@@ -213,10 +213,10 @@ public class StoryServiceTest extends LoginTest {
         StoryPagingResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
-        assertThat(response.getContents()).hasSize(2);
-        assertThat(response.getContents().get(0).getContent()).isEqualTo("내용 기다리고");
-        assertThat(response.getContents().get(0).getWriter()).isEqualTo("파인애플");
-        assertThat(response.getContents().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
+        assertThat(response.getStories()).hasSize(2);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("내용 기다리고");
+        assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
+        assertThat(response.getStories().get(1).getTitle()).isEqualTo("기다리고 기다리던 하루");
     }
 
     @Test
@@ -235,9 +235,9 @@ public class StoryServiceTest extends LoginTest {
         StoryPagingResponse response = storyService.findStoryByWriter(PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
-        assertThat(response.getContents()).hasSize(1);
-        assertThat(response.getContents().get(0).getContent()).isEqualTo("정답");
-        assertThat(response.getContents().get(0).getWriter()).isEqualTo("파인애플");
+        assertThat(response.getStories()).hasSize(1);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("정답");
+        assertThat(response.getStories().get(0).getWriter()).isEqualTo("파인애플");
     }
 
     @Test
@@ -259,8 +259,8 @@ public class StoryServiceTest extends LoginTest {
         StoryPagingResponse response = storyService.findStoryByHeart(PageRequest.of(0, 4, Sort.by("start_date")));
 
         //then
-        assertThat(response.getContents()).hasSize(1);
-        assertThat(response.getContents().get(0).getContent()).isEqualTo("정답");
-        assertThat(response.getContents().get(0).getTitle()).isEqualTo("좋아요");
+        assertThat(response.getStories()).hasSize(1);
+        assertThat(response.getStories().get(0).getContent()).isEqualTo("정답");
+        assertThat(response.getStories().get(0).getTitle()).isEqualTo("좋아요");
     }
 }

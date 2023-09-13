@@ -18,7 +18,7 @@ public class StoryPagingResponse {
     private static final StoryMapper storyMapper = new StoryMapper();
     private static final Integer LAST_PAGE = -1;
 
-    private List<FindAllStoryResponse> contents = new ArrayList<>();
+    private List<FindAllStoryResponse> stories = new ArrayList<>();
     private Integer nextPage;
     private Integer lastPage;
 
