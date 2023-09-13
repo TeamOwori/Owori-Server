@@ -19,8 +19,9 @@ public class StoryPagingResponse {
     private static final Integer LAST_PAGE = -1;
 
     private List<FindAllStoryResponse> contents = new ArrayList<>();
-    private Integer lastPage;
     private Integer nextPage;
+    private Integer lastPage;
+
 
 
     public static StoryPagingResponse of(Page<Story> pageStory){
