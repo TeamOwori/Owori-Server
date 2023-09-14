@@ -2,8 +2,8 @@ package com.owori.domain.schedule.controller;
 
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,7 @@ public class ScheduleController {
      * @return List<FindScheduleByMonthResponse> 해당 달에 대한 일정 리스트 정보입니다.
      */
     @GetMapping("/month")
-    public ResponseEntity<List<ScheduleByMonthResponse>> findScheduleByMonth(
+    public ResponseEntity<List<FindAllScheduleByMonthResponse>> findScheduleByMonth(
             @RequestParam("year_month") @Pattern(regexp = "\\d{4}-(0[1-9]|1[012])", message = "\"yyyy-MM\"형태로 입력하세요") String yearMonth) {
         return ResponseEntity.ok(scheduleService.findScheduleByMonth(yearMonth));
     }
@@ -76,7 +76,7 @@ public class ScheduleController {
      */
 
     @GetMapping("/dday")
-    public ResponseEntity<List<ScheduleDDayResponse>> findDDayByFamily() {
+    public ResponseEntity<List<FindAllScheduleByDDayResponse>> findDDayByFamily() {
         return ResponseEntity.ok(scheduleService.findDDayByFamily());
     }
 }

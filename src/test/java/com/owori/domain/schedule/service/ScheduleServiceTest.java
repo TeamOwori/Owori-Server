@@ -10,8 +10,8 @@ import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -123,10 +123,10 @@ public class ScheduleServiceTest extends LoginTest {
         Schedule schedule2 = scheduleRepository.save(new Schedule("기말고사", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), member1));
 
         // when
-        List<ScheduleByMonthResponse> responses = scheduleService.findScheduleByMonth(month);
+        List<FindAllScheduleByMonthResponse> responses = scheduleService.findScheduleByMonth(month);
 
         // then
-        assertThat(responses.stream().map(ScheduleByMonthResponse::getScheduleId).toList()).isEqualTo(List.of(schedule2.getId(), schedule4.getId(), schedule5.getId()));
+        assertThat(responses.stream().map(FindAllScheduleByMonthResponse::getScheduleId).toList()).isEqualTo(List.of(schedule2.getId(), schedule4.getId(), schedule5.getId()));
     }
 
     @Test
@@ -159,10 +159,10 @@ public class ScheduleServiceTest extends LoginTest {
         scheduleRepository.save(new Schedule("기말고사", "뿌엥", LocalDate.parse("2023-06-22"), LocalDate.parse("2023-07-06"), ScheduleType.INDIVIDUAL,true, List.of(A_DAY_AGO), saveMember1));
 
         // when
-        List<ScheduleDDayResponse> responses = scheduleService.findDDayByFamily();
+        List<FindAllScheduleByDDayResponse> responses = scheduleService.findDDayByFamily();
 
         // then
-        assertThat(responses.stream().map(ScheduleDDayResponse::getScheduleId).toList()).isEqualTo(List.of());
+        assertThat(responses.stream().map(FindAllScheduleByDDayResponse::getScheduleId).toList()).isEqualTo(List.of());
     }
 
     @Test

@@ -12,5 +12,4 @@ public enum ScheduleType {
     INDIVIDUAL("개인");
 
     private final String toKorean;
-
 }

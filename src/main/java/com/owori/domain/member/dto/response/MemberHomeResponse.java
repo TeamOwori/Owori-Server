@@ -1,7 +1,7 @@
 package com.owori.domain.member.dto.response;
 
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 public class MemberHomeResponse {
     private String familyGroupName;
     private List<MemberProfileResponse> memberProfiles;
-    private List<ScheduleDDayResponse> ddaySchedules;
+    private List<FindAllScheduleByDDayResponse> ddaySchedules;
     private List<String> familyImages;
     private List<SayingByFamilyResponse> familySayings;
 }

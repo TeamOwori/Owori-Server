@@ -8,7 +8,7 @@ import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.EmotionalBadge;
 import com.owori.domain.member.service.MemberService;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.entity.ScheduleType;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
@@ -230,10 +230,10 @@ class MemberControllerTest extends RestDocsTest {
                 new SayingByFamilyResponse(UUID.randomUUID(), "오늘 회식해요", member1, List.of(UUID.randomUUID(), UUID.randomUUID()), LocalDateTime.now()),
                 new SayingByFamilyResponse(UUID.randomUUID(),"오늘 저녁 카레", member2, List.of(), LocalDateTime.now())
         );
-        List<ScheduleDDayResponse> dDaySchedules = List.of(
-                new ScheduleDDayResponse(UUID.randomUUID(), "가족 여행", "재밌겠다.", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of(), Boolean.TRUE),
-                new ScheduleDDayResponse(UUID.randomUUID(), "휴가", "재밌겠다.", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.SKYBLUE, true, List.of(), Boolean.TRUE),
-                new ScheduleDDayResponse(UUID.randomUUID(), "친구 여행", "재밌겠다.", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.GREEN, true, List.of(), Boolean.TRUE)
+        List<FindAllScheduleByDDayResponse> dDaySchedules = List.of(
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(), "가족 여행", "재밌겠다.", LocalDate.parse("2023-07-20"), LocalDate.parse("2023-07-23"),"D-3", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of(), Boolean.TRUE),
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(), "휴가", "재밌겠다.", LocalDate.parse("2023-07-24"), LocalDate.parse("2023-07-28"),"D-3", ScheduleType.INDIVIDUAL, "오월이", Color.SKYBLUE, true, List.of(), Boolean.TRUE),
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(), "친구 여행", "재밌겠다.", LocalDate.parse("2023-07-30"), LocalDate.parse("2023-08-03"),"D-3", ScheduleType.INDIVIDUAL, "벡스", Color.GREEN, true, List.of(), Boolean.TRUE)
                 );
 
         MemberHomeResponse expected = new MemberHomeResponse("오월이 가족",membersProfile,dDaySchedules ,List.of("111111","222222"), sayings);

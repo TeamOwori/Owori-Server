@@ -3,8 +3,8 @@ package com.owori.domain.schedule.controller;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
 import com.owori.domain.schedule.dto.request.UpdateScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.dto.response.ScheduleIdResponse;
 import com.owori.domain.schedule.entity.Alarm;
 import com.owori.domain.schedule.entity.ScheduleType;
@@ -117,10 +117,10 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("GET / schedule 일정 월별 조회 API 테스트")
     void findScheduleByMonth() throws Exception {
         // given
-        List<ScheduleByMonthResponse> expected = List.of(
-                new ScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", "재밌겠다.", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY)),
-                new ScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", "재밌겠다.", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO)),
-                new ScheduleByMonthResponse(UUID.randomUUID(),"가족여행", "재밌겠다.",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, "가족", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO))
+        List<FindAllScheduleByMonthResponse> expected = List.of(
+                new FindAllScheduleByMonthResponse(UUID.randomUUID(),"친구랑 여행", "재밌겠다.", LocalDate.parse("2023-07-08"), LocalDate.parse("2023-07-09"), ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY)),
+                new FindAllScheduleByMonthResponse(UUID.randomUUID(),"코딩 테스트", "재밌겠다.", LocalDate.parse("2023-07-15"), LocalDate.parse("2023-07-15"), ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO)),
+                new FindAllScheduleByMonthResponse(UUID.randomUUID(),"가족여행", "재밌겠다.",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"), ScheduleType.FAMILY, "가족", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO))
         );
 
         given(scheduleService.findScheduleByMonth(any())).willReturn(expected);
@@ -149,10 +149,10 @@ public class ScheduleControllerTest extends RestDocsTest {
     @DisplayName("GET / schedule 가족별 디데이 일정 조회 API 테스트")
     void findDDayByFamily() throws Exception {
         // given
-        List<ScheduleDDayResponse> expected = List.of(
-                new ScheduleDDayResponse(UUID.randomUUID(),"친구랑 여행", "재밌겠다.", LocalDate.parse("2023-07-16"), LocalDate.parse("2023-07-09"),"D-DAY", ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY), Boolean.TRUE),
-                new ScheduleDDayResponse(UUID.randomUUID(),"코딩 테스트", "재밌겠다.", LocalDate.parse("2023-07-17"), LocalDate.parse("2023-07-15"), "D-1", ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO), Boolean.TRUE),
-                new ScheduleDDayResponse(UUID.randomUUID(),"가족여행", "재밌겠다.",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"),"D-15", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO), Boolean.TRUE)
+        List<FindAllScheduleByDDayResponse> expected = List.of(
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(),"친구랑 여행", "재밌겠다.", LocalDate.parse("2023-07-16"), LocalDate.parse("2023-07-09"),"D-DAY", ScheduleType.INDIVIDUAL, "벡스", Color.BLUE, true, List.of(Alarm.TODAY), Boolean.TRUE),
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(),"코딩 테스트", "재밌겠다.", LocalDate.parse("2023-07-17"), LocalDate.parse("2023-07-15"), "D-1", ScheduleType.INDIVIDUAL , "오월이", Color.BLUE, true, List.of(Alarm.A_DAY_AGO), Boolean.TRUE),
+                new FindAllScheduleByDDayResponse(UUID.randomUUID(),"가족여행", "재밌겠다.",LocalDate.parse("2023-07-31"), LocalDate.parse("2023-08-02"),"D-15", ScheduleType.FAMILY, "벡스", Color.BLUE, true, List.of(Alarm.A_DAY_AGO, Alarm.A_WEEK_AGO), Boolean.TRUE)
         );
 
         given(scheduleService.findDDayByFamily()).willReturn(expected);

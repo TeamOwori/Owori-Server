@@ -8,10 +8,9 @@ import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,7 @@ public class MemberMapper {
                 .build();
     }
 
-    public MemberHomeResponse toHomeResponse(Member nowMember, List<ScheduleDDayResponse> dDayByFamilyResponses, List<SayingByFamilyResponse> sayingResponses) {
+    public MemberHomeResponse toHomeResponse(Member nowMember, List<FindAllScheduleByDDayResponse> dDayByFamilyResponses, List<SayingByFamilyResponse> sayingResponses) {
         Family family = nowMember.getFamily();
         return MemberHomeResponse.builder()
                 .familyGroupName(family.getFamilyGroupName())

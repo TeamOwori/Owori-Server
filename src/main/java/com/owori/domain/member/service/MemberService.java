@@ -18,7 +18,7 @@ import com.owori.domain.member.mapper.MemberMapper;
 import com.owori.domain.member.repository.MemberRepository;
 import com.owori.domain.saying.dto.response.SayingByFamilyResponse;
 import com.owori.domain.saying.mapper.SayingMapper;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.service.ScheduleService;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.service.FacadeService;
@@ -166,7 +166,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     @Transactional(readOnly = true)
     public MemberHomeResponse findHomeData() {
         Member nowMember = authService.getLoginUser();
-        List<ScheduleDDayResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
+        List<FindAllScheduleByDDayResponse> dDayByFamilyResponses = scheduleService.findDDayByFamily();
         List<SayingByFamilyResponse> sayingResponses = nowMember.getFamily().getMembers().stream()
                 .map(Member::getSaying).filter(Objects::nonNull).map(sayingMapper::toResponse).toList();
         return memberMapper.toHomeResponse(nowMember, dDayByFamilyResponses, sayingResponses);

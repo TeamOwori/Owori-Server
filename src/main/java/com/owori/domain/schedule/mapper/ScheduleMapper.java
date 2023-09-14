@@ -2,8 +2,8 @@ package com.owori.domain.schedule.mapper;
 
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.schedule.dto.request.AddScheduleRequest;
-import com.owori.domain.schedule.dto.response.ScheduleByMonthResponse;
-import com.owori.domain.schedule.dto.response.ScheduleDDayResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByMonthResponse;
+import com.owori.domain.schedule.dto.response.FindAllScheduleByDDayResponse;
 import com.owori.domain.schedule.entity.Schedule;
 import com.owori.domain.schedule.entity.ScheduleType;
 import org.springframework.stereotype.Component;
@@ -27,20 +27,20 @@ public class ScheduleMapper {
                 .build();
     }
 
-    public List<ScheduleByMonthResponse> toMonthResponseList(List<Schedule> schedules) {
+    public List<FindAllScheduleByMonthResponse> toMonthResponseList(List<Schedule> schedules) {
         return schedules.stream()
                 .map(this::toMonthResponse)
                 .toList();
     }
 
-    public List<ScheduleDDayResponse> toDDayResponseList(List<Schedule> schedules, Member nowMember) {
+    public List<FindAllScheduleByDDayResponse> toDDayResponseList(List<Schedule> schedules, Member nowMember) {
         return schedules.stream()
                 .map(schedule -> toDDayResponse(schedule, toDDay(schedule.getStartDate()), nowMember))
                 .toList();
     }
 
-    private ScheduleByMonthResponse toMonthResponse(Schedule schedule) {
-        return ScheduleByMonthResponse.builder()
+    private FindAllScheduleByMonthResponse toMonthResponse(Schedule schedule) {
+        return FindAllScheduleByMonthResponse.builder()
                 .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
@@ -54,8 +54,8 @@ public class ScheduleMapper {
                 .build();
     }
 
-    private ScheduleDDayResponse toDDayResponse(Schedule schedule, String dDay, Member nowMember) {
-        return ScheduleDDayResponse.builder()
+    private FindAllScheduleByDDayResponse toDDayResponse(Schedule schedule, String dDay, Member nowMember) {
+        return FindAllScheduleByDDayResponse.builder()
                 .scheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
