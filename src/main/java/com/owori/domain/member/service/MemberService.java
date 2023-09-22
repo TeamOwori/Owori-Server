@@ -3,8 +3,10 @@ package com.owori.domain.member.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.owori.config.security.jwt.JwtToken;
 import com.owori.domain.member.client.ApplePublicKeyClient;
+import com.owori.domain.member.client.GoogleMemberClient;
 import com.owori.domain.member.client.KakaoMemberClient;
 import com.owori.domain.member.dto.client.ApplePublicKeyResponse;
+import com.owori.domain.member.dto.client.GoogleMemberResponse;
 import com.owori.domain.member.dto.client.KakaoMemberResponse;
 import com.owori.domain.member.dto.collection.AppleMap;
 import com.owori.domain.member.dto.request.*;
@@ -45,6 +47,7 @@ public class MemberService implements EntityLoader<Member, UUID> {
     private final ScheduleService scheduleService;
     private final S3ImageComponent s3ImageComponent;
     private final KakaoMemberClient kakaoMemberClient;
+    private final GoogleMemberClient googleMemberClient;
     private final ApplePublicKeyClient applePublicKeyClient;
     private final JwtParser jwtParser;
     private final AppleKeyGenerator appleKeyGenerator;
@@ -76,6 +79,16 @@ public class MemberService implements EntityLoader<Member, UUID> {
         return getNewMemberJwtResponse(AuthProvider.APPLE, clientId);
     }
 
+    public MemberJwtResponse saveWithGoogleIfNone(final MemberGoogleRequest memberGoogleRequest) {
+        String clientId = getGoogleClientId(memberGoogleRequest);
+
+        Optional<Member> member = memberRepository.findByClientIdAndAuthProvider(clientId, AuthProvider.GOOGLE);
+        if(member.isPresent()) {
+            return getServiceMemberJwtResponse(member.get());
+        }
+        return getNewMemberJwtResponse(AuthProvider.GOOGLE, clientId);
+    }
+
     private String getKakaoClientId(final MemberKakaoRequest memberKakaoRequest) {
         return Long.toString(requestToKakao(memberKakaoRequest.getToken()).getId());
     }
@@ -86,6 +99,10 @@ public class MemberService implements EntityLoader<Member, UUID> {
         ApplePublicKeyResponse response = applePublicKeyClient.requestToApple();
         PublicKey publicKey = appleKeyGenerator.generatePublicKey(appleMap, response);
         return jwtParser.parseClaims(identityToken, publicKey);
+    }
+
+    private String getGoogleClientId(final MemberGoogleRequest memberGoogleRequest) {
+        return requestToGoogle(memberGoogleRequest.getToken()).getId();
     }
 
     private MemberJwtResponse getNewMemberJwtResponse(final AuthProvider authProvider, final String clientId) {
@@ -105,6 +122,10 @@ public class MemberService implements EntityLoader<Member, UUID> {
 
     private KakaoMemberResponse requestToKakao(final String token) {
         return kakaoMemberClient.requestToKakao(token);
+    }
+
+    private GoogleMemberResponse requestToGoogle(final String token) {
+        return googleMemberClient.requestToGoogle(token);
     }
 
     @Transactional
