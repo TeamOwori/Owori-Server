@@ -37,8 +37,19 @@ public class MemberController {
      * @return 멤버의 JwtToken 입니다.
      */
     @PostMapping("/apple")
-    public ResponseEntity<MemberJwtResponse> saveMemberApple(@RequestBody @Valid MemberAppleRequest memberAppleRequest) throws JsonProcessingException {
+    public ResponseEntity<MemberJwtResponse> saveMemberWithApple(@RequestBody @Valid MemberAppleRequest memberAppleRequest) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveWithAppleIfNone(memberAppleRequest));
+    }
+
+    /**
+     * 구글을 통한 멤버 생성 컨트롤러입니다.
+     * 멤버를 조회한 후 이미 존재하면 Jwt 토큰을 생성하고, 없다면 생성 후 Jwt 토큰을 생성해 response 합니다.
+     * @param memberGoogleRequest 멤버의 OAuth2 인증 후 OAuth2 Provider 와 조회가능한 accountId를 가집니다.
+     * @return 멤버의 JwtToken 입니다.
+     */
+    @PostMapping("/google")
+        public ResponseEntity<MemberJwtResponse> saveMemberWithGoogle(@RequestBody @Valid MemberGoogleRequest memberGoogleRequest ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveWithGoogleIfNone(memberGoogleRequest));
     }
 
     /**
