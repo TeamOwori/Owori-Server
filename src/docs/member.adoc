@@ -5,8 +5,14 @@
 :toclevels: 4
 
 == Member
-=== 멤버 생성 및 Jwt 토큰 생성
-operation::save member and get jwt[snippets='http-request,http-response']
+=== 카카오 멤버 생성 및 Jwt 토큰 생성
+operation::save member by kakao and get jwt[snippets='http-request,http-response']
+
+=== 애플 멤버 생성 및 Jwt 토큰 생성
+operation::save member by apple and get jwt[snippets='http-request,http-response']
+
+=== 구글 멤버 생성 및 Jwt 토큰 생성
+operation::save member by google and get jwt[snippets='http-request,http-response']
 
 === 멤버 초기 정보 업데이트
 operation::update member details[snippets='http-request,http-response']
