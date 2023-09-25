@@ -6,10 +6,10 @@
 
 == Comment
 === 댓글 작성
-operation::add comment[snippets='http-request,http-response']
+operation::add comment[snippets='http-request,http-response,request-fields,response-fields']
 
 === 댓글 삭제
-operation::delete comment[snippets='http-request,http-response']
+operation::delete comment[snippets='http-request,http-response,path-parameters']
 
 === 댓글 수정
-operation::update comment[snippets='http-request,http-response']
+operation::update comment[snippets='http-request,http-response,request-fields']

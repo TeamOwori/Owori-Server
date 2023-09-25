@@ -6,4 +6,4 @@
 
 == Image
 === 이미지 업로드 - 이야기
-operation::save story image[snippets='http-request,http-response']
+operation::save story image[snippets='http-request,http-response,request-parts,response-fields']

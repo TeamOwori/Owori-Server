@@ -6,10 +6,10 @@
 
 == Keyword
 === 최신 검색어 조회
-operation::find keywords[snippets='http-request,http-response']
+operation::find keywords[snippets='http-request,http-response,response-fields']
 
 === 최신 검색어 단일 삭제
-operation::delete keyword[snippets='http-request,http-response']
+operation::delete keyword[snippets='http-request,http-response,path-parameters']
 
 === 최신 검색어 전체 삭제
 operation::delete keywords[snippets='http-request,http-response']

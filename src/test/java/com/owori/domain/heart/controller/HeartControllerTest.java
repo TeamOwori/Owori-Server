@@ -2,7 +2,6 @@ package com.owori.domain.heart.controller;
 
 import com.owori.domain.heart.dto.request.ToggleHeartRequest;
 import com.owori.domain.heart.dto.response.HeartStatusResponse;
-import com.owori.domain.heart.service.HeartService;
 import com.owori.domain.story.service.FacadeService;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +21,13 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 @DisplayName("Heart 컨트롤러의")
 @WebMvcTest(HeartController.class)
 public class HeartControllerTest extends RestDocsTest {
 
-    @MockBean
-    private HeartService heartService;
     @MockBean private FacadeService facadeService;
 
 
@@ -54,7 +53,14 @@ public class HeartControllerTest extends RestDocsTest {
                 .andExpect(jsonPath("$.is_liked").exists());
 
         //docs
-        perform.andDo(document("toggle heart", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("toggle heart", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("story_id").description("좋아요 누를 story의 id")
+                ),
+                responseFields(
+                        fieldWithPath("is_liked").description("좋아요 여부")
+                )
+        ));
     }
 
 }

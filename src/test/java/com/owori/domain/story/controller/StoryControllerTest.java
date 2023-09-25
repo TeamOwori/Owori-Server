@@ -25,8 +25,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 @DisplayName("Story 컨트롤러의")
 @WebMvcTest(StoryController.class)
@@ -59,7 +61,19 @@ class StoryControllerTest extends RestDocsTest{
         perform.andExpect(status().isCreated());
 
         //docs
-        perform.andDo(document("save story", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("save story", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("start_date").description("활동 시작 일자"),
+                        fieldWithPath("end_date").description("활동 종료 일자"),
+                        fieldWithPath("title").description("story 제목"),
+                        fieldWithPath("content").description("story 내용"),
+                        fieldWithPath("story_images").description("이미지 리스트 (null 가능 / 최대 10장)")
+                ),
+                responseFields(
+                        fieldWithPath("story_id").description("생성된 story의 id")
+                )
+
+        ));
     }
 
     @Test
@@ -85,7 +99,15 @@ class StoryControllerTest extends RestDocsTest{
         perform.andExpect(status().isOk());
 
         //docs
-        perform.andDo(document("update story", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("update story", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("story_id").description("수정할 story의 id"),
+                        fieldWithPath("start_date").description("수정할 활동 시작 일자"),
+                        fieldWithPath("end_date").description("수정할 활동 종료 일자"),
+                        fieldWithPath("title").description("수정할 story 제목"),
+                        fieldWithPath("content").description("수정할 story 내용"),
+                        fieldWithPath("story_images").description("수정할 이미지 리스트 (null 가능 / 최대 10장)")
+                )));
     }
 
     @Test
@@ -94,7 +116,7 @@ class StoryControllerTest extends RestDocsTest{
         //given
         List<FindAllStoryResponse> response = List.of(
                 new FindAllStoryResponse(UUID.randomUUID(),"신나는 가족여행", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2002, 02, 01), LocalDate.of(2002, 02, 02)),
-                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"맛있는 저녁식사", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "null", Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2005, 02, 03)),
                 new FindAllStoryResponse(UUID.randomUUID(),"못난이 생일잔치", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 1, 0, "허망고", LocalDate.of(2012, 02, 01), LocalDate.of(2012, 02, 02)),
                 new FindAllStoryResponse(UUID.randomUUID(),"다같이 보드게임 했던 날", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 3, "허지롱이", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 12, 03)));
 
@@ -118,7 +140,27 @@ class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story by eventAt", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story by eventAt", getDocumentRequest(), getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("sort").description("정렬 기준 (날짜순 start_date / 최신순 created_at)"),
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("size").description("불러올 게시글 개수")
+                        ),
+                        responseFields(
+                                fieldWithPath("stories").description("조회한 story 리스트"),
+                                fieldWithPath("stories[].story_id").description("story의 id"),
+                                fieldWithPath("stories[].title").description("제목"),
+                                fieldWithPath("stories[].content").description("내용"),
+                                fieldWithPath("stories[].thumbnail").description("대표 이미지").optional(),
+                                fieldWithPath("stories[].is_multiple_images").description("여러 이미지 인가"),
+                                fieldWithPath("stories[].heart_count").description("좋아요 개수"),
+                                fieldWithPath("stories[].comment_count").description("댓글 개수"),
+                                fieldWithPath("stories[].writer").description("작성자"),
+                                fieldWithPath("stories[].start_date").description("활동 시작 일자"),
+                                fieldWithPath("stories[].end_date").description("활동 종료 일"),
+                                fieldWithPath("next_page").description("다음 페이지 번호 / (-1인 경우 마지막 페이지)"),
+                                fieldWithPath("last_page").description("마지막 페이지 번호 / (-1인 경우 마지막 페이지)")
+                        )));
     }
 
     @Test
@@ -185,7 +227,29 @@ class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story", getDocumentRequest(), getDocumentResponse(),
+                        pathParameters(parameterWithName("storyId").description("조회할 story id")),
+                        responseFields(
+                                fieldWithPath("story_id").description("story id"),
+                                fieldWithPath("is_liked").description("로그인 한 유저가 좋아요를 눌렀는지"),
+                                fieldWithPath("story_images").description("이미지 리스트 (null 가능 / 최대 10장)"),
+                                fieldWithPath("title").description("제목"),
+                                fieldWithPath("writer").description("작성자"),
+                                fieldWithPath("content").description("내용"),
+                                fieldWithPath("heart_count").description("좋아요 개수"),
+                                fieldWithPath("comment_count").description("댓글 개수"),
+                                fieldWithPath("comments").description("댓글 리스트"),
+                                fieldWithPath("comments[].parent_comment_id").description("댓글의 부모 댓글 id").optional(),
+                                fieldWithPath("comments[].comment_id").description("댓글의 id"),
+                                fieldWithPath("comments[].comment").description("댓글 내용"),
+                                fieldWithPath("comments[].writer").description("댓글 작성자"),
+                                fieldWithPath("comments[].time_before_writing").description("댓글 작성 후 지난 시간"),
+                                fieldWithPath("comments[].delete_comment_check").description("댓글이 삭제되었는지"),
+                                fieldWithPath("start_date").description("story의 활동 시작 날짜"),
+                                fieldWithPath("end_date").description("story 활동 종료 날짜"),
+                                fieldWithPath("thumbnail").description("대표 이미지")
+                        ))
+                );
     }
 
     @Test
@@ -208,7 +272,7 @@ class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("remove story", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("remove story", getDocumentRequest(), getDocumentResponse(), pathParameters(parameterWithName("storyId").description("삭제할 story id"))));
     }
 
     @Test
@@ -242,7 +306,13 @@ class StoryControllerTest extends RestDocsTest{
 
         //docs
         perform.andDo(print())
-                .andDo(document("find story by search", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find story by search", getDocumentRequest(), getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("keyword").description("검색어"),
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("size").description("조회한 페이지 개수")
+                        ))
+                );
     }
 
     @Test
@@ -251,7 +321,7 @@ class StoryControllerTest extends RestDocsTest{
         //given
         List<FindAllStoryResponse> response = List.of(
                 new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
-                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)));
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)));
         StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 12, 21);
         given(storyService.findStoryByWriter(any())).willReturn(pagingResponse);
 

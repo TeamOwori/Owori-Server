@@ -6,4 +6,4 @@
 
 == Heart
 === 좋아요 생성 / 취소
-operation::toggle heart[snippets='http-request,http-response']
+operation::toggle heart[snippets='http-request,http-response,request-fields,response-fields']
