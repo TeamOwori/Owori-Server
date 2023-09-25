@@ -8,6 +8,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class FindAllStoryGroupResponse {
+    // todo: 다음 버전 배포 시 삭제
+
     private List<FindAllStoryResponse> stories;
     private Boolean hasNext;
 }
