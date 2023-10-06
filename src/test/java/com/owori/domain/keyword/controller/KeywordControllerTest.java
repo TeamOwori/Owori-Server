@@ -22,6 +22,8 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 @DisplayName("Keyword 컨트롤러의")
 @WebMvcTest(KeywordController.class)
@@ -53,7 +55,11 @@ public class KeywordControllerTest extends RestDocsTest {
 
         //docs
         perform.andDo(print())
-                .andDo(document("find keywords", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("find keywords", getDocumentRequest(), getDocumentResponse(),
+                        responseFields(
+                                fieldWithPath("[].keyword_id").description("검색어 id"),
+                                fieldWithPath("[].content").description("검색어")
+                        )));
     }
 
     @Test
@@ -99,7 +105,8 @@ public class KeywordControllerTest extends RestDocsTest {
 
         //docs
         perform.andDo(print())
-                .andDo(document("delete keyword", getDocumentRequest(), getDocumentResponse()));
+                .andDo(document("delete keyword", getDocumentRequest(), getDocumentResponse(),
+                        pathParameters(parameterWithName("keywordId").description("삭제할 키워드의 id"))));
     }
 
 }

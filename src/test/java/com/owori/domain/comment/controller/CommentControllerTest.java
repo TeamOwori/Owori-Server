@@ -24,6 +24,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 @DisplayName("Comment 컨트롤러의")
 @WebMvcTest(CommentController.class)
@@ -54,7 +56,15 @@ public class CommentControllerTest extends RestDocsTest {
         perform.andExpect(status().isCreated());
 
         //docs
-        perform.andDo(document("add comment", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("add comment", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("story_id").description("댓글을 작성할 story의 id"),
+                        fieldWithPath("parent_comment_id").description("부모 댓글의 id (null도 가능)").optional(),
+                        fieldWithPath("content").description("댓글 내용")
+                ),
+                responseFields(
+                        fieldWithPath("comment_id").description("댓글의 id")
+                )));
     }
 
     @Test
@@ -76,14 +86,18 @@ public class CommentControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk());
 
         //docs
-        perform.andDo(document("delete comment", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("delete comment", getDocumentRequest(), getDocumentResponse(),
+                pathParameters(
+                        parameterWithName("commentId").description("삭제할 댓글의 id")
+                )));
     }
 
     @Test
     @DisplayName("POST /comments/{commentId} 댓글 수정 테스트")
     void updateComment() throws Exception {
         //given
-        CommentIdResponse expected = new CommentIdResponse(UUID.randomUUID());
+        UUID commentId = UUID.randomUUID();
+        CommentIdResponse expected = new CommentIdResponse(commentId);
         given(commentService.updateComment(any())).willReturn(expected);
 
         //when
@@ -91,8 +105,7 @@ public class CommentControllerTest extends RestDocsTest {
                 mockMvc.perform(
                         post("/comments/update")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(
-                                        toRequestBody(new UpdateCommentRequest(UUID.randomUUID(),  "수정할 댓글 내용")))
+                                .content(toRequestBody(new UpdateCommentRequest(commentId,  "수정할 댓글 내용")))
                                 .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
                                 .header("member_id", UUID.randomUUID().toString())
                 );
@@ -101,6 +114,10 @@ public class CommentControllerTest extends RestDocsTest {
         perform.andExpect(status().isOk());
 
         //docs
-        perform.andDo(document("update comment", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("update comment", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("comment_id").description("수정할 댓글의 id"),
+                        fieldWithPath("comment").description("수정할 댓글 내용")
+                )));
     }
 }

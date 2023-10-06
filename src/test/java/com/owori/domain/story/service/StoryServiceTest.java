@@ -13,9 +13,9 @@ import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.request.UpdateStoryRequest;
-import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
 import com.owori.domain.story.dto.response.StoryIdResponse;
+import com.owori.domain.story.dto.response.StoryPagingResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.exception.EntityNotFoundException;
@@ -80,7 +80,7 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story));
 
         //when
-        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("created_at")), null);
+        StoryPagingResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo(title);
@@ -107,7 +107,7 @@ public class StoryServiceTest extends LoginTest {
         image.updateStory(story);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("start_date")), null);
+        StoryPagingResponse response = storyService.findAllStory(PageRequest.of(0, 4, Sort.by("start_date")));
 
         //then
         assertThat(response.getStories().get(0).getTitle()).isEqualTo("기다리고 기다리던 하루");
@@ -210,7 +210,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(story3);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")), null);
+        StoryPagingResponse response = storyService.findStoryBySearch("기다리", PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
         assertThat(response.getStories()).hasSize(2);
@@ -232,7 +232,7 @@ public class StoryServiceTest extends LoginTest {
         storyRepository.save(story3);
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryByWriter( PageRequest.of(0, 4, Sort.by("created_at")), null);
+        StoryPagingResponse response = storyService.findStoryByWriter(PageRequest.of(0, 4, Sort.by("created_at")));
 
         //then
         assertThat(response.getStories()).hasSize(1);
@@ -256,7 +256,7 @@ public class StoryServiceTest extends LoginTest {
         heartRepository.save(new Heart(member, story2));
 
         //when
-        FindAllStoryGroupResponse response = storyService.findStoryByHeart( PageRequest.of(0, 4, Sort.by("start_date")), null);
+        StoryPagingResponse response = storyService.findStoryByHeart(PageRequest.of(0, 4, Sort.by("start_date")));
 
         //then
         assertThat(response.getStories()).hasSize(1);

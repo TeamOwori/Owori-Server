@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests(
                         requests -> requests
-                                .antMatchers("/auth/**", "/members/kakao", "/members/apple")
+                                .antMatchers("/auth/**", "/members/kakao", "/members/apple", "/members/google")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

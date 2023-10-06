@@ -3,7 +3,6 @@ package com.owori.domain.image.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owori.domain.image.dto.response.ImagesStoryResponse;
 import com.owori.domain.image.service.ImageService;
-import com.owori.global.dto.ImageResponse;
 import com.owori.support.docs.RestDocsTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static com.owori.support.docs.ApiDocsUtils.getDocumentRequest;
 import static com.owori.support.docs.ApiDocsUtils.getDocumentResponse;
@@ -28,6 +26,9 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+
 
 @DisplayName("Image 컨트롤러의")
 @WebMvcTest(ImageController.class)
@@ -61,7 +62,13 @@ public class ImageControllerTest extends RestDocsTest{
         perform.andExpect(status().isCreated());
 
         //docs
-        perform.andDo(document("save story image", getDocumentRequest(), getDocumentResponse()));
+        perform.andDo(document("save story image", getDocumentRequest(), getDocumentResponse(),
+                requestParts(
+                        partWithName("story_images").description("업로드 할 이미지 파일")
+                ),
+                responseFields(
+                        fieldWithPath("story_images").description("이미지에 접근 가능한 url")
+                )));
     }
 
 
