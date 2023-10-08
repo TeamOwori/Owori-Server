@@ -1,37 +1,50 @@
 package com.owori.domain.member.client;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import org.springframework.beans.factory.annotation.Value;
 import com.owori.domain.member.dto.client.GoogleMemberResponse;
-import com.owori.domain.member.exception.WebClientException;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.nio.charset.StandardCharsets;
+import com.owori.domain.member.exception.InvalidTokenException;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
 
 
 @Component
 public class GoogleMemberClient {
 
-    private final WebClient webClient;
-    public GoogleMemberClient() { this.webClient = generateWebClient(); }
+    @Value("${social.google.client-id}")
+    private String clientId;
 
     public GoogleMemberResponse requestToGoogle(final String token) {
-        return webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParam("access_token", token)
-                        .build())
-                .accept(MediaType.APPLICATION_JSON)
-                .acceptCharset(StandardCharsets.UTF_8)
-                .retrieve()
-                .bodyToMono(GoogleMemberResponse.class)
-                .blockOptional()
-                .orElseThrow(WebClientException::new);
+        // idToken 무결성 확인
+        HttpTransport transport = new NetHttpTransport();
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                .setAudience(Collections.singletonList(clientId))
+                .build();
+        GoogleIdToken idToken = null;
+        try {
+            idToken = verifier.verify(token);
+        } catch (GeneralSecurityException | IOException e) {
+            throw new InvalidTokenException();
+        }
+
+        Payload payload = idToken.getPayload();
+
+        // 유저 식별자 받기 및 출력 테스트
+        String userId = payload.getSubject();
+
+        return new GoogleMemberResponse(userId);
     }
 
-    private WebClient generateWebClient() {
-        return WebClient.builder()
-                .baseUrl("https://www.googleapis.com/oauth2/v2/userinfo")
-                .build();
-    }
+
 }
