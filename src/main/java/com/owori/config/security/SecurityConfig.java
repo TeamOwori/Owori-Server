@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
-                .build();정
+                .build();
     }
 
     private Customizer<SessionManagementConfigurer<HttpSecurity>> sessionManagementConfigurer() {
