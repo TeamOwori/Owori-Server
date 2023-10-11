@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeRequests(
                         requests -> requests
                                 .antMatchers("/auth/**", "/members/kakao", "/members/apple", "/members/google").permitAll()
-                                .antMatchers("/actuator/**").hasRole("ROLE_ADMIN")
+                                .antMatchers("/actuator/**").hasRole("ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(sessionManagementConfigurer())
