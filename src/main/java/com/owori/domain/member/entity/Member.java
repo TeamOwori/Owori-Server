@@ -45,7 +45,7 @@ public class Member implements Auditable {
     @JoinColumn
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> role = new ArrayList<>(List.of(Role.ROLE_USER));
+    private List<Role> role = new ArrayList<>(List.of(Role.USER));
 
     @Embedded
     private OAuth2Info oAuth2Info;
