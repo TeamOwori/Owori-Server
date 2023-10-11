@@ -37,8 +37,8 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests(
                         requests -> requests
-                                .antMatchers("/auth/**", "/members/kakao", "/members/apple", "/members/google")
-                                .permitAll()
+                                .antMatchers("/auth/**", "/members/kakao", "/members/apple", "/members/google").permitAll()
+                                .antMatchers("/actuator/**").hasRole("ROLE_ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(sessionManagementConfigurer())
