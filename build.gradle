@@ -69,9 +69,11 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-	// google idToken 무결성 체크
 	implementation group: 'com.google.api-client', name: 'google-api-client-jackson2', version: '1.30.10'
 	compile 'com.google.api-client:google-api-client:1.32.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.2'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 ext {
