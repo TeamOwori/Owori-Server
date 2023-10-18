@@ -15,21 +15,24 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
+import java.util.Arrays;
 
 
 @Component
 public class GoogleMemberClient {
 
-    @Value("${social.google.client-id}")
-    private String clientId;
+    @Value("${social.google.android-client-id}")
+    private String androidClientId;
+
+    @Value("${social.google.ios-client-id}")
+    private String iosClientId;
 
     public GoogleMemberResponse requestToGoogle(final String token) {
         // idToken 무결성 확인
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                .setAudience(Collections.singletonList(clientId))
+                .setAudience(Arrays.asList(androidClientId, iosClientId))
                 .build();
         GoogleIdToken idToken = null;
         try {
@@ -37,7 +40,6 @@ public class GoogleMemberClient {
         } catch (GeneralSecurityException | IOException e) {
             throw new InvalidTokenException();
         }
-
         Payload payload = idToken.getPayload();
 
         // 유저 식별자 받기 및 출력 테스트
