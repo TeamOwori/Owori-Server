@@ -48,7 +48,7 @@ public class MemberController {
      * @return 멤버의 JwtToken 입니다.
      */
     @PostMapping("/google")
-        public ResponseEntity<MemberJwtResponse> saveMemberWithGoogle(@RequestBody @Valid MemberGoogleRequest memberGoogleRequest ) {
+    public ResponseEntity<MemberJwtResponse> saveMemberWithGoogle(@RequestBody @Valid MemberGoogleRequest memberGoogleRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(memberService.saveWithGoogleIfNone(memberGoogleRequest));
     }
 
