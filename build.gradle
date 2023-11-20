@@ -94,8 +94,8 @@ asciidoctor {
 
 tasks.named('test') {
 	outputs.dir snippetsDir
-	useJUnitPlatform()
 	finalizedBy 'jacocoTestReport'
+	useJUnitPlatform()
 }
 
 configurations {
