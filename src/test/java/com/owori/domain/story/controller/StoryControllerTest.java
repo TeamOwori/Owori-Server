@@ -111,6 +111,39 @@ class StoryControllerTest extends RestDocsTest{
     }
 
     @Test
+    @DisplayName("POST /stories/{storyId} 이야기 제목 수정 API 테스트")
+    void updateStoryTitle() throws Exception {
+        //given
+        StoryIdResponse expected = new StoryIdResponse(UUID.randomUUID());
+        given(storyService.updateStory(any())).willReturn(expected);
+        UpdateStoryRequest request = new UpdateStoryRequest(UUID.randomUUID(), LocalDate.parse("2012-12-25"), LocalDate.parse("2012-12-25"), "기다리고 기다리던 하루", "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        post("/stories/update")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toRequestBody(request))
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(document("update story", getDocumentRequest(), getDocumentResponse(),
+                requestFields(
+                        fieldWithPath("story_id").description("수정할 story의 id"),
+                        fieldWithPath("start_date").description("수정할 활동 시작 일자"),
+                        fieldWithPath("end_date").description("수정할 활동 종료 일자"),
+                        fieldWithPath("title").description("수정할 story 제목"),
+                        fieldWithPath("content").description("수정할 story 내용"),
+                        fieldWithPath("story_images").description("수정할 이미지 리스트 (null 가능 / 최대 10장)")
+                )));
+    }
+
+    @Test
     @DisplayName("GET /stories 이야기 전체 조회 (날짜순) API 테스트")
     void findAllStoryByEventAt() throws Exception {
         //given

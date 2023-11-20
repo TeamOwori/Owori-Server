@@ -4,6 +4,7 @@ import com.owori.domain.comment.dto.request.AddCommentRequest;
 import com.owori.domain.comment.dto.request.UpdateCommentRequest;
 import com.owori.domain.comment.entity.Comment;
 import com.owori.domain.comment.entity.TimesAgo;
+import com.owori.domain.comment.exception.CommentRestrictException;
 import com.owori.domain.comment.repository.CommentRepository;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.member.service.AuthService;
@@ -83,6 +84,23 @@ public class CommentServiceTest extends LoginTest {
         assertThat(commentList.get(1).getContent()).isEqualTo(content);
         assertThat(commentList.get(0).getContent()).isEqualTo("나는 부모 댓글");
 
+    }
+
+    @Test
+    @DisplayName("대대댓글 작성이 이루어지는가")
+    void addCommentWithTwoParent() {
+        //given
+        String content = "아니오.";
+        Member member = authService.getLoginUser();
+        Story story = new Story("댓글 작성이 제대로", "될까요 ?", LocalDate.of(2000, 4, 22), LocalDate.of(2022, 8, 22), member);
+        storyRepository.save(story);
+        Comment parent1 = new Comment(member, story, null, "나는 첫번째 부모 댓글");
+        Comment parent2 = new Comment(member, story, parent1, "나는 두번째 부모 댓글");
+        commentRepository.save(parent1);
+        commentRepository.save(parent2);
+
+        //when then
+        assertThrows(CommentRestrictException.class, () -> commentService.addComment(story, new AddCommentRequest(story.getId(), parent2.getId(), content)));
     }
 
     @Test
