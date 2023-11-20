@@ -9,8 +9,9 @@ plugins {
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'com.google.cloud.tools.jib' version '3.2.1'
-	id "org.asciidoctor.jvm.convert" version "3.3.2"
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+	id 'jacoco'
 }
 
 jib {
@@ -94,6 +95,7 @@ asciidoctor {
 tasks.named('test') {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport'
 }
 
 configurations {
@@ -122,4 +124,18 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 	querydsl.extendsFrom compileClasspath
+}
+
+jacoco {
+	toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+		csv.required = false
+	}
+	finalizedBy 'jacocoTestCoverageVerification'
 }
