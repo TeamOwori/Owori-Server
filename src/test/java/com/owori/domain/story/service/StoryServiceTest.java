@@ -8,8 +8,10 @@ import com.owori.domain.heart.entity.Heart;
 import com.owori.domain.heart.repository.HeartRepository;
 import com.owori.domain.image.entity.Image;
 import com.owori.domain.image.repository.ImageRepository;
+import com.owori.domain.member.entity.AuthProvider;
 import com.owori.domain.member.entity.Color;
 import com.owori.domain.member.entity.Member;
+import com.owori.domain.member.entity.OAuth2Info;
 import com.owori.domain.member.service.AuthService;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.request.UpdateStoryRequest;
@@ -19,6 +21,8 @@ import com.owori.domain.story.dto.response.StoryPagingResponse;
 import com.owori.domain.story.entity.Story;
 import com.owori.domain.story.repository.StoryRepository;
 import com.owori.global.exception.EntityNotFoundException;
+import com.owori.global.exception.InvalidDateException;
+import com.owori.global.exception.NoAuthorityException;
 import com.owori.support.database.DatabaseTest;
 import com.owori.support.database.LoginTest;
 import org.junit.jupiter.api.DisplayName;
@@ -49,8 +53,25 @@ public class StoryServiceTest extends LoginTest {
 
 
     @Test
-    @DisplayName("이야기 생성이 수행되는가")
-    void addStory() {
+    @DisplayName("(이미지 O) 이야기 생성이 수행되는가")
+    void addStoryWithImg() {
+        //given
+        String title = "기다리고 기다리던 하루";
+        PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", List.of("image.png"));
+
+        //when
+        storyService.addStory(request);
+
+        //then
+        Story story = storyRepository.findAll().get(0);
+
+        assertThat(story.getTitle()).isEqualTo(title);
+        assertThat(story.getMember()).isEqualTo(authService.getLoginUser());
+    }
+
+    @Test
+    @DisplayName("(이미지 X) 이야기 생성이 수행되는가")
+    void addStoryWithoutImg() {
         //given
         String title = "기다리고 기다리던 하루";
         PostStoryRequest request = new PostStoryRequest(LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), title, "종강하면 동해바다로 가족 여행 가자고 한게 엊그제 같았는데...3박 4일 동해여행 너무 재밌었어!! 날씨도 너무 좋았고 특히 갈치조림이 대박 ㄹㅇ 맛집 인정... 2일차 점심 때 대림공원 안에서 피크닉한게 가장 기억에 남았던거 같아! 엄마가 만들어 준 샌드위치는 세상에서 젤 맛있어 이거 팔면 대박날듯 ㅋㅋㅋ ", null);
@@ -263,4 +284,53 @@ public class StoryServiceTest extends LoginTest {
         assertThat(response.getStories().get(0).getContent()).isEqualTo("정답");
         assertThat(response.getStories().get(0).getTitle()).isEqualTo("좋아요");
     }
+
+    @Test
+    @DisplayName("start date가 end date보다 나중에 일어난 경우 예외 처리가 발생하는가")
+    void invalidDateException() {
+        //given
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), authService.getLoginUser());
+        Image image = new Image("https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(1).png", 1L);
+        storyRepository.save(story);
+        imageRepository.save(image);
+
+        LocalDate start = LocalDate.of(2023, 03, 23);
+        LocalDate end = LocalDate.of(2023, 02, 01);
+
+        UpdateStoryRequest request = new UpdateStoryRequest(story.getId(), start, end, "제목", "내용", List.of("https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(2).png","https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(3).png"));
+
+        //when & then
+        assertThrows(InvalidDateException.class, () -> storyService.updateStory(request));
+    }
+
+    @Test
+    @DisplayName("게시글 수정 시 reqeust의 유저와 로그인 유저가 다르면 예외 처리가 발생하는가")
+    void updateAuthException() {
+        //given
+        Member member = new Member(new OAuth2Info("d3akdsa", AuthProvider.GOOGLE));
+        memberRepository.save(member);
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        Image image = new Image("https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(1).png", 1L);
+        storyRepository.save(story);
+        imageRepository.save(image);
+
+        UpdateStoryRequest request = new UpdateStoryRequest(story.getId(), LocalDate.of(2023, 03, 23), LocalDate.of(2023, 04, 01), "제목", "내용", List.of("https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(2).png","https://owori.s3.ap-northeast-2.amazonaws.com/story/Logo+(3).png"));
+
+        //when & then
+        assertThrows(NoAuthorityException.class, () -> storyService.updateStory(request));
+    }
+
+    @Test
+    @DisplayName("이야기 삭제 시 reqeust의 유저와 로그인 유저가 다르면 예외 처리가 발생하는가")
+    void removeAuthException() {
+        //given
+        Member member = new Member(new OAuth2Info("d3akdsa", AuthProvider.GOOGLE));
+        memberRepository.save(member);
+        Story story = new Story("기다리고 기다리던 하루", "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+        storyRepository.save(story);
+
+        //when & then
+        assertThrows(NoAuthorityException.class, () -> storyService.removeStory(story));
+    }
+
 }
