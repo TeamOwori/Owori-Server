@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin'
         architecture: x64
     - run: chmod +x gradlew
-    - run: ./gradlew build -x test
+    - run: ./gradlew --info test
 
     - name: Test Coverage Report
       id: jacoco
