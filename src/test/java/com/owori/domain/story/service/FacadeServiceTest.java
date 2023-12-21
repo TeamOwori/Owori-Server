@@ -50,5 +50,26 @@ public class FacadeServiceTest extends LoginTest {
         assertThat(findStory.getTitle()).isEqualTo(title);
 
     }
+
+    @Test
+    @DisplayName("id로 Story Entity 조회가 잘 이루어지는가")
+    void loadStoryEntity() {
+        //given
+        Member member = authService.getLoginUser();
+        Family family = new Family("우리집", member, "code");
+        String title = "기다리고 기다리던 하루";
+        Story story = new Story(title, "내용", LocalDate.parse("2017-12-25"), LocalDate.parse("2017-12-30"), member);
+
+        familyRepository.save(family);
+        storyRepository.save(story);
+
+        //when
+        Story findStory = facadeService.loadStoryEntity(story.getId());
+
+        //then
+        assertThat(findStory.getId()).isEqualTo(story.getId());
+        assertThat(findStory.getTitle()).isEqualTo(title);
+
+    }
 }
 
