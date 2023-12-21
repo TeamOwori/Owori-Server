@@ -20,6 +20,13 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         architecture: x64
+
+    - name: Set ENV
+      run: |
+        mkdir -p src/main/resources
+        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/env.yml
+        find src
+        
     - run: chmod +x gradlew
     - run: ./gradlew build
 
