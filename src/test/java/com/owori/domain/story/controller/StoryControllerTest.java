@@ -408,4 +408,107 @@ class StoryControllerTest extends RestDocsTest{
         perform.andDo(print())
                 .andDo(document("find story by heart", getDocumentRequest(), getDocumentResponse()));
     }
+
+    @Test
+    @DisplayName("GET /stories/find")
+    void getAllStory() throws Exception {
+        //given
+        FindAllStoryGroupResponse response = new FindAllStoryGroupResponse(
+                List.of(
+                        new FindAllStoryResponse(UUID.randomUUID(), "선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                        new FindAllStoryResponse(UUID.randomUUID(), "못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))),
+                false
+        );
+        given(storyService.findAllStory2(any())).willReturn(response);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/find")
+                                .param("sort", "created_at")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET /stories/search/temp")
+    void searchStory() throws Exception {
+        //given
+        FindAllStoryGroupResponse response = new FindAllStoryGroupResponse(
+                List.of(
+                        new FindAllStoryResponse(UUID.randomUUID(), "선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                        new FindAllStoryResponse(UUID.randomUUID(), "못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))),
+                false
+        );
+        given(storyService.findStoryBySearch2(any(), any())).willReturn(response);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/search/temp")
+                                .param("sort", "created_at")
+                                .param("keyword","검색어")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET /stories/member/find")
+    void findStoryByWriter() throws Exception {
+        //given
+        FindAllStoryGroupResponse response = new FindAllStoryGroupResponse(
+                List.of(
+                        new FindAllStoryResponse(UUID.randomUUID(), "선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                        new FindAllStoryResponse(UUID.randomUUID(), "못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))),
+                false
+        );
+        given(storyService.findStoryByWriter2()).willReturn(response);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/member/find")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("GET /stories/heart/find")
+    void findStoryHeart() throws Exception {
+        //given
+        FindAllStoryGroupResponse response = new FindAllStoryGroupResponse(
+                List.of(
+                        new FindAllStoryResponse(UUID.randomUUID(), "선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                        new FindAllStoryResponse(UUID.randomUUID(), "못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))),
+                false
+        );
+        given(storyService.findStoryByHeart2()).willReturn(response);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/heart/find")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+    }
 }
