@@ -15,33 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoryPagingResponse {
-    private static final StoryMapper storyMapper = new StoryMapper();
-    private static final Integer LAST_PAGE = -1;
-
+    private static final StoryMapper mapper = new StoryMapper();
     private List<FindAllStoryResponse> stories = new ArrayList<>();
-    private Integer nextPage;
-    private Integer lastPage;
-
-
+    private boolean hasNext;
 
     public static StoryPagingResponse of(Page<Story> pageStory){
-        if(!pageStory.hasNext()){
-            return StoryPagingResponse.newLastScroll(pageStory.getContent(), pageStory.getTotalPages() - 1);
-        }
-        return StoryPagingResponse.newPageHasNext(pageStory.getContent(), pageStory.getTotalPages() - 1, pageStory.getPageable().getPageNumber() + 1);
-    }
-
-    private static StoryPagingResponse newPageHasNext(List<Story> stories, Integer lastPage, Integer nextPage) {
-        return new StoryPagingResponse(getContents(stories), lastPage, nextPage);
-    }
-
-    private static StoryPagingResponse newLastScroll(List<Story> stories, Integer lastPage) {
-        return newPageHasNext(stories, lastPage, LAST_PAGE);
+        return new StoryPagingResponse(getContents(pageStory.getContent()), pageStory.hasNext());
     }
 
     private static List<FindAllStoryResponse> getContents(List<Story> stories){
-        return stories.stream().map(story -> storyMapper.toFindAllStoryResponse(story)).toList();
+        return stories.stream().map(story -> mapper.toFindAllStoryResponse(story)).toList();
     }
-
 
 }
