@@ -24,7 +24,7 @@ jobs:
     - name: Set ENV
       run: |
         mkdir -p src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/env.yml
+        echo "${{ secrets.APPLICATION_YML }}" >> src/main/resources/env.yml
         find src
         
     - run: chmod +x gradlew
