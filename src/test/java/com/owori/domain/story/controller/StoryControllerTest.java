@@ -308,106 +308,106 @@ class StoryControllerTest extends RestDocsTest{
                 .andDo(document("remove story", getDocumentRequest(), getDocumentResponse(), pathParameters(parameterWithName("storyId").description("삭제할 story id"))));
     }
 
-//    @Test
-//    @DisplayName("GET /stories 검색 API 테스트")
-//    void findStoryBySearch() throws Exception {
-//        //given
-//        List<FindAllStoryResponse> response = List.of(
-//                new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
-//                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)),
-//                new FindAllStoryResponse(UUID.randomUUID(),"생일잔치", "못난이 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 1, 0, "허망고", LocalDate.of(2011, 02, 01), LocalDate.of(2011, 02, 02)),
-//                new FindAllStoryResponse(UUID.randomUUID(),"쇼핑 데이 with 못난이", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 3, "못난이", LocalDate.of(2010, 02, 01), LocalDate.of(2022, 12, 03)));
-//
-//        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 10, -1);
-//        given(storyService.findStoryBySearch(any(),any())).willReturn(pagingResponse);
-//
-//        //when
-//        ResultActions perform =
-//                mockMvc.perform(
-//                        get("/stories/search")
-//                                .param("keyword", "못난이")
-//                                .param("page", "10")
-//                                .param("size", "4")
-//                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-//                                .header("member_id", UUID.randomUUID().toString())
-//                                .characterEncoding("UTF-8")
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                );
-//
-//        //then
-//        perform.andExpect(status().isOk());
-//
-//        //docs
-//        perform.andDo(print())
-//                .andDo(document("find story by search", getDocumentRequest(), getDocumentResponse(),
-//                        requestParameters(
-//                                parameterWithName("keyword").description("검색어"),
-//                                parameterWithName("page").description("현재 페이지"),
-//                                parameterWithName("size").description("조회한 페이지 개수")
-//                        ))
-//                );
-//    }
+    @Test
+    @DisplayName("GET /stories 검색 API 테스트")
+    void findStoryBySearch() throws Exception {
+        //given
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)),
+                new FindAllStoryResponse(UUID.randomUUID(),"생일잔치", "못난이 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 1, 0, "허망고", LocalDate.of(2011, 02, 01), LocalDate.of(2011, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"쇼핑 데이 with 못난이", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용 이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.TRUE, 2, 3, "못난이", LocalDate.of(2010, 02, 01), LocalDate.of(2022, 12, 03)));
 
-//    @Test
-//    @DisplayName("GET /stories/member 유저가 작성한 이야기 조회 API 테스트")
-//    void findStoryByMember() throws Exception {
-//        //given
-//        List<FindAllStoryResponse> response = List.of(
-//                new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
-//                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)));
-//        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 12, 21);
-//        given(storyService.findStoryByWriter(any())).willReturn(pagingResponse);
-//
-//        //when
-//        ResultActions perform =
-//                mockMvc.perform(
-//                        get("/stories/member")
-//                                .param("sort", "start_date")
-//                                .param("page","11")
-//                                .param("size", "2")
-//                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-//                                .header("member_id", UUID.randomUUID().toString())
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                );
-//
-//        //then
-//        perform.andExpect(status().isOk());
-//
-//        //docs
-//        perform.andDo(print())
-//                .andDo(document("find story by member", getDocumentRequest(), getDocumentResponse()));
-//    }
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, true);
+        given(storyService.findStoryBySearch(any(),any())).willReturn(pagingResponse);
 
-//    @Test
-//    @DisplayName("GET /stories/heart 유저가 좋아한 이야기 조회 API 테스트")
-//    void findStoryByHeart() throws Exception {
-//        //given
-//        List<FindAllStoryResponse> response = List.of(
-//                new FindAllStoryResponse(UUID.randomUUID(),"선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png",  Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
-//                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))
-//        );
-//        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, 2, 12);
-//        given(storyService.findStoryByHeart(any())).willReturn(pagingResponse);
-//
-//        //when
-//        ResultActions perform =
-//                mockMvc.perform(
-//                        get("/stories/heart")
-//                                .param("sort", "created_at")
-//                                .param("page","1")
-//                                .param("size", "2")
-//                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
-//                                .header("member_id", UUID.randomUUID().toString())
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                );
-//
-//        //then
-//        perform.andExpect(status().isOk());
-//
-//        //docs
-//        perform.andDo(print())
-//                .andDo(document("find story by heart", getDocumentRequest(), getDocumentResponse()));
-//    }
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/search")
+                                .param("keyword", "못난이")
+                                .param("page", "10")
+                                .param("size", "4")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .characterEncoding("UTF-8")
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("find story by search", getDocumentRequest(), getDocumentResponse(),
+                        requestParameters(
+                                parameterWithName("keyword").description("검색어"),
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("size").description("조회한 페이지 개수")
+                        ))
+                );
+    }
+
+    @Test
+    @DisplayName("GET /stories/member 유저가 작성한 이야기 조회 API 테스트")
+    void findStoryByMember() throws Exception {
+        //given
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(UUID.randomUUID(),"룰루랄라", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png", Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03)));
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, true);
+        given(storyService.findStoryByWriter(any())).willReturn(pagingResponse);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/member")
+                                .param("sort", "start_date")
+                                .param("page","11")
+                                .param("size", "2")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("find story by member", getDocumentRequest(), getDocumentResponse()));
+    }
+
+    @Test
+    @DisplayName("GET /stories/heart 유저가 좋아한 이야기 조회 API 테스트")
+    void findStoryByHeart() throws Exception {
+        //given
+        List<FindAllStoryResponse> response = List.of(
+                new FindAllStoryResponse(UUID.randomUUID(),"선풍기 청소한 날", "이야기 내용입니다 못난이 내용 내용 내용 내용 내용 내용 내용 내용 내용", "https://owori.s3.ap-northeast-2.amazonaws.com/story/Group%2010_f985a58a-1257-4691-88ee-e2b75977fb3e.png",  Boolean.FALSE, 2, 2, "고구마", LocalDate.of(2022, 02, 01), LocalDate.of(2022, 02, 02)),
+                new FindAllStoryResponse(UUID.randomUUID(),"못난이 외식 했지롱", "이야기 내용입니다 내용 내용 내용 내용 내용 내용 내용 내용 내용", null, Boolean.FALSE, 0, 0, "구운계란", LocalDate.of(2005, 02, 01), LocalDate.of(2019, 02, 03))
+        );
+        StoryPagingResponse pagingResponse = new StoryPagingResponse(response, false);
+        given(storyService.findStoryByHeart(any())).willReturn(pagingResponse);
+
+        //when
+        ResultActions perform =
+                mockMvc.perform(
+                        get("/stories/heart")
+                                .param("sort", "created_at")
+                                .param("page","1")
+                                .param("size", "2")
+                                .header("Authorization", "Bearer ghuriewhv32j12.oiuwhftg32shdi.ogiurhw0gb")
+                                .header("member_id", UUID.randomUUID().toString())
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        //then
+        perform.andExpect(status().isOk());
+
+        //docs
+        perform.andDo(print())
+                .andDo(document("find story by heart", getDocumentRequest(), getDocumentResponse()));
+    }
 
     @Test
     @DisplayName("GET /stories/find")
