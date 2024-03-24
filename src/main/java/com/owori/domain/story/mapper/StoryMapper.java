@@ -1,14 +1,14 @@
 package com.owori.domain.story.mapper;
 
 import com.owori.domain.comment.dto.response.CommentResponse;
-import com.owori.domain.family.entity.Family;
 import com.owori.domain.member.entity.Member;
 import com.owori.domain.story.dto.request.PostStoryRequest;
 import com.owori.domain.story.dto.response.FindAllStoryGroupResponse;
 import com.owori.domain.story.dto.response.FindAllStoryResponse;
 import com.owori.domain.story.dto.response.FindStoryResponse;
+import com.owori.domain.story.dto.response.StoryPagingResponse;
 import com.owori.domain.story.entity.Story;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -58,12 +58,12 @@ public class StoryMapper {
                 .build();
     }
 
-    public FindAllStoryGroupResponse toFindAllStoryGroupResponse(Slice<Story> stories) {
-        List<FindAllStoryResponse> responses = stories.getContent().stream()
-                .map(this::toFindAllStoryResponse)
-                .toList();
-
-        return new FindAllStoryGroupResponse(responses, stories.hasNext());
+    public StoryPagingResponse toStoryPagingResponse(Page<Story> pageStory) {
+        List<FindAllStoryResponse> stories = pageStory.getContent().stream().map(story -> toFindAllStoryResponse(story)).toList();
+        return StoryPagingResponse.builder()
+                .stories(stories)
+                .hasNext(pageStory.hasNext())
+                .build();
     }
 
     public FindAllStoryGroupResponse toFindAllStoryGroupResponse2(List<Story> stories) {

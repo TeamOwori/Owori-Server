@@ -86,14 +86,13 @@ public class StoryController {
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping
-    public ResponseEntity<StoryPagingResponse> findAllStory(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
+    public ResponseEntity<StoryPagingResponse> findAllStory(@PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
         return ResponseEntity.ok(storyService.findAllStory(pageable));
     }
 
     /**
      * 이야기 검색을 위한 컨트롤러입니다.
-     * @param keyword    검색어입니다.
+     * @param keyword 검색어입니다.
      * @param pageable
      * @return 검색 결과 dto가 반환됩니다.
      */
@@ -110,9 +109,7 @@ public class StoryController {
      * @return 전체 조회 dto가 반환됩니다.
      */
     @GetMapping("/member")
-    public ResponseEntity<StoryPagingResponse> findStoryByWriter(
-            @PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
-
+    public ResponseEntity<StoryPagingResponse> findStoryByWriter(@PageableDefault(sort = "created_at", direction = DESC) Pageable pageable) {
         return ResponseEntity.ok(storyService.findStoryByWriter(pageable));
     }
 

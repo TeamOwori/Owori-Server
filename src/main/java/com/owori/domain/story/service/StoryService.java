@@ -58,7 +58,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional(readOnly = true)
     public StoryPagingResponse findAllStory(Pageable pageable) {
         Family family = authService.getLoginUser().getFamily();
-        return StoryPagingResponse.of(storyRepository.findAllStory(pageable, family));
+        return storyMapper.toStoryPagingResponse(storyRepository.findAllStory(pageable, family));
     }
 
     public FindAllStoryGroupResponse findAllStory2(String sort) {
@@ -104,7 +104,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
         Member loginUser = authService.getLoginUser();
         keywordService.addKeyword(keyword, loginUser);
 
-        return StoryPagingResponse.of(storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily()));
+        return storyMapper.toStoryPagingResponse(storyRepository.findStoryBySearch(pageable, keyword, loginUser.getFamily()));
     }
 
     public FindAllStoryGroupResponse findStoryBySearch2(String keyword, String sort) {
@@ -117,7 +117,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional(readOnly = true)
     public StoryPagingResponse findStoryByWriter(Pageable pageable) {
         Member member = authService.getLoginUser();
-        return StoryPagingResponse.of(storyRepository.findStoryByWriter(pageable, member));
+        return storyMapper.toStoryPagingResponse(storyRepository.findStoryByWriter(pageable, member));
     }
 
     public FindAllStoryGroupResponse findStoryByWriter2() {
@@ -130,7 +130,7 @@ public class StoryService implements EntityLoader<Story, UUID> {
     @Transactional(readOnly = true)
     public StoryPagingResponse findStoryByHeart(Pageable pageable) {
         Member member = authService.getLoginUser();
-        return StoryPagingResponse.of(storyRepository.findStoryByHeart(pageable, member));
+        return storyMapper.toStoryPagingResponse(storyRepository.findStoryByHeart(pageable, member));
     }
 
     public FindAllStoryGroupResponse findStoryByHeart2() {
